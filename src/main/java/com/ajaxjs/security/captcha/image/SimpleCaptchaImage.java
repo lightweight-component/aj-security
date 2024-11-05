@@ -1,4 +1,4 @@
-package com.ajaxjs.captcha.image;
+package com.ajaxjs.security.captcha.image;
 
 
 import javax.imageio.ImageIO;

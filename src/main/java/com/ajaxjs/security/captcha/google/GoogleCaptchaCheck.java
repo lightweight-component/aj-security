@@ -1,4 +1,4 @@
-package com.ajaxjs.captcha.google;
+package com.ajaxjs.security.captcha.google;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,6 @@
 package com.ajaxjs.security;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.captcha.google.GoogleCaptchaCheck;
 import com.ajaxjs.security.referer.HttpReferer;
 import com.ajaxjs.security.referer.HttpRefererCheck;
 import org.springframework.beans.factory.annotation.Autowired;

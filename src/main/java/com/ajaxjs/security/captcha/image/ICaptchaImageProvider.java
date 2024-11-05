@@ -1,4 +1,4 @@
-package com.ajaxjs.captcha.image;
+package com.ajaxjs.security.captcha.image;
 
 import java.awt.image.RenderedImage;
 
@@ -8,7 +8,8 @@ import java.awt.image.RenderedImage;
 public interface ICaptchaImageProvider {
 
     /**
-     * Get rendered image
+     * Get rendered imageF
+     *
      * @param width
      * @param height
      * @param randomStr

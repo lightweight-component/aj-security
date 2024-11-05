@@ -1,4 +1,4 @@
-package com.ajaxjs.captcha.google;
+package com.ajaxjs.security.captcha.google;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.net.http.Post;
@@ -9,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 @Data

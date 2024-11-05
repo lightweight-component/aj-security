@@ -15,7 +15,7 @@ public class HttpReferer implements SecurityFilter {
     @Override
     public void onRequest(HttpServletRequest req) {
         // 获取 Referer 头
-        String referer = req.getHeader("Referer");
+        var referer = req.getHeader("Referer");
 
         if (!StringUtils.hasText(referer) || !ALLOWED_REFERRERS.contains(referer))
             throw new HttpRefererException("Invalid Referer header.");

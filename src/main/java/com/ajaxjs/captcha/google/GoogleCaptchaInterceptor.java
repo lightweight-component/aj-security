@@ -23,9 +23,9 @@ public class GoogleCaptchaInterceptor implements HandlerInterceptor {
         if (Version.isDebug)
             return true;
         else if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
-            String httpMethod = req.getMethod();
+            var handlerMethod = (HandlerMethod) handler;
+            var method = handlerMethod.getMethod();
+            var httpMethod = req.getMethod();
 
             if (("POST".equals(httpMethod) || "PUT".equals(httpMethod)) && method.getAnnotation(GoogleCaptchaCheck.class) != null) {
                 // 有注解，要检测

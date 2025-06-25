@@ -12,7 +12,7 @@
 
     <artifactId>aj-security-center</artifactId>
     <version>1.0</version>
-    <description>Security Center</description>
+    <description>For the Security Issue</description>
     <packaging>jar</packaging>
 
     <dependencies>

@@ -3,6 +3,7 @@ package com.ajaxjs.security.referer;
 import com.ajaxjs.security.InterceptorAction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class HttpReferer extends InterceptorAction<HttpRefererCheck> {
 
     @Override
     public boolean action(HttpRefererCheck annotation, HttpServletRequest req) {
-        String referer = req.getHeader("Referer");  // 获取 Referer 头
+        String referer = req.getHeader(HttpHeaders.REFERER);  // 获取 Referer 头
 
         if (ALLOWED_REFERRERS != null && (!StringUtils.hasText(referer) || !ALLOWED_REFERRERS.contains(referer)))
             throw new SecurityException("Invalid Referer header.");

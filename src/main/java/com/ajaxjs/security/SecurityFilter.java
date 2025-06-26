@@ -14,7 +14,7 @@ import com.ajaxjs.security.timesignature.TimeSignatureVerify;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 @Slf4j
-public class SecurityFilter extends HandlerInterceptorAdapter {
+public class SecurityFilter implements HandlerInterceptor {
     @Autowired(required = false)
     NonRepeatSubmitMgr nonRepeatSubmitMgr;
 

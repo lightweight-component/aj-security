@@ -29,3 +29,7 @@ layout: layouts/docs.njk
 
 - 针对同一用户、同一业务参数，在短时间内只能提交一次。
 - 可用请求参数哈希（如 MD5）、加上用户 ID，作为 Redis Key，短时间内只能用一次。
+
+
+## 参考
+- [resubmit 渐进式防重复提交框架](https://mp.weixin.qq.com/s/tVkeyrDNc_scRusbClrY1w)

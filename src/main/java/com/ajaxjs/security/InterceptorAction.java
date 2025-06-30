@@ -18,6 +18,11 @@ public abstract class InterceptorAction<T extends Annotation> {
     private boolean isGlobalCheck;
 
     /**
+     * Whether this component is enabled
+     */
+    private boolean isEnabled;
+
+    /**
      * 执行动作
      *
      * @param annotation 注解配置

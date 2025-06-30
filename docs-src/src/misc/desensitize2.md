@@ -9,6 +9,7 @@ layout: layouts/docs-cn.njk
 ---
 
 #### 开源pom依赖引用
+
 https://mingyang.blog.csdn.net/article/details/130324987
 
 ##### 新增JsonNullField注解，可将指定的字段值置为null，注解定义如下：
@@ -91,8 +92,6 @@ public @interface JsonFlexField {
 ```
 
 > @JsonFlexField注解标注在复杂数据类型字段上，具体的使用方法会在后面举例说明；
-
-
 
 ##### 三、基于注解的脱敏SDK使用案例
 

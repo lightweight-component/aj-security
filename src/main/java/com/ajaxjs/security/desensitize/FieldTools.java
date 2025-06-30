@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 /**
  * bean相互转换工具类
  */
-class Utils {
+class FieldTools {
     public static Object getValue(Field field, Object obj) {
         try {
             return field.get(obj);
@@ -44,8 +44,8 @@ class Utils {
 
         while (currentClass != null) {
             try {
-                // 尝试在当前类中获取字段
-                Field field = currentClass.getDeclaredField(name);
+                Field field = currentClass.getDeclaredField(name); // 尝试在当前类中获取字段
+
                 if (forceAccess)
                     field.setAccessible(true);
 
@@ -54,8 +54,7 @@ class Utils {
                 // 如果当前类没有该字段，则继续查找父类
             }
 
-            // 移动到父类
-            currentClass = currentClass.getSuperclass();
+            currentClass = currentClass.getSuperclass(); // 移动到父类
         }
 
         // 如果到达 Object 类还没有找到字段，则抛出异常
@@ -97,8 +96,7 @@ class Utils {
             for (Class<?> interF : currentClass.getInterfaces())
                 fields.addAll(getAllFields(interF, fn));
 
-            // 移动到父类
-            currentClass = currentClass.getSuperclass();
+            currentClass = currentClass.getSuperclass();// 移动到父类
         }
 
         return fields;
@@ -142,7 +140,7 @@ class Utils {
      * @param field 字段反射类型
      * @return true -是 false-否
      */
-    public static boolean isModifierFinal(final Field field) {
+    public static boolean isModifierFinal(Field field) {
         int modifiers = field.getModifiers();
 
         return checkModifierFinalStaticTransVol(modifiers) || checkModifierNativeSyncStrict(modifiers);

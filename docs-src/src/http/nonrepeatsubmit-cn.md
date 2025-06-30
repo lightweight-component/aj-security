@@ -5,7 +5,7 @@ description: 防止重复提交（如表单或接口的“二次提交”、“�
 date: 2022-01-05
 tags:
   - last one
-layout: layouts/docs.njk
+layout: layouts/docs-cn.njk
 ---
 
 # 防止重复提交

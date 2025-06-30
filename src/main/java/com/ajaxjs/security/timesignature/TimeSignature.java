@@ -5,6 +5,8 @@ import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.util.cryptography.AesCrypto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
  * 1) App public API, not browser 2) make a link for password reset
  */
 @Data
+@Component
 @EqualsAndHashCode(callSuper = true)
+@ConfigurationProperties(prefix = "security.time-signature")
 public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
     /**
      * 秘钥，需要保密
@@ -51,9 +55,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
             throw new SecurityException("Invalid timestamp format.");
         }
 
-        long now = System.currentTimeMillis();
-
-        return Math.abs(now - timestamp) <= expirationTime;
+        return Math.abs(System.currentTimeMillis() - timestamp) < expirationTime;
     }
 
     /**

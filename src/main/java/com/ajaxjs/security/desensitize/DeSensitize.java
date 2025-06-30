@@ -20,7 +20,7 @@ public class DeSensitize {
      * @return 脱敏后的实体类对象
      */
     public static Object acquire(Object entity, Class<?>... packClass) {
-        if (Utils.isFinal(entity))
+        if (FieldTools.isFinal(entity))
             return entity;
 
         if (entity instanceof Collection) {
@@ -54,7 +54,7 @@ public class DeSensitize {
         } else if (entity.getClass().isAnnotationPresent(DesensitizeModel.class))
             return doSetField(entity);
         else if (packClass.length > 0 && entity.getClass().isAssignableFrom(packClass[0]))
-            return doSetField(entity, Utils.remove(packClass, 0));
+            return doSetField(entity, FieldTools.remove(packClass, 0));
 
         return entity;
     }
@@ -67,16 +67,16 @@ public class DeSensitize {
      */
     protected static Map<String, Object> doSetField(Object entity, Class<?>... packClass) {
         Map<String, Object> fieldMap = new HashMap<>();
-        List<Field> fields = Utils.getAllFields(entity.getClass());
+        List<Field> fields = FieldTools.getAllFields(entity.getClass());
 
 
         for (Field field : fields) {
-            if (Utils.isModifierFinal(field))
+            if (FieldTools.isModifierFinal(field))
                 continue;
 
             field.setAccessible(true);
             String name = field.getName();
-            Object value = Utils.getValue(field, entity);
+            Object value = FieldTools.getValue(field, entity);
 
             if (DeSensitizeNewEntity.checkNullValue(field, value)) {
                 fieldMap.put(name, null);
@@ -98,7 +98,6 @@ public class DeSensitize {
         fieldMap.putAll(doGetEntityComplex(entity));
         return fieldMap;
     }
-
 
     /**
      * @param field 实体类属性对象
@@ -211,11 +210,11 @@ public class DeSensitize {
      */
     protected static Map<String, Object> doGetEntityComplex(Object entity) {
         Map<String, Object> flexFieldMap = null;
-        List<Field> fields = Utils.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
+        List<Field> fields = FieldTools.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
 
         for (Field field : fields) {
             field.setAccessible(true);
-            Object value = Utils.getValue(field, entity);
+            Object value = FieldTools.getValue(field, entity);
 
             if (Objects.isNull(value))
                 continue;
@@ -224,11 +223,11 @@ public class DeSensitize {
             if (Objects.isNull(desensitizeComplexProperty.value()))
                 continue;
 
-            Field flexField = Utils.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
+            Field flexField = FieldTools.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
             if (Objects.isNull(flexField))
                 continue;
 
-            Object flexValue = Utils.getValue(flexField, entity);
+            Object flexValue = FieldTools.getValue(flexField, entity);
             if (Objects.isNull(flexValue) || !(flexValue instanceof String))
                 continue;
 

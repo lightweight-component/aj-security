@@ -18,7 +18,7 @@ public class DeSensitizeNewEntity {
      * @return 对实体类进行脱敏，返回原来的实体类对象
      */
     protected static <T> T acquire(T entity, Class<?>... packClass) {
-        if (Utils.isFinal(entity))
+        if (FieldTools.isFinal(entity))
             return entity;
 
         if (entity instanceof Collection) {
@@ -35,7 +35,7 @@ public class DeSensitizeNewEntity {
         } else if (entity.getClass().isAnnotationPresent(DesensitizeModel.class))
             doSetField(entity);
         else if (packClass.length > 0 && entity.getClass().isAssignableFrom(packClass[0]))
-            doSetField(entity, Utils.remove(packClass, 0));
+            doSetField(entity, FieldTools.remove(packClass, 0));
 
         return entity;
     }
@@ -47,17 +47,17 @@ public class DeSensitizeNewEntity {
      * @param <T>    实体类类型
      */
     protected static <T> void doSetField(T entity, Class<?>... packClass) {
-        List<Field> fields = Utils.getAllFields(entity.getClass());
+        List<Field> fields = FieldTools.getAllFields(entity.getClass());
 
         for (Field field : fields) {
-            if (Utils.isModifierFinal(field))
+            if (FieldTools.isModifierFinal(field))
                 continue;
 
             field.setAccessible(true);
-            Object value = Utils.getValue(field, entity);
+            Object value = FieldTools.getValue(field, entity);
 
             if (checkNullValue(field, value)) {
-                Utils.setField(field, entity, null);
+                FieldTools.setField(field, entity, null);
                 continue;
             }
 
@@ -108,11 +108,10 @@ public class DeSensitizeNewEntity {
     protected static <T> void doGetEntityStr(Field field, T entity, Object value) {
         if (field.isAnnotationPresent(DesensitizeProperty.class)) {
             String _value = DataMask.doGetProperty((String) value, field.getAnnotation(DesensitizeProperty.class).value());
-            Utils.setField(field, entity, _value);
+            FieldTools.setField(field, entity, _value);
         } else
             acquire(value);
     }
-
 
     /**
      * 对Collection集合中存储是字符串、实体对象进行多语言支持
@@ -138,7 +137,7 @@ public class DeSensitizeNewEntity {
         }
 
         if (Objects.nonNull(list))
-            Utils.setField(field, entity, list);
+            FieldTools.setField(field, entity, list);
     }
 
     /**
@@ -218,12 +217,11 @@ public class DeSensitizeNewEntity {
      * @param <T>    实体类类型
      */
     protected static <T> void doGetEntityComplex(T entity) {
-        List<Field> fields = Utils.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
-
+        List<Field> fields = FieldTools.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
 
         for (Field field : fields) {
             field.setAccessible(true);
-            Object value = Utils.getValue(field, entity);
+            Object value = FieldTools.getValue(field, entity);
 
             if (Objects.isNull(value))
                 continue;
@@ -232,11 +230,11 @@ public class DeSensitizeNewEntity {
             if (Objects.isNull(desensitizeComplexProperty.value()))
                 return;
 
-            Field flexField = Utils.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
+            Field flexField = FieldTools.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
             if (Objects.isNull(flexField))
                 return;
 
-            Object flexValue = Utils.getValue(flexField, entity);
+            Object flexValue = FieldTools.getValue(flexField, entity);
             if (Objects.isNull(flexValue) || !(flexValue instanceof String))
                 return;
 
@@ -248,8 +246,7 @@ public class DeSensitizeNewEntity {
             if (index <= desensitizeComplexProperty.types().length - 1)
                 type = desensitizeComplexProperty.types()[index];
 
-            Utils.setField(flexField, entity, DataMask.doGetProperty((String) flexValue, type));
+            FieldTools.setField(flexField, entity, DataMask.doGetProperty((String) flexValue, type));
         }
-
     }
 }

@@ -9,6 +9,7 @@ public class TestTimeSign {
 
     @Test
     public void testGenerateSignature() {
+        timeSignature.setSecretKey("der3@x7Az#2");
         String signature = timeSignature.generateSignature();
         assertNotNull(signature);
         System.out.println(signature);

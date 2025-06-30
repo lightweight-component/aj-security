@@ -5,7 +5,7 @@ description: Architecture
 date: 2022-01-05
 tags:
   - HTTP Basic Auth
-layout: layouts/docs.njk
+layout: layouts/docs-cn.njk
 ---
 
 # HTTP 基本认证（Basic Auth）
@@ -39,4 +39,4 @@ int HttpDigestAuthCheck();
 
 浏览器提示输入账号、密码。
 
-![](auth.jpg)
+![](/auth/auth.jpg)

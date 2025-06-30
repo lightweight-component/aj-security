@@ -5,7 +5,7 @@ description: Initializing the Protocol
 date: 2022-01-05
 tags:
   - initialization
-layout: layouts/docs.njk
+layout: layouts/docs-cn.njk
 ---
 
 # 协议初始化

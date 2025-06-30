@@ -1,4 +1,4 @@
-package com.ajaxjs.security.desensitize.annotation;
+package com.ajaxjs.security.iplist;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Json脱敏标记，必须指定此标记，否则脱敏无效
+ * HTTP Referer check
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DesensitizeModel {
+public @interface IpListCheck {
 }

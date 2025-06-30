@@ -1,12 +1,14 @@
 package com.ajaxjs.security.desensitize;
 
+import com.ajaxjs.util.StrUtil;
+
 import java.util.Arrays;
 
 /**
  * 数据脱敏
  */
 public class DataMask {
-    public static final String PLACE_HOLDER = "--隐藏--";
+    public static String PLACE_HOLDER = "--隐藏--";
 
     /**
      * 中文姓名脱敏，第一个字符展示，其它隐藏
@@ -16,7 +18,7 @@ public class DataMask {
      * @return 脱敏后的姓名
      */
     public static String maskChineseName(String name) {
-        if (name == null || name.isEmpty())
+        if (StrUtil.isEmptyText(name))
             return name;
 
         if (name.length() == 1)
@@ -43,8 +45,8 @@ public class DataMask {
      * @param idCard 身份证
      * @return 脱敏后的身份证信息
      */
-    public static String maskIdCard(final String idCard) {
-        if (idCard == null || idCard.isEmpty())
+    public static String maskIdCard(String idCard) {
+        if (StrUtil.isEmptyText(idCard))
             return idCard;
 
         if (idCard.length() == 15)
@@ -66,8 +68,8 @@ public class DataMask {
      * @param phone 手机号码
      * @return 脱敏后的手机号
      */
-    public static String maskPhoneNumber(final String phone) {
-        if (phone == null || phone.isEmpty())
+    public static String maskPhoneNumber(String phone) {
+        if (StrUtil.isEmptyText(phone))
             return phone;
 
         if (phone.length() == 11)
@@ -103,9 +105,8 @@ public class DataMask {
         String after = str.substring(quarter * 3); // 最后一段字符串
         int middle = str.length() - before.length() - after.length();  // 中间字符串的长度
 
-        return String.join("*".repeat(Math.max(0, middle)), before, after);    // 中间字符串拼接为*号
+        return String.join(repeat("*", Math.max(0, middle)), before, after);    // 中间字符串拼接为*号
     }
-
 
     /**
      * 地址脱敏，只显示地址，不展示详细信息
@@ -116,8 +117,8 @@ public class DataMask {
      * @param len     长度
      * @return 脱敏后的地址信息
      */
-    public static String maskAddress(final String address, int len) {
-        if (address == null || address.isEmpty())
+    public static String maskAddress(String address, int len) {
+        if (StrUtil.isEmptyText(address))
             return address;
 
         if (address.length() < 3)
@@ -126,7 +127,7 @@ public class DataMask {
         if (len <= 0)
             len = address.length() / 3;
 
-        return address.substring(0, len) + "*".repeat(Math.max(0, address.length() - len));
+        return address.substring(0, len) + repeat("*", Math.max(0, address.length() - len));
     }
 
     /**
@@ -148,8 +149,8 @@ public class DataMask {
      * @param email 邮箱
      * @return 脱敏后的邮箱
      */
-    public static String maskEmail(final String email) {
-        if (email == null || email.isEmpty())
+    public static String maskEmail(String email) {
+        if (StrUtil.isEmptyText(email))
             return email;
 
         int index = email.indexOf('@');
@@ -182,14 +183,26 @@ public class DataMask {
      * @param cardNo 卡号
      * @return 脱敏后的银行卡号
      */
-    public static String maskBankCard(final String cardNo) {
-        if (cardNo == null || cardNo.isEmpty())
+    public static String maskBankCard(String cardNo) {
+        if (StrUtil.isEmptyText(cardNo))
             return cardNo;
 
         if (cardNo.length() <= 10)
             return maskMiddleTwoPortions(cardNo);
 
-        return cardNo.substring(0, 6) + "*".repeat(cardNo.length() - 10) + cardNo.substring(cardNo.length() - 4);
+        return cardNo.substring(0, 6) + repeat("*", cardNo.length() - 10) + cardNo.substring(cardNo.length() - 4);
+    }
+
+    public static String repeat(String str, int count) {
+        if (str == null || count <= 0) 
+            return "";
+        
+        StringBuilder builder = new StringBuilder(str.length() * count);
+
+        for (int i = 0; i < count; i++) 
+            builder.append(str);
+        
+        return builder.toString();
     }
 
     /**
@@ -198,7 +211,7 @@ public class DataMask {
      * @return 脱敏后的字段值
      */
     public static String doGetProperty(String value, DesensitizeType type) {
-        if (value == null || value.isEmpty())
+        if (StrUtil.isEmptyText(value))
             return value;
 
         if (type == null)

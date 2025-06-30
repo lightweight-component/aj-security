@@ -8,28 +8,53 @@ tags:
 layout: layouts/docs-cn.njk
 ---
 
-# 欢迎使用 AJ MCP SDK 用户手册
+# AJ Security：实用的 Java Web 安全库
 
-AJ MCP SDK 是 **模型上下文协议**（MCP）的一个实现。MCP 是一种开放协议，旨在实现大型语言模型（LLM）应用与外部数据源和工具之间的无缝集成。本 SDK 提供了声明式的 API，使开发者能够轻松地在自己的应用程序中实现 MCP 服务器功能。
+基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一一套的调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
 
-## 为什么选择 AJ MCP SDK？
+本框架的功能有：
 
-与其他 MCP SDK 相比，AJ MCP SDK 被设计得更轻量、更易于使用。它基于 Java 8 构建，为开发者提供了简单直观的 API 来实现 MCP 服务器功能。SDK 的体积小巧，便于集成到你的应用程序中。
+<style>
+  table, table td { 
+    border: 0!important;
+  }
+  table td {
+    text-align: left;
+    vertical-align: top;
+  }
+</style>
+<table><tr><td>
 
-### 为什么还在使用 Java 8？
+- HTTP Web 安全
+    - HTTP Referer 校验
+    - 时间戳加密 Token 校验
+    - IP 白名单/黑名单
+    - 防止重复提交数据
+    - 根据 IP 地域限制（TODO）
+- 一般性 Web 校验
+    - 防止 XSS 跨站攻击
+    - 防止 CRLF 攻击
+    - Cookie 容量检查
+- HTTP 标准认证
+  - HTTP Basic Auth 认证
+  - HTTP Digest Auth 认证
+</td>
 
-MCP 是一个基于协议的框架，因此应具有更强的通用性，满足更广泛的市场需求。
+<td>
 
-目前 Java 领域中开发 MCP 的情况如下：
+- 验证码 Captcha 机制
+    - 简单 Java 图片验证码
+    - 基于 kaptcha 的图片验证码
+    - 基于 Google Recaptcha 的验证码
+    - 基于 CloudFlare Turnstile 的验证码
 
-| 框架名称                | 所需 JDK 版本 |
-|---------------------|-----------|
-| 官方 Java MCP SDK     | jdk17+    |
-| Spring AI MCP       | jdk17+    |
-| Quarkus MCP 服务器     | jdk17+    |
-| langchain4j-mcp 客户端 | jdk11+    |
+- API 接口功能
+    - 限流限次数（TODO）
+- 其他实用功能
+    - 实体字段脱敏
+    - API 接口加解密
 
-考虑到仍有大量服务器运行在 JDK 8 上，使用 Java 8 开发 MCP（或 MCP 服务器）对于确保广泛兼容性和灵活性至关重要——这才是 MCP 真正意义上的自由。
+</td></tr></table>
 
 ## 更多信息
 
@@ -37,7 +62,7 @@ MCP 是一个基于协议的框架，因此应具有更强的通用性，满足�
 
 - [架构说明](auth)
 - [客户端 SDK](captcha)
-- [服务端 SDK](classic)
+- [服务端 SDK](misc)
 
 ## 源代码
 

@@ -5,7 +5,7 @@ description: HTTP Referer 校验（也称为“Referer 检查”）是一种常�
 date: 2022-01-05
 tags:
   - Referer
-layout: layouts/docs.njk
+layout: layouts/docs-cn.njk
 ---
 
 # HTTP Referer 校验

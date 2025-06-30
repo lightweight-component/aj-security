@@ -15,11 +15,10 @@
  */
 package com.ajaxjs.security.classic;
 
-import java.io.IOException;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
 
 /**
  *

@@ -34,4 +34,4 @@ int HttpBasicAuthCheck();
 
 浏览器提示输入账号、密码。
 
-![](auth.jpg)
+![](/auth/auth.jpg)

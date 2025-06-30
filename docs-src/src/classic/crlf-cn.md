@@ -5,28 +5,24 @@ description: MCP Server SDK Resources Development
 date: 2022-01-05
 tags:
   - desensitize
-layout: layouts/docs.njk
+layout: layouts/docs-cn.njk
 ---
 
 # aj-desensitize
+
+平时开发的过程中经常会遇到对一些敏感的字段进行脱敏处理，防止信息泄漏，如：邮箱、用户名、密码等；做为一个优秀的程序员我们不应该遇到这种问题时就做特殊处理，重复做相同的工作，所以我们应该写一个基础库SDK，解决重复的问题。
+
 ##### 脱敏 SDK 组件
-
-##### 二、属性配置
-
-```properties
-#脱敏组件SDK开关
-spring.emily.desensitize.enabled=true
-```
 
 ##### 三、注解列表
 
 | 注解                          | 作用域                                                                                  |
 |-----------------------------|--------------------------------------------------------------------------------------|
-| @DesensitizeOperation       | 标记在方法上，只有标记了此注解的返回值才会进行脱敏处理，removePackClass属性指定要剥离的外层类，可以指定多个剥离的外层类，只有最内层的类才会进行脱敏处理； |
+| @DesensitizeOperation       | 标记在方法上，只有标记了此注解的返回值才会进行脱敏处理，`removePackClass`属性指定要剥离的外层类，可以指定多个剥离的外层类，只有最内层的类才会进行脱敏处理； |
 | @DesensitizeModel           | 标记在实体类上，只有标记了此注解的实体类才会进行脱敏处理                                                         |
-| @DesensitizeProperty        | 标记在实体类字符串、Map属性字段，标记了次注解的字段会按照指定类型进行脱敏；                                              |
+| @DesensitizeProperty        | 标记在实体类字符串、Map 属性字段，标记了次注解的字段会按照指定类型进行脱敏；                                             |
 | @DesensitizeNullProperty    | 标记在实体类引用数据类型上                                                                        |
-| @DesensitizeMapProperty     | 标记在实体类Map数据类型上，按照指定的key字段及类型进行脱敏。                                                    |
+| @DesensitizeMapProperty     | 标记在实体类Map数据类型上，按照指定的 key 字段及类型进行脱敏。                                                  |
 | @DesensitizeComplexProperty | 标记在实体类属性字段上，需两个字段配合使用                                                                |
 
 ##### 四、应用场景

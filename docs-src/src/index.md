@@ -8,11 +8,22 @@ tags:
 layout: layouts/docs.njk
 ---
 
-# Welcome to the User Manual of AJ MCP SDK
+# 实用的 Java Web 安全库
 
-The AJ MCP SDK is an implementation of the Model Context Protocol (MCP), an open protocol designed to enable seamless integration between Large
-Language Model (LLM) applications and external data sources and tools. This SDK provides the declarative APIs that make it easy for developers to
-implement MCP server features in your applications.
+基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一一套的调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。 Spring Boot 程序引入 jar 包即可开箱即用。
+
+本框架的功能有
+
+- HTTP Web 安全
+  - HTTP Referer 校验
+  - 时间戳加密 Token 校验
+  - IP 白名单/黑名单
+- 验证码 Captcha 机制
+  - 简单 Java 图片验证码
+  - 基于 kaptcha 的图片验证码
+- HTTP 标准认证
+  - HTTP Basic Auth 认证
+  - HTTP Digest Auth 认证
 
 ## Why AJ MCP SDK?
 
@@ -32,12 +43,12 @@ Currently, the situation with developing MCP in Java is:
 | Quarkus MCP server     | jdk17+       |
 | langchain4j-mcp client | jdk11+       |
 
-
 Given that a large number of servers still run on JDK 8, the ability to develop MCP (or MCP Server) with Java 8 is essential to ensure broad compatibility and flexibility — that’s what real freedom for MCP means.
 
 ## Further
+
 For specific information about working with individual components,
-please see dedicated pages on [Architecture](auth), [Client SDK](captcha), [Server SDK](classic).
+please see dedicated pages on [Architecture](auth), [Client SDK](captcha), [Server SDK](misc).
 
 ## Source Code
 

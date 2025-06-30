@@ -1,10 +1,13 @@
 package com.ajaxjs.security.desensitize;
 
+import lombok.AllArgsConstructor;
+
 import java.util.function.Function;
 
 /**
  * 脱敏类型
  */
+@AllArgsConstructor
 public enum DesensitizeType {
     DEFAULT(v -> DataMask.PLACE_HOLDER),
     // 手机号
@@ -21,8 +24,4 @@ public enum DesensitizeType {
     ADDRESS(v -> DataMask.maskAddress(v, 0));
 
     public final Function<String, String> handler;
-
-    DesensitizeType(Function<String, String> handler) {
-        this.handler = handler;
-    }
 }

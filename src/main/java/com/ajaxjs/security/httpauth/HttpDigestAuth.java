@@ -7,7 +7,9 @@ import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,11 +20,13 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Simply check the HttpBasicAuth
+ * Simply check the HttpDigestAuth
  */
 @Data
+@Component
 @EqualsAndHashCode(callSuper = true)
-public class HttpDigestAuth extends InterceptorAction<HttpBasicDigestCheck> {
+@ConfigurationProperties(prefix = "security.http-digest-auth")
+public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
     String username;
 
     String password;
@@ -30,11 +34,13 @@ public class HttpDigestAuth extends InterceptorAction<HttpBasicDigestCheck> {
     String REALM = "my-digest-realm";
 
     @Override
-    public boolean action(HttpBasicDigestCheck annotation, HttpServletRequest req) {
+    public boolean action(HttpDigestAuthCheck annotation, HttpServletRequest req) {
         String authHeader = req.getHeader(HttpHeaders.AUTHORIZATION);  // 获取 Referer 头
 
-        if (StrUtil.isEmptyText(authHeader) || !authHeader.startsWith("Digest "))
-            throw new SecurityException("Invalid HttpDigestAuth header.");
+        if (StrUtil.isEmptyText(authHeader) || !authHeader.startsWith("Digest ")){
+            sendDigestChallenge();
+            return false;
+        }
 
         // 解析 Authorization 头
         Map<String, String> authParams = parseDigestHeader(authHeader.substring(7));
@@ -54,10 +60,8 @@ public class HttpDigestAuth extends InterceptorAction<HttpBasicDigestCheck> {
 
         // HA1 = MD5(username:realm:password)
         String ha1 = MessageDigestHelper.md5(username + ":" + REALM + ":" + password);
-
         // HA2 = MD5(method:uri)
         String ha2 = MessageDigestHelper.md5(method + ":" + uri);
-
         // response = MD5(HA1:nonce:nc:cnonce:qop:HA2)
         String validResponse = MessageDigestHelper.md5(ha1 + ":" + nonce + ":" + nc + ":" + cnonce + ":" + qop + ":" + ha2);
 

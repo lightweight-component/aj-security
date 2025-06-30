@@ -2,17 +2,26 @@ package com.ajaxjs.security;
 
 import com.ajaxjs.security.captcha.google.GoogleCaptcha;
 import com.ajaxjs.security.captcha.google.GoogleCaptchaCheck;
+import com.ajaxjs.security.httpauth.HttpBasicAuth;
+import com.ajaxjs.security.httpauth.HttpBasicAuthCheck;
+import com.ajaxjs.security.httpauth.HttpDigestAuthCheck;
+import com.ajaxjs.security.httpauth.HttpDigestAuth;
+import com.ajaxjs.security.iplist.IpList;
+import com.ajaxjs.security.iplist.IpListCheck;
 import com.ajaxjs.security.limit.LimitAccess;
 import com.ajaxjs.security.limit.LimitAccessVerify;
 import com.ajaxjs.security.nonrepeatsubmit.NonRepeatSubmit;
 import com.ajaxjs.security.nonrepeatsubmit.NonRepeatSubmitMgr;
 import com.ajaxjs.security.referer.HttpReferer;
 import com.ajaxjs.security.referer.HttpRefererCheck;
-import com.ajaxjs.security.common.SpringUtils;
 import com.ajaxjs.security.timesignature.TimeSignature;
 import com.ajaxjs.security.timesignature.TimeSignatureVerify;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -22,7 +31,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 @Slf4j
-public class SecurityFilter implements HandlerInterceptor {
+public class SecurityInterceptor implements HandlerInterceptor, ApplicationContextAware {
     @Autowired(required = false)
     NonRepeatSubmitMgr nonRepeatSubmitMgr;
 
@@ -37,6 +46,12 @@ public class SecurityFilter implements HandlerInterceptor {
         if (nonRepeatSubmitMgr != null && method.isAnnotationPresent(NonRepeatSubmit.class))
             nonRepeatSubmitMgr.handle(request, method);
 
+        if (!handler(IpList.class, request, handlerMethod, method, IpListCheck.class))
+            return false;
+
+        if (!handler(HttpReferer.class, request, handlerMethod, method, HttpRefererCheck.class))
+            return false;
+
         if (!handler(TimeSignature.class, request, handlerMethod, method, TimeSignatureVerify.class))
             return false;
 
@@ -46,7 +61,10 @@ public class SecurityFilter implements HandlerInterceptor {
         if (!handler(LimitAccess.class, request, handlerMethod, method, LimitAccessVerify.class))
             return false;
 
-        if (!handler(HttpReferer.class, request, handlerMethod, method, HttpRefererCheck.class))
+        if (!handler(HttpBasicAuth.class, request, handlerMethod, method, HttpBasicAuthCheck.class))
+            return false;
+
+        if (!handler(HttpDigestAuth.class, request, handlerMethod, method, HttpDigestAuthCheck.class))
             return false;
 
         return true;
@@ -67,15 +85,16 @@ public class SecurityFilter implements HandlerInterceptor {
     @SuppressWarnings("unchecked")
     private <T extends Annotation> boolean handler(Class<? extends InterceptorAction<T>> serviceClz, HttpServletRequest req,
                                                    HandlerMethod handlerMethod, Method method, Class<T> annotationType) {
-        InterceptorAction<T> service = SpringUtils.getBean(serviceClz);// 获取拦截器服务的实例
+        InterceptorAction<T> service = getBean(serviceClz);// 获取拦截器服务的实例
 
-        if (service == null)// 如果服务实例为空，表示对应的业务没有创建，直接放行
+        if (service == null || !service.isEnabled())// 如果服务实例为空，表示对应的业务没有创建，直接放行
             return true;
 
-        Annotation annotation = null;
+        Annotation annotation;
 
         if (service.isGlobalCheck()) {// 如果服务配置了全局检查，则不需要查找方法或类注解
             // TODO: 当前缺乏一个获取配置的手段，需要进一步实现
+            return service.action(null, req);
         } else {
             // 获取处理方法的Bean类型，并尝试获取类级别的注解
             Class<?> beanType = handlerMethod.getBeanType(); // or method.getDeclaringClass()
@@ -104,4 +123,36 @@ public class SecurityFilter implements HandlerInterceptor {
         return true;  // 如果注解不存在，直接放行
     }
 
+    /**
+     * Spring 上下文
+     */
+    public static ApplicationContext context;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
+    }
+
+
+    /**
+     * 获取已注入的对象
+     *
+     * @param <T> 对象类型
+     * @param clz 对象类型引用
+     * @return 组件对象
+     */
+    public static <T> T getBean(Class<T> clz) {
+        if (context == null) {
+            log.warn("Spring Bean 未准备好，不能返回 {} 类", clz);
+            return null;
+        }
+
+        try {
+            return context.getBean(clz);
+        } catch (NoSuchBeanDefinitionException e) {
+            log.warn("No such bean of class {}.", clz);
+
+            return null;
+        }
+    }
 }

@@ -56,7 +56,7 @@ layout: layouts/docs-cn.njk
 
 </td></tr></table>
 
-
+AJ Security 的代码量不多，而且都是很简单易懂的代码。另外没啥第三方依赖，适合 Java8+。
 
 ## 源代码
 本项目采用 Apache License 协议开源。

@@ -13,17 +13,6 @@
 
 本框架的功能有：
 
-<style>
-  table, table td { 
-    border: 0!important;
-  }
-  table td {
-    text-align: left;
-    vertical-align: top;
-  }
-</style>
-<table><tr><td>
-
 - HTTP Web 安全
   - HTTP Referer 校验
   - 时间戳加密 Token 校验
@@ -37,23 +26,17 @@
 - HTTP 标准认证
   - HTTP Basic Auth 认证
   - HTTP Digest Auth 认证
-</td>
-
-<td>
-
 - 验证码 Captcha 机制
   - 简单 Java 图片验证码
   - 基于 kaptcha 的图片验证码
   - 基于 Google Recaptcha 的验证码
   - 基于 CloudFlare Turnstile 的验证码
-
 - API 接口功能
   - 限流限次数（TODO）
 - 其他实用功能
   - 实体字段脱敏
   - API 接口加解密
 
-</td></tr></table>
 
 AJ Security 的代码量不多，而且都是很简单易懂的代码。另外没啥第三方依赖，适合 Java8+。
 

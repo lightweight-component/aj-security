@@ -14,17 +14,6 @@ Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set o
 
 The features of this framework include:
 
-<style>
-  table, table td { 
-    border: 0!important;
-  }
-  table td {
-    text-align: left;
-    vertical-align: top;
-  }
-</style>
-<table><tr><td>
-
 - HTTP Web Security
     - HTTP Referer validation
     - Timestamp encrypted token validation
@@ -38,23 +27,17 @@ The features of this framework include:
 - HTTP Standard Authentication
     - HTTP Basic Auth authentication
     - HTTP Digest Auth authentication
-</td>
-
-<td>
-
 - Captcha Mechanisms
     - Simple Java image captcha
     - Image captcha based on kaptcha
     - Captcha based on Google Recaptcha
     - Captcha based on CloudFlare Turnstile
-
 - API Interface Features
     - Rate limiting and quota (TODO)
 - Other Practical Features
     - Entity field desensitization
     - API interface encryption/decryption
 
-</td></tr></table>
 
 The code of AJ Security is small, straightforward and well commented. There are not much third-party dependencies, just Java 8 requires.
 

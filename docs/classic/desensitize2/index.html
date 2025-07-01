@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Security 框架</MCP Server SDK 资源内容</title>
+        <meta name="description" content="实用的 Java Web 安全库。MCP Server SDK 资源内容"/>
+        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, 资源内容"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="/asset/style/main.css"/>
+        <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
+        <script src="/asset/common.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 首页</a>
+                    | ⚙️ 源码:
+                    <a target="_blank" href="https://github.com/lightweight-component/aj-mcp">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-mcp">Gitcode</a>
+                    |
+                    <a href="/">英文版本</a>
+                </div>
+                <h1>AJ Security</h1>
+                <h3>用户手册</h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                <ul>
+                    <li class="selected">
+                        <a href="/cn">首页</a>
+                    </li>
+                    <li>
+                        <a href="/install-cn">安装与配置</a>
+                    </li>
+                </ul>
+                <h3>HTTP Web 安全</h3>
+                <ul>
+                    <li>
+                        <a href="/http/http-referer-cn">HTTP Referer 校验</a>
+                    </li>
+                    <li>
+                       <a href="/client/initialization-cn">初始化</a>
+                    </li>
+                    <li>
+                       <a href="/client/resource-cn">Resources 用法</a>
+                    </li>
+                     <li>
+                       <a href="/client/prompt-cn">Prompts 用法</a>
+                    </li>
+                     <li>
+                       <a href="/client/tool-cn">Tools 用法</a>
+                    </li>
+                </ul>
+                <h3>一般性 Web 校验</h3>
+                <ul>
+                      <li>
+                           <a href="/server/usage-server-cn">Server SDK 用法指南</a>
+                      </li>
+                      <li>
+                           <a href="/server/res-server-cn">Resources 用法</a>
+                      </li>
+                      <li>
+                           <a href="/server/pro-server-cn">Prompts 用法</a>
+                      </li>
+                      <li>
+                             <a href="/server/tool-server-cn">Tools 用法</a>
+                       </li>
+                      <li>
+                         <a href="/server/sample-cn">整合例子</a>
+                      </li>
+                </ul>
+
+                <h3>验证码 Captcha 机制</h3>
+                <ul>
+                    <li><a href="/misc/versions">版本记录</a></li>
+                    <li><a href="/misc/contact-cn">联系方式</a></li>
+                </ul>
+                <h3>HTTP 标准认证</h3>
+                <ul>
+                    <li><a href="/misc/versions">版本记录</a></li>
+                    <li><a href="/misc/contact-cn">联系方式</a></li>
+                </ul>
+                <h3>API 接口功能</h3>
+                <ul>
+                    <li><a href="/misc/versions">版本记录</a></li>
+                    <li><a href="/misc/contact-cn">联系方式</a></li>
+                </ul>
+                <h3>其他实用功能</h3>
+                <ul>
+                    <li><a href="/misc/versions">版本记录</a></li>
+                    <li><a href="/misc/contact-cn">联系方式</a></li>
+                </ul>
+            </menu>
+            <article>
+                <h4>开源pom依赖引用</h4>
+<p>https://mingyang.blog.csdn.net/article/details/130324987</p>
+<h5>新增JsonNullField注解，可将指定的字段值置为null，注解定义如下：</h5>
+<pre><code class="language-java">/**
+ *   自定义注解，标注在属性上，字段属性值置为null
+ * ---------------------------------------------
+ * 生效规则：
+ * 1.非int、double、float、byte、short、long、boolean、char八种基本数据类型字段才会生效；
+ * 2.
+ * ---------------------------------------------
+ * @author  Emily
+ * @since :  Created in 2023/7/14 5:22 下午
+ */
+@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonNullField {
+
+}
+</code></pre>
+<hr>
+<h4>解锁新技能《Java基于注解的脱敏实现组件SDK》</h4>
+<blockquote>
+<p>平时开发的过程中经常会遇到对一些敏感的字段进行脱敏处理，防止信息泄漏，如：邮箱、用户名、密码等；做为一个优秀的程序员我们不应该遇到这种问题时就做特殊处理，重复做相同的工作，所以我们应该写一个基础库SDK，解决重复的问题；</p>
+</blockquote>
+<h5>一、定义注解</h5>
+<pre><code class="language-java">@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonSensitive {
+}
+</code></pre>
+<blockquote>
+<p>@JsonSensitive标注在类上，表示此类需要进行脱敏处理；</p>
+</blockquote>
+<pre><code class="language-java">@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonSimField {
+    /**
+     * 脱敏类型，见枚举类型{@link SensitiveType}
+     *
+     * @return
+     */
+    SensitiveType value() default SensitiveType.DEFAULT;
+}
+</code></pre>
+<blockquote>
+<p>@JsonSimField标注在类的String、Collection<String>、String[]字段上，表示对这些字段值进行脱敏处理；</p>
+</blockquote>
+<pre><code class="language-java">@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface JsonFlexField {
+    /**
+     * 要隐藏的参数key名称
+     *
+     * @return
+     */
+    String[] fieldKeys() default {};
+
+    /**
+     * 要隐藏的参数值的key名称
+     *
+     * @return
+     */
+    String fieldValue();
+
+    /**
+     * 脱敏类型，见枚举类型{@link SensitiveType}
+     *
+     * @return
+     */
+    SensitiveType[] types() default {};
+}
+</code></pre>
+<blockquote>
+<p>@JsonFlexField注解标注在复杂数据类型字段上，具体的使用方法会在后面举例说明；</p>
+</blockquote>
+<h5>三、基于注解的脱敏SDK使用案例</h5>
+<ul>
+<li>对实体类中字段为字符串类型脱敏处理</li>
+</ul>
+<pre><code class="language-java">@JsonSensitive
+public class PubRequest {
+    @JsonSimField(SensitiveType.USERNAME)
+    public String username;
+    @JsonSimField
+    public String password;
+    }
+</code></pre>
+<ul>
+<li>对实体类中字段是List<String>、Map&lt;String,String&gt;、String[]集合类型进行脱敏处理</li>
+</ul>
+<pre><code class="language-java">@JsonSensitive
+public class PubRequest {
+    @JsonSimField
+    public Map&lt;String, String&gt; work;
+    @JsonSimField
+    public List&lt;String&gt; jobList;
+    @JsonSimField
+    public String[] jobs;
+}
+</code></pre>
+<ul>
+<li>实体类中的字段是复杂数据类型脱敏处理</li>
+</ul>
+<pre><code class="language-java">@JsonSensitive
+public class JsonRequest extends Animal{
+    @JsonFlexField(fieldKeys = {&quot;email&quot;, &quot;phone&quot;}, fieldValue = &quot;fieldValue&quot;, types = {SensitiveType.EMAIL, SensitiveType.PHONE})
+    private String fieldKey;
+    private String fieldValue;
+}
+</code></pre>
+<blockquote>
+<p>复杂数据类型其实就是fieldKey可以指定多个不同的字段名，fieldValue是具体的字段值，如果fieldKey是email时fieldValue传递的就是邮箱，就按照types中指定脱敏策略为邮箱的策略脱敏；</p>
+</blockquote>
+<ul>
+<li>实体类中的属性字段是集合类型，集合中存放的是嵌套的实体类</li>
+</ul>
+<pre><code class="language-java">    @JsonSensitive
+    public static class Job {
+        @JsonSimField(SensitiveType.DEFAULT)
+        private String work;
+        @JsonSimField(SensitiveType.EMAIL)
+        private String email;
+    }
+</code></pre>
+<p>嵌套实体类属性字段</p>
+<pre><code class="language-java">    public Job job;
+    public Map&lt;String, Object&gt; work;
+    public List&lt;PubResponse.Job&gt; jobList;
+    public PubResponse.Job[] jobs;
+</code></pre>
+<blockquote></blockquote>
+<p>如果实体类中的集合中存放的是实体类，并且这个实体类标注了@JsonSensitive注解，则会对嵌套实体类中标注了@JsonSimField、@JsonFlexField注解的字段进行脱敏处理；同样如果最外层是集合、数组、key-value类型则也会对内部嵌套的实体类进行脱敏处理；</p>
+<p>本文只对脱敏SDK做大概的阐述，如果你需要源码可以到个人GitHub上去拉；本文的示例是对当前实体类对象本身进行脱敏处理，返回的还是原来的对象本身，个人GitHub示例中还有一个返回是非当前对象的SDK工具类SensitiveUtils；</p>
+<p>GitHub地址：<a href="https://github.com/mingyang66/spring-parent">https://github.com/mingyang66/spring-parent</a></p>
+
+            </article>
+        </div>
+        <footer>
+             AJ-Util，开源框架 <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> 的一部分。联系方式：
+             frank@ajaxjs.com，<a href="https://blog.csdn.net/zhangxin09" target="_blank">作者博客</a>
+             <br />
+             <br />
+             Copyright © 2025 Frank Cheung. All rights reserved.
+         </footer>
+    </body>
+</html>

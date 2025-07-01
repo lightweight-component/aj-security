@@ -1,16 +1,16 @@
 ---
-title: 用户手册 首页
+title: AJ Security 首页
 subTitle: 2024-12-05 by Frank Cheung
-description: 用户手册 首页
+description: AJ Security 简介
 date: 2022-01-05
 tags:
-  - 用户手册
+  - AJ Security 简介
 layout: layouts/docs-cn.njk
 ---
 
 # AJ Security：实用的 Java Web 安全库
 
-基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一一套的调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
+基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一的一套调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
 
 本框架的功能有：
 
@@ -56,27 +56,15 @@ layout: layouts/docs-cn.njk
 
 </td></tr></table>
 
-## 更多信息
 
-如需了解各组件的具体使用方法，请参阅以下页面：
-
-- [架构说明](auth)
-- [客户端 SDK](captcha)
-- [服务端 SDK](misc)
 
 ## 源代码
+本项目采用 Apache License 协议开源。
 
-本项目采用 GNU GENERAL PUBLIC LICENSE v3.0 协议开源。
-
-- GitHub 地址：[https://github.com/lightweight-component/aj-mcp](https://github.com/lightweight-component/aj-mcp)
-- GitCode 地址（适合中国用户快速访问）：[https://gitcode.com/lightweight-component/aj-mcp](https://gitcode.com/lightweight-component/aj-mcp)
+- GitHub 地址：[https://github.com/lightweight-component/aj-security](https://github.com/lightweight-component/aj-security)
+- GitCode 地址（适合中国用户快速访问）：[https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security)
 
 ## 相关链接
 
-[官网](https://mcp.ajaxjs.com) | [DeepWiki 页面](https://deepwiki.com/lightweight-component/aj-mcp)
+[用户手册](https://security.ajaxjs.com) | [JavaDoc](https://javadoc.io/doc/com.ajaxjs/aj-security) | [DeepWiki 页面](https://deepwiki.com/lightweight-component/aj-security)
 
-## JavaDoc 文档
-
-- [aj-mcp-common](https://javadoc.io/doc/com.ajaxjs/aj-mcp-common)
-- [aj-mcp-client](https://javadoc.io/doc/com.ajaxjs/aj-mcp-client)
-- [aj-mcp-server](https://javadoc.io/doc/com.ajaxjs/aj-mcp-server)

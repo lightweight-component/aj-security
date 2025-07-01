@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Security 框架-{{ title }}</title>
-        <meta name="description" content="实用的 Java Web 安全库。{{description}}"/>
-        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, {{tags}}"/>
+        <title>AJ Security 框架-API 接口数据加密</title>
+        <meta name="description" content="实用的 Java Web 安全库。对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。"/>
+        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, api"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -82,7 +82,25 @@
                 </ul>
             </menu>
             <article>
-                {{ content | safe }}
+                <h1>API 接口数据加密</h1>
+<p>对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。</p>
+<p>示例（Java AES 加密）:</p>
+<pre><code class="language-java">// 加密
+String json = &quot;{\&quot;username\&quot;:\&quot;test\&quot;, \&quot;password\&quot;:\&quot;123456\&quot;}&quot;;
+String key = &quot;xxxxxx&quot;; // 16/24/32位
+String encrypted = AESUtil.encrypt(json, key);
+// 传 encrypted 给后端
+
+// 解密
+String decrypted = AESUtil.decrypt(encrypted, key);
+// 得到原始json
+</code></pre>
+<p>传输格式举例</p>
+<pre><code class="language-json">{
+&quot;data&quot;: &quot;8kfj2j38fjsl2j3dfk...&quot;  // 加密后的密文
+}
+```java</code></pre>
+
             </article>
         </div>
         <footer>

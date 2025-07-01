@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ MCP SDK/Home</title>
-        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. TODO"/>
-        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, last one"/>
+        <title>AJ MCP SDK/API 接口数据加密</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. 对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。"/>
+        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, api"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -80,78 +80,24 @@
                 </ul>
             </menu>
             <article>
-                <h1>AJ Security: A Practical Java Web Security Library</h1>
-<p>Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set of filtering/validation mechanisms, forming a unified invocation chain that is flexibly configurable and extensible. The architecture of this security framework is simple, the code is concise, and it has no additional dependencies, making it suitable for any Spring-based project. Spring Boot applications can use it out of the box by simply importing the jar package.</p>
-<p>The features of this framework include:</p>
-<style>
-  table, table td { 
-    border: 0!important;
-  }
-  table td {
-    text-align: left;
-    vertical-align: top;
-  }
-</style>
-<table><tr><td>
-<ul>
-<li>HTTP Web Security
-<ul>
-<li>HTTP Referer validation</li>
-<li>Timestamp encrypted token validation</li>
-<li>IP whitelist/blacklist</li>
-<li>Prevention of duplicate submissions</li>
-<li>IP region-based restrictions (TODO)</li>
-</ul>
-</li>
-<li>General Web Validation
-<ul>
-<li>XSS attack prevention</li>
-<li>CRLF attack prevention</li>
-<li>Cookie size check</li>
-</ul>
-</li>
-<li>HTTP Standard Authentication
-<ul>
-<li>HTTP Basic Auth authentication</li>
-<li>HTTP Digest Auth authentication</li>
-</ul>
-</li>
-</ul>
-</td>
-<td>
-<ul>
-<li>
-<p>Captcha Mechanisms</p>
-<ul>
-<li>Simple Java image captcha</li>
-<li>Image captcha based on kaptcha</li>
-<li>Captcha based on Google Recaptcha</li>
-<li>Captcha based on CloudFlare Turnstile</li>
-</ul>
-</li>
-<li>
-<p>API Interface Features</p>
-<ul>
-<li>Rate limiting and quota (TODO)</li>
-</ul>
-</li>
-<li>
-<p>Other Practical Features</p>
-<ul>
-<li>Entity field desensitization</li>
-<li>API interface encryption/decryption</li>
-</ul>
-</li>
-</ul>
-</td></tr></table>
-<h2>Source Code</h2>
-<p>Under Apache License v3.0.</p>
-<ul>
-<li>Github: <a href="https://github.com/lightweight-component/aj-security">https://github.com/lightweight-component/aj-security</a></li>
-<li>Gitcode: <a href="https://gitcode.com/lightweight-component/aj-security">https://gitcode.com/lightweight-component/aj-security</a>, for Chinese users faster access.</li>
-</ul>
-<h2>Links</h2>
-<p><a href="https://security.ajaxjs.com">User Manuel</a> | <a href="https://javadoc.io/doc/com.ajaxjs/aj-security">JavaDoc</a> | <a href="https://deepwiki.com/lightweight-component/aj-security">DeepWiki</a></p>
+                <h1>API 接口数据加密</h1>
+<p>对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。</p>
+<p>示例（Java AES 加密）:</p>
+<pre><code class="language-java">// 加密
+String json = &quot;{\&quot;username\&quot;:\&quot;test\&quot;, \&quot;password\&quot;:\&quot;123456\&quot;}&quot;;
+String key = &quot;xxxxxx&quot;; // 16/24/32位
+String encrypted = AESUtil.encrypt(json, key);
+// 传 encrypted 给后端
+
+// 解密
+String decrypted = AESUtil.decrypt(encrypted, key);
+// 得到原始json
+</code></pre>
+<p>传输格式举例</p>
+<pre><code class="language-json">{
+&quot;data&quot;: &quot;8kfj2j38fjsl2j3dfk...&quot;  // 加密后的密文
+}
+```java</code></pre>
 
             </article>
         </div>

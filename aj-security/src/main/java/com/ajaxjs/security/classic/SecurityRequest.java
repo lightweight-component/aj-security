@@ -46,7 +46,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
         String v = super.getParameter(key);
 
         if (isXssCheck) {
-            return Filter.cleanXSS(v);
+            return InstallFilter.cleanXSS(v);
         } else
             return v;
     }
@@ -60,7 +60,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 
         if (isXssCheck) {
             Map<String, String[]> map = new HashMap<>();
-            _map.forEach((k, v) -> map.put(Filter.cleanXSS(k), clean(v)));
+            _map.forEach((k, v) -> map.put(InstallFilter.cleanXSS(k), clean(v)));
 
             return map;
         } else
@@ -76,7 +76,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 
             while (enums.hasMoreElements()) {
                 String value = enums.nextElement();
-                vec.add(Filter.cleanXSS(value));
+                vec.add(InstallFilter.cleanXSS(value));
             }
 
             return vec.elements();
@@ -105,7 +105,7 @@ public class SecurityRequest extends HttpServletRequestWrapper {
             return null;
 
         for (int i = 0; i < values.length; i++)
-            values[i] = Filter.cleanXSS(values[i]);
+            values[i] = InstallFilter.cleanXSS(values[i]);
 
         return values;
     }

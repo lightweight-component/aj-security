@@ -43,7 +43,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     public void addCookie(Cookie cookie) {
         if (isCRLFCheck) {
             String name = cookie.getName(), value = cookie.getValue();
-            Cookie newCookie = new Cookie(Filter.cleanCRLF(name), Filter.cleanCRLF(value));
+            Cookie newCookie = new Cookie(InstallFilter.cleanCRLF(name), InstallFilter.cleanCRLF(value));
 
             if (cookie.getDomain() != null)
                 newCookie.setDomain(cookie.getDomain());
@@ -77,7 +77,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     @Override
     public void setDateHeader(String name, long date) {
         if (isCRLFCheck)
-            name = Filter.cleanCRLF(name);
+            name = InstallFilter.cleanCRLF(name);
 
         super.setDateHeader(name, date);
     }
@@ -85,7 +85,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     @Override
     public void setIntHeader(String name, int value) {
         if (isCRLFCheck)
-            name = Filter.cleanCRLF(name);
+            name = InstallFilter.cleanCRLF(name);
 
         super.setIntHeader(name, value);
     }
@@ -93,11 +93,11 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     @Override
     public void addHeader(String name, String value) {
         if (isXssCheck)
-            value = Filter.cleanXSS(value);
+            value = InstallFilter.cleanXSS(value);
 
         if (isCRLFCheck) {
-            name = Filter.cleanCRLF(name);
-            value = Filter.cleanCRLF(value);
+            name = InstallFilter.cleanCRLF(name);
+            value = InstallFilter.cleanCRLF(value);
         }
 
         super.addHeader(name, value);
@@ -106,11 +106,11 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     @Override
     public void setHeader(String name, String value) {
         if (isXssCheck)
-            value = Filter.cleanXSS(value);
+            value = InstallFilter.cleanXSS(value);
 
         if (isCRLFCheck) {
-            name = Filter.cleanCRLF(name);
-            value = Filter.cleanCRLF(value);
+            name = InstallFilter.cleanCRLF(name);
+            value = InstallFilter.cleanCRLF(value);
         }
 
         super.setHeader(name, value);
@@ -120,7 +120,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     @Override
     public void setStatus(int sc, String value) {
         if (isXssCheck)
-            value = Filter.cleanCRLF(value);
+            value = InstallFilter.cleanCRLF(value);
 
         super.setStatus(sc, value);
     }
@@ -128,7 +128,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
     @Override
     public void sendError(int sc, String value) throws IOException {
         if (isXssCheck)
-            value = Filter.cleanCRLF(value);
+            value = InstallFilter.cleanCRLF(value);
 
         super.sendError(sc, value);
     }

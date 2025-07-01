@@ -62,11 +62,6 @@
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/classic/</loc>
-            <lastmod>2022-01-05T00:00:00.000Z</lastmod>
-        </url>
-    
-        <url>
             <loc>https://mcp.ajaxjs.com/classic/crlf-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
@@ -142,6 +137,11 @@
         </url>
     
         <url>
+            <loc>https://mcp.ajaxjs.com/install-cn/</loc>
+            <lastmod>2022-01-05T00:00:00.000Z</lastmod>
+        </url>
+    
+        <url>
             <loc>https://mcp.ajaxjs.com/misc/api-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
@@ -174,16 +174,6 @@
         <url>
             <loc>https://mcp.ajaxjs.com/asset/style/main.css</loc>
             <lastmod>2025-06-26T12:33:30.118Z</lastmod>
-        </url>
-    
-        <url>
-            <loc>https://mcp.ajaxjs.com/baidu_verify_codeva-05U1Ak03ZG/</loc>
-            <lastmod>2025-06-26T12:33:30.122Z</lastmod>
-        </url>
-    
-        <url>
-            <loc>https://mcp.ajaxjs.com/google9ecf72d780b8e5c8/</loc>
-            <lastmod>2025-06-26T12:33:30.195Z</lastmod>
         </url>
     
         <url>

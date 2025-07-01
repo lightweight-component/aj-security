@@ -1,43 +1,41 @@
 ---
-title: IP 白名单/黑名单
+title: IP Whitelist/Blacklist
 subTitle: 2024-12-05 by Frank Cheung
 description: MCP Server SDK Prompts Development
 date: 2022-01-05
 tags:
-  - IP 白名单/黑名单
-layout: layouts/docs-cn.njk
+  - IP Whitelist/Blacklist
+layout: layouts/docs.njk
 ---
+# IP Whitelist/Blacklist
 
-# IP 白名单/黑名单
+IP whitelist/blacklist validation is a common security measure used to allow or deny specific IP addresses access to interfaces, pages, or services.
 
-IP 白名单/黑名单校验是一种常见的安全措施，用于允许或拒绝特定IP地址访问接口、页面或服务。
+## Scenario Description
 
-## 场景说明
+- Whitelist: Only IPs on the whitelist are allowed access; all others are denied.
+- Blacklist: IPs on the blacklist are denied access; all others are allowed.
 
-- 白名单：只有在白名单内的IP才能访问，其它全部拒绝。
-- 黑名单：黑名单内的IP拒绝访问，其它全部允许。
-
-# 使用方式
-## YAML 配置
-白名单、黑名单同时一般只设置一种。
+# Usage
+## YAML Configuration
+Usually, only one of whitelist or blacklist is set at a time.
 
 ```yaml
 security:
   IpList:
-    globalCheck: true # 全局检查
+    globalCheck: true # Global check
     enabled: true
     whiteList:
       - 192.168.1.1
       - 192.168.1.2
 ```
-## 拦截校验
-在使用的接口上添加`@IpListCheck`注解：
+## Interceptor Validation
+Add the `@IpListCheck` annotation to the interface in use:
 ```java
 @GetMapping("/IpListCheck")
 @IpListCheck
 int IpListCheck();
 ```
 
-
 # Roadmap
-考虑 ipv6、针对注解的单独配置
+Consider IPv6 and separate configuration for annotations.

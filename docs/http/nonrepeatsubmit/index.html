@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ MCP SDK/防止重复提交</title>
-        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. 防止重复提交（如表单或接口的“二次提交”、“刷新重复”）是后端开发常见的需求"/>
+        <title>AJ MCP SDK/Preventing Duplicate Submission</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. Preventing Duplicate Submission"/>
         <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, last one"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
@@ -27,80 +27,82 @@
         </nav>
         <div>
             <menu>
-                
                 <ul>
                     <li class="selected">
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="/architecture/index">Architecture</a>
+                        <a href="/install">Installation & Configuration</a>
                     </li>
                 </ul>
-                <h3>MCP Client SDK</h3>
+                <h3>HTTP Web Security</h3>
                 <ul>
                     <li>
-                        <a href="/client/setup-client">Client SDK Setup</a>
+                        <a href="/http/http-referer">HTTP Referer Validation</a>
                     </li>
                     <li>
-                       <a href="/client/initialization">Initialization</a>
+                        <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
                     <li>
-                       <a href="/client/resource">Resources Usage</a>
+                        <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
-                     <li>
-                       <a href="/client/prompt">Prompts Usage</a>
-                    </li>
-                     <li>
-                       <a href="/client/tool">Tools Usage</a>
+                    <li>
+                        <a href="/http/nonrepeatsubmit">Prevent Duplicate Submission</a>
                     </li>
                 </ul>
-                <h3>MCP Server SDK</h3>
+                <h3>General Web Validation</h3>
                 <ul>
-                      <li>
-                           <a href="/server/usage-server">Server SDK Usage</a>
-                      </li>
-                      <li>
-                           <a href="/server/res-server">Resources Usage</a>
-                      </li>
-                      <li>
-                           <a href="/server/pro-server">Prompts Usage</a>
-                      </li>
-                      <li>
-                             <a href="/server/tool-server">Tools Usage</a>
-                       </li>
-                      <li>
-                         <a href="/server/sample">Integration Samples</a>
-                      </li>
+                    <li>
+                        <a href="/classic/xss">Prevent XSS Attacks</a>
+                    </li>
+                    <li>
+                        <a href="/classic/crlf">Prevent CRLF Attacks</a>
+                    </li>
                 </ul>
 
-                <h3>Misc</h3>
+                <h3>Captcha Mechanism</h3>
                 <ul>
-                    <li><a href="/misc/versions">Release History</a></li>
-                    <li><a href="/misc/contact">Contact</a></li>
+                    <li><a href="/captcha/img-captcha">Image Captcha</a></li>
+                    <li><a href="/captcha/google">Google-based Captcha</a></li>
+                    <li><a href="/captcha/cf">CloudFlare-based Captcha</a></li>
+                </ul>
+                <h3>HTTP Standard Authentication</h3>
+                <ul>
+                    <li><a href="/auth/http-basic-auth">HTTP Basic Auth</a></li>
+                    <li><a href="/auth/http-digest-auth">HTTP Digest Auth</a></li>
+                </ul>
+                <h3>API Features</h3>
+                <ul>
+                    <li><a href="/api/limit">Rate Limiting</a></li>
+                </ul>
+                <h3>Other Practical Features</h3>
+                <ul>
+                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
+                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>防止重复提交</h1>
-<p>防止重复提交（如表单或接口的“二次提交”、“刷新重复”）是后端开发常见的需求。常用的校验和防护方案如下：</p>
-<h2>前端禁用按钮（基础方案）</h2>
-<p>在表单提交时，前端禁用按钮或显示 loading，防止用户多次点击。 只能防误操作，不能防止恶意或快速重复提交。</p>
-<h2>后端幂等性校验</h2>
-<p>前端禁用按钮只能防止误操作，后端校验才安全可靠。</p>
-<h3>唯一 Token 校验</h3>
+                <h1>Preventing Duplicate Submission</h1>
+<p>Preventing duplicate submissions (such as form or API &quot;double submissions&quot; or &quot;refresh duplicates&quot;) is a common requirement in backend development. Common validation and protection solutions are as follows:</p>
+<h2>Frontend Disable Button (Basic Solution)</h2>
+<p>When submitting a form, the frontend disables the button or displays a loading state to prevent users from clicking multiple times. This can only prevent accidental operations, but cannot prevent malicious or rapid duplicate submissions.</p>
+<h2>Backend Idempotency Validation</h2>
+<p>Disabling the button on the frontend only prevents accidental actions; backend validation is safer and more reliable.</p>
+<h3>Unique Token Validation</h3>
 <ul>
-<li>前端请求表单页时，后端生成唯一 token（如 UUID），返回给前端。</li>
-<li>前端提交表单时带上 token。</li>
-<li>后端校验 token 是否已用过，用过即拒绝，并立即让 token 失效。</li>
-<li>实现方式可用 Redis、数据库等存储 token。</li>
+<li>When the frontend requests the form page, the backend generates a unique token (such as a UUID) and returns it to the frontend.</li>
+<li>The frontend includes the token when submitting the form.</li>
+<li>The backend checks whether the token has been used; if it has, the submission is rejected, and the token is immediately invalidated.</li>
+<li>Tokens can be stored using Redis, a database, etc.</li>
 </ul>
-<h3>基于请求内容的唯一性校验</h3>
+<h3>Uniqueness Validation Based on Request Content</h3>
 <ul>
-<li>针对同一用户、同一业务参数，在短时间内只能提交一次。</li>
-<li>可用请求参数哈希（如 MD5）、加上用户 ID，作为 Redis Key，短时间内只能用一次。</li>
+<li>For the same user and same business parameters, submissions are only allowed once within a short period.</li>
+<li>You can use a hash of the request parameters (such as MD5), combined with the user ID, as the Redis key, which can only be used once within a short time.</li>
 </ul>
-<h2>参考</h2>
+<h2>Reference</h2>
 <ul>
-<li><a href="https://mp.weixin.qq.com/s/tVkeyrDNc_scRusbClrY1w">resubmit 渐进式防重复提交框架</a></li>
+<li><a href="https://mp.weixin.qq.com/s/tVkeyrDNc_scRusbClrY1w">resubmit: Progressive Duplicate Submission Prevention Framework (Chinese)</a></li>
 </ul>
 
             </article>

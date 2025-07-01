@@ -1,37 +1,36 @@
 ---
-title: HTTP Digest 认证
+title: HTTP Digest Authentication
 subTitle: 2024-12-05 by Frank Cheung
-description: HTTP Digest 认证
+description: HTTP Digest Authentication
 date: 2022-01-05
 tags:
   - HTTP Digest
-layout: layouts/docs-cn.njk
+layout: layouts/docs.njk
 ---
+# HTTP Digest Authentication
 
-# HTTP Digest 认证（Digest Authentication）
+HTTP Digest Auth is similar to Basic Auth, but it does not transmit the plain text password directly. 
+Instead, it mixes the password, nonce, request method, etc., to generate a digest (hash) and transmits the hash value. The advantage is that even if eavesdropped, the password cannot be obtained directly, and replay attacks are prevented.
 
-HTTP Digest Auth 与 Basic Auth 类似，但不会直接传输明文密码，而是将密码、随机数、请求方法等混合生成摘要（哈希），传输哈希值。优点是即使被窃听也无法直接获得密码，防止重放攻击。
+# Usage
 
-
-# 使用方式
-
-## yaml 配置
+## yaml Configuration
 ```yaml
 security:
-    HttpBasicAuth: # HTTP Basic 认证
-        globalCheck: true # 全局检查
+    HttpBasicAuth: # HTTP Basic Authentication
+        globalCheck: true # Global check
         enabled: true
         username: admin
         password: admin
 ```
-## 拦截校验
-在使用的接口上添加`@HttpBasicAuthCheck`注解：
+## Interceptor Validation
+Add the `@HttpBasicAuthCheck` annotation to the interface in use:
 ```java
 @GetMapping("/HttpBasicAuthCheck")
 @HttpBasicAuthCheck
 int HttpBasicAuthCheck();
 ```
 
-浏览器提示输入账号、密码。
+The browser will prompt for account and password input.
 
-![](auth.jpg)
+![](/auth/auth.jpg)

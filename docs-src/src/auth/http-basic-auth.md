@@ -8,35 +8,35 @@ tags:
 layout: layouts/docs.njk
 ---
 
-# HTTP 基本认证（Basic Auth）
+# HTTP Basic Authentication (Basic Auth)
 
-**HTTP 基本认证（Basic Auth）**是一种最简单的 HTTP 认证方式，客户端通过在 HTTP 请求头中带上用户名和密码（经过 Base64 编码）来进行身份验证。应用场景多见于测试环境、内部系统或简单接口保护（生产环境建议配合 HTTPS，否则密码易被窃取）。
+**HTTP Basic Authentication (Basic Auth)** is the simplest HTTP authentication method. The client performs identity verification by including the username and password (Base64 encoded) in the HTTP request header. It is commonly used in test environments, internal systems, or simple interface protection (it is recommended to use HTTPS in production environments, otherwise the password can be easily stolen).
 
-## 基本原理
+## Basic Principle
 
-1. 客户端将 username:password 用 Base64 编码。
-1. 在请求头中添加： `Authorization: Basic <base64编码后的字符串>`
-1. 服务器收到请求后，解码并校验用户名密码。
+1. The client encodes `username:password` using Base64.
+2. Adds the following to the request header: `Authorization: Basic <Base64 encoded string>`
+3. The server receives the request, decodes it, and verifies the username and password.
 
-# 使用方式
+# Usage
 
-## yaml 配置
+## yaml Configuration
 ```yaml
 security:
-  HttpDigestAuth: # HTTP Digest 认证
-        globalCheck: true # 全局检查
+  HttpDigestAuth: # HTTP Digest Authentication
+        globalCheck: true # Global check
         enabled: true
         username: admin
         password: admin
 ```
-## 拦截校验
-在使用的接口上添加`@HttpDigestAuthCheck`注解：
+## Interceptor Validation
+Add the `@HttpDigestAuthCheck` annotation to the interface in use:
 ```java
 @GetMapping("/HttpDigestAuthCheck")
 @HttpDigestAuthCheck
 int HttpDigestAuthCheck();
 ```
 
-浏览器提示输入账号、密码。
+The browser will prompt for account and password input.
 
-![](auth.jpg)
+![](/auth/auth.jpg)

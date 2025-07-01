@@ -2,7 +2,7 @@
 title: AJ Security Home
 subTitle: 
 description: AJ Security Introduction
-date: 2025-7-01
+date: 2025-07-01
 tags:
   -  AJ Security Introduction
 layout: layouts/docs.njk

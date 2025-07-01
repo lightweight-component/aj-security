@@ -27,84 +27,86 @@
         </nav>
         <div>
             <menu>
-                
                 <ul>
                     <li class="selected">
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="/architecture/index">Architecture</a>
+                        <a href="/install">Installation & Configuration</a>
                     </li>
                 </ul>
-                <h3>MCP Client SDK</h3>
+                <h3>HTTP Web Security</h3>
                 <ul>
                     <li>
-                        <a href="/client/setup-client">Client SDK Setup</a>
+                        <a href="/http/http-referer">HTTP Referer Validation</a>
                     </li>
                     <li>
-                       <a href="/client/initialization">Initialization</a>
+                        <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
                     <li>
-                       <a href="/client/resource">Resources Usage</a>
+                        <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
-                     <li>
-                       <a href="/client/prompt">Prompts Usage</a>
-                    </li>
-                     <li>
-                       <a href="/client/tool">Tools Usage</a>
+                    <li>
+                        <a href="/http/nonrepeatsubmit">Prevent Duplicate Submission</a>
                     </li>
                 </ul>
-                <h3>MCP Server SDK</h3>
+                <h3>General Web Validation</h3>
                 <ul>
-                      <li>
-                           <a href="/server/usage-server">Server SDK Usage</a>
-                      </li>
-                      <li>
-                           <a href="/server/res-server">Resources Usage</a>
-                      </li>
-                      <li>
-                           <a href="/server/pro-server">Prompts Usage</a>
-                      </li>
-                      <li>
-                             <a href="/server/tool-server">Tools Usage</a>
-                       </li>
-                      <li>
-                         <a href="/server/sample">Integration Samples</a>
-                      </li>
+                    <li>
+                        <a href="/classic/xss">Prevent XSS Attacks</a>
+                    </li>
+                    <li>
+                        <a href="/classic/crlf">Prevent CRLF Attacks</a>
+                    </li>
                 </ul>
 
-                <h3>Misc</h3>
+                <h3>Captcha Mechanism</h3>
                 <ul>
-                    <li><a href="/misc/versions">Release History</a></li>
-                    <li><a href="/misc/contact">Contact</a></li>
+                    <li><a href="/captcha/img-captcha">Image Captcha</a></li>
+                    <li><a href="/captcha/google">Google-based Captcha</a></li>
+                    <li><a href="/captcha/cf">CloudFlare-based Captcha</a></li>
+                </ul>
+                <h3>HTTP Standard Authentication</h3>
+                <ul>
+                    <li><a href="/auth/http-basic-auth">HTTP Basic Auth</a></li>
+                    <li><a href="/auth/http-digest-auth">HTTP Digest Auth</a></li>
+                </ul>
+                <h3>API Features</h3>
+                <ul>
+                    <li><a href="/api/limit">Rate Limiting</a></li>
+                </ul>
+                <h3>Other Practical Features</h3>
+                <ul>
+                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
+                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>HTTP 基本认证（Basic Auth）</h1>
-<p>**HTTP 基本认证（Basic Auth）**是一种最简单的 HTTP 认证方式，客户端通过在 HTTP 请求头中带上用户名和密码（经过 Base64 编码）来进行身份验证。应用场景多见于测试环境、内部系统或简单接口保护（生产环境建议配合 HTTPS，否则密码易被窃取）。</p>
-<h2>基本原理</h2>
+                <h1>HTTP Basic Authentication (Basic Auth)</h1>
+<p><strong>HTTP Basic Authentication (Basic Auth)</strong> is the simplest HTTP authentication method. The client performs identity verification by including the username and password (Base64 encoded) in the HTTP request header. It is commonly used in test environments, internal systems, or simple interface protection (it is recommended to use HTTPS in production environments, otherwise the password can be easily stolen).</p>
+<h2>Basic Principle</h2>
 <ol>
-<li>客户端将 username:password 用 Base64 编码。</li>
-<li>在请求头中添加： <code>Authorization: Basic &lt;base64编码后的字符串&gt;</code></li>
-<li>服务器收到请求后，解码并校验用户名密码。</li>
+<li>The client encodes <code>username:password</code> using Base64.</li>
+<li>Adds the following to the request header: <code>Authorization: Basic &lt;Base64 encoded string&gt;</code></li>
+<li>The server receives the request, decodes it, and verifies the username and password.</li>
 </ol>
-<h1>使用方式</h1>
-<h2>yaml 配置</h2>
+<h1>Usage</h1>
+<h2>yaml Configuration</h2>
 <pre><code class="language-yaml">security:
-  HttpDigestAuth: # HTTP Digest 认证
-        globalCheck: true # 全局检查
+  HttpDigestAuth: # HTTP Digest Authentication
+        globalCheck: true # Global check
         enabled: true
         username: admin
         password: admin
 </code></pre>
-<h2>拦截校验</h2>
-<p>在使用的接口上添加<code>@HttpDigestAuthCheck</code>注解：</p>
+<h2>Interceptor Validation</h2>
+<p>Add the <code>@HttpDigestAuthCheck</code> annotation to the interface in use:</p>
 <pre><code class="language-java">@GetMapping(&quot;/HttpDigestAuthCheck&quot;)
 @HttpDigestAuthCheck
 int HttpDigestAuthCheck();
 </code></pre>
-<p>浏览器提示输入账号、密码。</p>
-<p><img src="auth.jpg" alt=""></p>
+<p>The browser will prompt for account and password input.</p>
+<p><img src="/auth/auth.jpg" alt=""></p>
 
             </article>
         </div>

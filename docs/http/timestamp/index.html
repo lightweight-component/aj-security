@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Security 框架-Contact Us</title>
-        <meta name="description" content="实用的 Java Web 安全库。TODO"/>
+        <title>AJ MCP SDK/Timestamp Request Validation</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. Timestamp Request Validation"/>
         <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, timestamp"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
@@ -15,113 +15,112 @@
         <nav>
             <div>
                 <div class="links">
-                    <a href="/">🏠 首页</a>
-                    | ⚙️ 源码:
+                    <a href="/">🏠 Home</a>
+                    | ⚙️ Source:
                     <a target="_blank" href="https://github.com/lightweight-component/aj-security">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-security">Gitcode</a>
                     |
-                    <a href="/">英文版本</a>
+                    <a href="/cn">Chinese Version</a>
                 </div>
-                <h1>AJ Security</h1>
-                <h3>用户手册</h3>
+                <h1>AJ MCP SDK</h1>
+                <h3>User Manual</h3>
             </div>
         </nav>
         <div>
             <menu>
                 <ul>
                     <li class="selected">
-                        <a href="/cn">首页</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="/install-cn">安装与配置</a>
+                        <a href="/install">Installation & Configuration</a>
                     </li>
                 </ul>
-                <h3>HTTP Web 安全</h3>
+                <h3>HTTP Web Security</h3>
                 <ul>
                     <li>
-                        <a href="/http/http-referer-cn">HTTP Referer 校验</a>
+                        <a href="/http/http-referer">HTTP Referer Validation</a>
                     </li>
                     <li>
-                       <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
+                        <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
                     <li>
-                       <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
+                        <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
-                     <li>
-                       <a href="/http/nonrepeatsubmit-cn">防止重复提交数据</a>
+                    <li>
+                        <a href="/http/nonrepeatsubmit">Prevent Duplicate Submission</a>
                     </li>
                 </ul>
-                <h3>一般性 Web 校验</h3>
+                <h3>General Web Validation</h3>
                 <ul>
-                      <li>
-                           <a href="/classic/xss-cn">防止 XSS 跨站攻击</a>
-                      </li>
-                      <li>
-                           <a href="/classic/crlf-cn">防止 CRLF 攻击</a>
-                      </li>
+                    <li>
+                        <a href="/classic/xss">Prevent XSS Attacks</a>
+                    </li>
+                    <li>
+                        <a href="/classic/crlf">Prevent CRLF Attacks</a>
+                    </li>
                 </ul>
 
-                <h3>验证码 Captcha 机制</h3>
+                <h3>Captcha Mechanism</h3>
                 <ul>
-                    <li><a href="/captcha/img-captcha-cn">图片验证码</a></li>
-                    <li><a href="/captcha/google-cn">基于 Google 的验证码</a></li>
-                    <li><a href="/captcha/cf-cn">基于 CloudFlare 的验证码</a></li>
+                    <li><a href="/captcha/img-captcha">Image Captcha</a></li>
+                    <li><a href="/captcha/google">Google-based Captcha</a></li>
+                    <li><a href="/captcha/cf">CloudFlare-based Captcha</a></li>
                 </ul>
-                <h3>HTTP 标准认证</h3>
+                <h3>HTTP Standard Authentication</h3>
                 <ul>
-                    <li><a href="/auth/http-basic-auth-cn">HTTP Basic Auth 认证</a></li>
-                    <li><a href="/auth/http-digest-auth-cn">HTTP Digest Auth 认证</a></li>
+                    <li><a href="/auth/http-basic-auth">HTTP Basic Auth</a></li>
+                    <li><a href="/auth/http-digest-auth">HTTP Digest Auth</a></li>
                 </ul>
-                <h3>API 接口功能</h3>
+                <h3>API Features</h3>
                 <ul>
-                    <li><a href="/api/limit-cn">限流限次数</a></li>
+                    <li><a href="/api/limit">Rate Limiting</a></li>
                 </ul>
-                <h3>其他实用功能</h3>
+                <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
-                    <li><a href="/misc/api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
+                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>时间戳请求校验</h1>
-<p>时间戳（Timestamp）请求校验主要用于防止请求重放（Replay Attack），原理是在每次请求中附带一个时间戳（通常是毫秒），后端校验该时间戳是否在允许的时间窗口内。常与签名机制配合，确保请求的时效性和唯一性，但也可以单独使用。</p>
-<p>使用场景：重置密码时候，发送 URL 地址的时候须附带这个时间戳密文转为参数；对 API 保密比较高的，且服务端调用的（不能是浏览器调用的，因为密钥在浏览器处保存的话，不安全）。</p>
-<h2>常见校验逻辑</h2>
+                <h1>Timestamp Request Validation</h1>
+<p>Timestamp request validation is mainly used to prevent replay attacks. The principle is to include a timestamp (usually in milliseconds) in each request, and the backend checks whether the timestamp falls within an allowed time window. This is often used together with a signature mechanism to ensure the timeliness and uniqueness of the request, but it can also be used standalone.</p>
+<p>Usage scenarios: When resetting a password, the URL sent should include this encrypted timestamp as a parameter; for APIs with high confidentiality, and for server-to-server calls (not browser calls, because if the key is stored in the browser, it is not secure).</p>
+<h2>Common Validation Logic</h2>
 <ol>
-<li>客户端请求时带上时间戳（如参数<code>timestamp=xxx</code>）密文。这个时间戳密文由密钥生成，由服务端或者客户端保存（注意不能泄露）</li>
-<li>后端校验当前服务器时间与请求时间戳之差，在合理范围内（如±5分钟）。</li>
-<li>超时则拒绝请求。</li>
+<li>The client includes the timestamp (e.g., parameter <code>timestamp=xxx</code>) ciphertext in the request. This timestamp ciphertext is generated by a secret key and stored by either the server or client (be careful not to leak it).</li>
+<li>The backend checks whether the difference between the current server time and the request timestamp is within a reasonable range (e.g., ±5 minutes).</li>
+<li>If the request is expired, it is rejected.</li>
 </ol>
-<p>重放攻击：仅时间戳校验无法防止同一请求多次提交，需配合唯一<code>nonce</code>，对于带有业务幂等性要求的接口，也校验<code>nonce</code>是否已用过。</p>
-<h1>使用方式</h1>
-<h2>YAML 配置</h2>
-<p>当前采用 AES 对称加密。添加你的 AES 密钥。</p>
+<p>Replay attack: Timestamp validation alone cannot prevent the same request from being submitted multiple times. You need to use a unique <code>nonce</code> along with it and, for interfaces with business idempotency requirements, also check whether the <code>nonce</code> has already been used.</p>
+<h1>Usage</h1>
+<h2>YAML Configuration</h2>
+<p>Currently, AES symmetric encryption is used. Add your AES secret key.</p>
 <pre><code class="language-yaml">security:
-    TimeSignature: # 时间戳控制
+    TimeSignature: # Timestamp control
         enabled: true
-        secretKey: der3@x7Az#2 # 密钥，必填的
+        secretKey: der3@x7Az#2 # Secret key, required
 </code></pre>
-<h2>拦截校验</h2>
-<p>在使用的接口上添加<code>@TimeSignatureVerify</code>注解：</p>
+<h2>Interceptor Validation</h2>
+<p>Add the <code>@TimeSignatureVerify</code> annotation to the interface in use:</p>
 <pre><code class="language-java">@GetMapping(&quot;/TimeSignatureVerify&quot;)
 @TimeSignatureVerify
 int TimeSignatureVerify();
 </code></pre>
-<h2>生成时间戳密文 token</h2>
-<p>作为参数分发到你的需求代码中去。</p>
-<pre><code class="language-java">// 静态方法可调用
-String token =  SecurityInterceptor.getBean(TimeSignature.class).generateSignature();
+<h2>Generate Timestamp Token</h2>
+<p>Distribute the token as a parameter in your business code.</p>
+<pre><code class="language-java">// Static method call
+String token = SecurityInterceptor.getBean(TimeSignature.class).generateSignature();
 </code></pre>
 <h1>Roadmap</h1>
-<p>更复杂的加密规则、针对注解的单独配置</p>
+<p>More complex encryption rules, separate configuration for each annotation</p>
 
             </article>
         </div>
         <footer>
-             AJ-Util，开源框架 <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> 的一部分。联系方式：
-             frank@ajaxjs.com，<a href="https://blog.csdn.net/zhangxin09" target="_blank">作者博客</a>
-             <br />
-             <br />
-             Copyright © 2025 Frank Cheung. All rights reserved.
-         </footer>
+            AJ MCP SDK, a part of
+            <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a>
+            open source. Mail:frank@ajaxjs.com, visit
+            <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>. <br/> <br/> Copyright © 2025 Frank Cheung. All rights reserved.
+        </footer>
     </body>
 </html>

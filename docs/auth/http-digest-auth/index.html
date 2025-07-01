@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Security 框架-HTTP Digest 认证</title>
-        <meta name="description" content="实用的 Java Web 安全库。HTTP Digest 认证"/>
+        <title>AJ MCP SDK/HTTP Digest Authentication</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. HTTP Digest Authentication"/>
         <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, HTTP Digest"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
@@ -15,101 +15,101 @@
         <nav>
             <div>
                 <div class="links">
-                    <a href="/">🏠 首页</a>
-                    | ⚙️ 源码:
+                    <a href="/">🏠 Home</a>
+                    | ⚙️ Source:
                     <a target="_blank" href="https://github.com/lightweight-component/aj-security">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-security">Gitcode</a>
                     |
-                    <a href="/">英文版本</a>
+                    <a href="/cn">Chinese Version</a>
                 </div>
-                <h1>AJ Security</h1>
-                <h3>用户手册</h3>
+                <h1>AJ MCP SDK</h1>
+                <h3>User Manual</h3>
             </div>
         </nav>
         <div>
             <menu>
                 <ul>
                     <li class="selected">
-                        <a href="/cn">首页</a>
+                        <a href="/">Home</a>
                     </li>
                     <li>
-                        <a href="/install-cn">安装与配置</a>
+                        <a href="/install">Installation & Configuration</a>
                     </li>
                 </ul>
-                <h3>HTTP Web 安全</h3>
+                <h3>HTTP Web Security</h3>
                 <ul>
                     <li>
-                        <a href="/http/http-referer-cn">HTTP Referer 校验</a>
+                        <a href="/http/http-referer">HTTP Referer Validation</a>
                     </li>
                     <li>
-                       <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
+                        <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
                     <li>
-                       <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
+                        <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
-                     <li>
-                       <a href="/http/nonrepeatsubmit-cn">防止重复提交数据</a>
+                    <li>
+                        <a href="/http/nonrepeatsubmit">Prevent Duplicate Submission</a>
                     </li>
                 </ul>
-                <h3>一般性 Web 校验</h3>
+                <h3>General Web Validation</h3>
                 <ul>
-                      <li>
-                           <a href="/classic/xss-cn">防止 XSS 跨站攻击</a>
-                      </li>
-                      <li>
-                           <a href="/classic/crlf-cn">防止 CRLF 攻击</a>
-                      </li>
+                    <li>
+                        <a href="/classic/xss">Prevent XSS Attacks</a>
+                    </li>
+                    <li>
+                        <a href="/classic/crlf">Prevent CRLF Attacks</a>
+                    </li>
                 </ul>
 
-                <h3>验证码 Captcha 机制</h3>
+                <h3>Captcha Mechanism</h3>
                 <ul>
-                    <li><a href="/captcha/img-captcha-cn">图片验证码</a></li>
-                    <li><a href="/captcha/google-cn">基于 Google 的验证码</a></li>
-                    <li><a href="/captcha/cf-cn">基于 CloudFlare 的验证码</a></li>
+                    <li><a href="/captcha/img-captcha">Image Captcha</a></li>
+                    <li><a href="/captcha/google">Google-based Captcha</a></li>
+                    <li><a href="/captcha/cf">CloudFlare-based Captcha</a></li>
                 </ul>
-                <h3>HTTP 标准认证</h3>
+                <h3>HTTP Standard Authentication</h3>
                 <ul>
-                    <li><a href="/auth/http-basic-auth-cn">HTTP Basic Auth 认证</a></li>
-                    <li><a href="/auth/http-digest-auth-cn">HTTP Digest Auth 认证</a></li>
+                    <li><a href="/auth/http-basic-auth">HTTP Basic Auth</a></li>
+                    <li><a href="/auth/http-digest-auth">HTTP Digest Auth</a></li>
                 </ul>
-                <h3>API 接口功能</h3>
+                <h3>API Features</h3>
                 <ul>
-                    <li><a href="/api/limit-cn">限流限次数</a></li>
+                    <li><a href="/api/limit">Rate Limiting</a></li>
                 </ul>
-                <h3>其他实用功能</h3>
+                <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
-                    <li><a href="/misc/api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
+                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>HTTP Digest 认证（Digest Authentication）</h1>
-<p>HTTP Digest Auth 与 Basic Auth 类似，但不会直接传输明文密码，而是将密码、随机数、请求方法等混合生成摘要（哈希），传输哈希值。优点是即使被窃听也无法直接获得密码，防止重放攻击。</p>
-<h1>使用方式</h1>
-<h2>yaml 配置</h2>
+                <h1>HTTP Digest Authentication</h1>
+<p>HTTP Digest Auth is similar to Basic Auth, but it does not transmit the plain text password directly.
+Instead, it mixes the password, nonce, request method, etc., to generate a digest (hash) and transmits the hash value. The advantage is that even if eavesdropped, the password cannot be obtained directly, and replay attacks are prevented.</p>
+<h1>Usage</h1>
+<h2>yaml Configuration</h2>
 <pre><code class="language-yaml">security:
-    HttpBasicAuth: # HTTP Basic 认证
-        globalCheck: true # 全局检查
+    HttpBasicAuth: # HTTP Basic Authentication
+        globalCheck: true # Global check
         enabled: true
         username: admin
         password: admin
 </code></pre>
-<h2>拦截校验</h2>
-<p>在使用的接口上添加<code>@HttpBasicAuthCheck</code>注解：</p>
+<h2>Interceptor Validation</h2>
+<p>Add the <code>@HttpBasicAuthCheck</code> annotation to the interface in use:</p>
 <pre><code class="language-java">@GetMapping(&quot;/HttpBasicAuthCheck&quot;)
 @HttpBasicAuthCheck
 int HttpBasicAuthCheck();
 </code></pre>
-<p>浏览器提示输入账号、密码。</p>
-<p><img src="auth.jpg" alt=""></p>
+<p>The browser will prompt for account and password input.</p>
+<p><img src="/auth/auth.jpg" alt=""></p>
 
             </article>
         </div>
         <footer>
-             AJ-Util，开源框架 <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> 的一部分。联系方式：
-             frank@ajaxjs.com，<a href="https://blog.csdn.net/zhangxin09" target="_blank">作者博客</a>
-             <br />
-             <br />
-             Copyright © 2025 Frank Cheung. All rights reserved.
-         </footer>
+            AJ MCP SDK, a part of
+            <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a>
+            open source. Mail:frank@ajaxjs.com, visit
+            <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>. <br/> <br/> Copyright © 2025 Frank Cheung. All rights reserved.
+        </footer>
     </body>
 </html>

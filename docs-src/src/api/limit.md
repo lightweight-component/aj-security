@@ -8,9 +8,7 @@ tags:
 layout: layouts/docs.njk
 ---
 
-# 提示（Prompt）开发
-
-限额限次
+# 限额限次
 
 ## 参考
 

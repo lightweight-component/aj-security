@@ -1,4 +1,4 @@
-Sitemap: https://mcp.ajaxjs.com/sitemap.xml
+Sitemap: https://security.ajaxjs.com/sitemap.xml
 
 User-agent: *
 Disallow:

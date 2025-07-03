@@ -30,7 +30,7 @@ import java.util.Vector;
  * @author sp42 frank@ajaxjs.com
  */
 public class SecurityRequest extends HttpServletRequestWrapper {
-    private final boolean isXssCheck = true;
+    public boolean isXssCheck = true;
 
     /**
      * 创建一个 SecurityRequest 实例

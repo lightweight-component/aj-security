@@ -1,35 +1,50 @@
 ---
-title: API 接口数据加密
+title: Prevent XSS Cross-Site Scripting Attacks
 subTitle: 2024-12-05 by Frank Cheung
-description: 对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。
+description: Prevent XSS Cross-Site Scripting Attacks
 date: 2022-01-05
 tags:
-  - api
+  - XSS
 layout: layouts/docs.njk
 ---
 
-# API 接口数据加密
+# General Web Validation
 
-对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。
-
-示例（Java AES 加密）:
+General web validation primarily addresses the prevention of attacks such as XSS, CSRF, and CRLF. Unlike other components within this framework that rely on Spring Interceptors, the validation mechanism here is implemented using traditional Servlet filters.
 
 ```java
-// 加密
-String json = "{\"username\":\"test\", \"password\":\"123456\"}";
-String key = "xxxxxx"; // 16/24/32位
-String encrypted = AESUtil.encrypt(json, key);
-// 传 encrypted 给后端
-
-// 解密
-String decrypted = AESUtil.decrypt(encrypted, key);
-// 得到原始json
+@Override
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        if (isEnabled) {
+            SecurityRequest securityRequest = new SecurityRequest((HttpServletRequest) request);
+            SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
+            securityResponse.isCRLFCheck = isCRLFCheck;
+            securityResponse.isCookiesSizeCheck = isCookiesSizeCheck;
+            securityResponse.maxCookieSize = maxCookieSize;
+    
+            securityRequest.isXssCheck = securityResponse.isXssCheck = isXssCheck;
+    
+            chain.doFilter(securityRequest, securityResponse);// Continue processing the request
+        } 
+        else
+            chain.doFilter(request, response);
+}
 ```
 
-传输格式举例
+By overriding the Servlet's method in this way, even if the Java system is attacked or compromised, the filter can still effectively prevent XSS attacks.
 
-```json
-{
-"data": "8kfj2j38fjsl2j3dfk..."  // 加密后的密文
-}
-```java
+# Prevent XSS Cross-Site Scripting Attacks
+
+XSS (Cross-Site Scripting) is a type of attack where malicious code (usually JavaScript) is injected into a web application. Attackers exploit XSS vulnerabilities to steal user data, hijack sessions, or manipulate browser behavior.
+
+The key to preventing XSS attacks is to strictly validate and escape user inputs, ensuring that any dynamic content is not interpreted as executable code before being output to a page.
+
+## Configuration
+First, ensure the filter is enabled by setting `enabled: true`, then activate `xssCheck` to enable detection.
+
+```yaml
+security:
+    web: # General attack prevention
+        enabled: true
+        xssCheck: true # Prevent XSS Cross-Site Scripting Attacks
+```

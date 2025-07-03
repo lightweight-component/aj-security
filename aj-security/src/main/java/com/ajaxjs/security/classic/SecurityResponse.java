@@ -24,11 +24,20 @@ import java.io.IOException;
  *
  */
 public class SecurityResponse extends HttpServletResponseWrapper {
-    private final boolean isXssCheck = true;
+    public boolean isXssCheck;
 
-    private final boolean isCRLFCheck = true;
+    public boolean isCRLFCheck;
 
-    private final boolean isCookiesSizeCheck = true;
+    /**
+     * 是否检测 cookie 大小
+     */
+    public boolean isCookiesSizeCheck;
+
+    /**
+     * 单个 cookie 最大大小，单位：kb
+     * 如果放置 JWT 应该不超过 1kb
+     */
+    public int maxCookieSize = 2;
 
     /**
      * 创建一个 SecurityResponse 实例。
@@ -58,8 +67,8 @@ public class SecurityResponse extends HttpServletResponseWrapper {
             /*
              * 检查 Cookie 容量大小和是否在白名单中。
              */
-            if (isCookiesSizeCheck && (cookie.getValue().length() > MAX_COOKIE_SIZE))
-                throw new SecurityException("超出 Cookie 允许容量：" + MAX_COOKIE_SIZE);
+            if (isCookiesSizeCheck && (cookie.getValue().length() > maxCookieSize * 1024))
+                throw new SecurityException("超出 Cookie 允许容量：" + maxCookieSize * 1024);
 
 //		if (!delegate.isInWhiteList(cookie.getName()))
 //			throw new SecurityException("cookie: " + cookie.getName() + " 不在白名单中，添加无效！");
@@ -68,11 +77,6 @@ public class SecurityResponse extends HttpServletResponseWrapper {
         } else
             super.addCookie(cookie);
     }
-
-    /**
-     * Cookie 最大容量
-     */
-    private static final int MAX_COOKIE_SIZE = 4 * 1024;
 
     @Override
     public void setDateHeader(String name, long date) {

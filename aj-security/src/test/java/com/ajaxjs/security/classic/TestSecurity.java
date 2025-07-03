@@ -1,32 +1,26 @@
-package com.ajaxjs.security;
+package com.ajaxjs.security.classic;
 
 
-import com.ajaxjs.security.classic.InstallFilter;
-import com.ajaxjs.security.classic.ListCheck;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestSecurity {
-
     private ListCheck c;
 
-//	@Test
+    //	@Test
 //	public void testListCheck() {
 //		assertTrue(c.isInWhiteList("test_abc"));
 //		assertTrue(!c.isInWhiteList("test_abc22"));
 //		assertTrue(!c.isInBlackList("test_abc22"));
 //	}
-//
-//	@Autowired
-//	private Xss xss;
-//
-//	@Test
-//	public void testXss() {
-//		String script = "Foo <script>alert(3)</script>";
-//		assertEquals("Foo ", xss.clean(script));
-//		assertEquals("&lt;script&gt;alert(3)&lt;/script&gt;", xss.clean(script, Handle.TYPE_ESCAPSE));
-//	}
+
+    @Test
+    public void testXss() {
+        String script = "Foo <script>alert(3)</script>";
+        assertEquals("Foo ", InstallFilter.cleanXSS(script));
+        assertEquals("&lt;script&gt;alert(3)&lt;/script&gt;", InstallFilter.cleanXSS(script, InstallFilter.Handle.TYPE_ESCAPE));
+    }
 //
 //	@Autowired
 //	private SqlInject sqlInject;

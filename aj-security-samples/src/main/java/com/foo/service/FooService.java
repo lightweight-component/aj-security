@@ -3,7 +3,8 @@ package com.foo.service;
 import com.foo.controller.FooController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import com.ajaxjs.security.desensitize.annotation.Desensitize;
+import com.foo.model.User;
 import java.util.Map;
 
 @Service
@@ -30,8 +31,34 @@ public class FooService implements FooController {
     }
 
     @Override
+    public User UserDesensitize() {
+        User user = new User();
+        user.setAge(1);
+        user.setName("tom");
+        user.setPhone("13711118120");
+
+        return user;
+    }
+
+    @Override
     public int ParamsSignCheck(Map<String, Object> params) {
         System.out.println( params);
         return 8;
+    }
+
+    @Override
+    public User getUser() {
+        User user = new User();
+        user.setAge(1);
+        user.setName("tom");
+        user.setPhone("13711118120");
+
+        return user;
+    }
+
+    @Override
+    public int encryptedParams(User user) {
+        System.out.println(user);
+        return 88;
     }
 }

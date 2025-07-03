@@ -2,10 +2,11 @@ package com.ajaxjs.security.classic;
 
 import com.ajaxjs.util.CollUtils;
 import com.ajaxjs.util.StrUtil;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.Filter;
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,25 +18,42 @@ import java.util.regex.Pattern;
 /**
  * 安装安全 request、response
  */
-@WebFilter("/*")
+@Component
+@Data
+@ConfigurationProperties(prefix = "security.web")
 public class InstallFilter implements Filter {
+    boolean isEnabled;
+
+    boolean isXssCheck;
+
+    boolean isCRLFCheck;
+
+    boolean isCookiesSizeCheck;
+
+    /**
+     * 单个 cookie 最大大小，单位：kb
+     * 如果放置 JWT 应该不超过 1kb
+     */
+    int maxCookieSize;
+
     @Override
     public void init(FilterConfig filterConfig) {
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        SecurityRequest securityRequest = new SecurityRequest(httpRequest);
-        SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
+        if (isEnabled) {
+            SecurityRequest securityRequest = new SecurityRequest((HttpServletRequest) request);
+            SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
+            securityResponse.isCRLFCheck = isCRLFCheck;
+            securityResponse.isCookiesSizeCheck = isCookiesSizeCheck;
+            securityResponse.maxCookieSize = maxCookieSize;
 
-        Object obj = httpRequest.getServletContext().getAttribute("");
+            securityRequest.isXssCheck = securityResponse.isXssCheck = isXssCheck;
 
-        if (obj != null) {
-
-        }
-
-        chain.doFilter(securityRequest, securityResponse);// 继续处理请求
+            chain.doFilter(securityRequest, securityResponse);// 继续处理请求
+        } else
+            chain.doFilter(request, response);
     }
 
     @Override

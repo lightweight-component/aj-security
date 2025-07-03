@@ -1,225 +1,152 @@
 ---
-title: MCP Server SDK Resources Development
+title: Entity Field Desensitization
 subTitle: 2024-12-05 by Frank Cheung
-description: MCP Server SDK Resources Development
+description: Entity Field Desensitization
 date: 2022-01-05
 tags:
-  - desensitize
+  - Desensitization
 layout: layouts/docs.njk
 ---
+# Entity Field Desensitization
 
-# aj-desensitize
+Desensitization refers to partially obscuring sensitive fields, ensuring data is not fully exposed while retaining enough information for identification. Common fields requiring desensitization include names, phone numbers, emails, usernames, passwords, etc.
 
-平时开发的过程中经常会遇到对一些敏感的字段进行脱敏处理，防止信息泄漏，如：邮箱、用户名、密码等；做为一个优秀的程序员我们不应该遇到这种问题时就做特殊处理，重复做相同的工作，所以我们应该写一个基础库SDK，解决重复的问题。
+Since Java entities are typically either Java Beans or Maps, desensitization can be applied directly to entity data. It is crucial to control where the desensitization component is invoked, such as processing entities before returning them in REST APIs. However, RPC scenarios may require different handling.
 
-##### 脱敏 SDK 组件
+The implementation of desensitization is straightforward, essentially involving simple string replacement. However, additional considerations are needed to address various scenarios involving entity fields.
 
-##### 三、注解列表
+## Source Code
+This component's source code is forked from [emily-project](https://github.com/mingyang66/spring-parent/tree/master/emily-project/emily-desensitize). Special thanks to the original author!
 
-| 注解                          | 作用域                                                                                  |
-|-----------------------------|--------------------------------------------------------------------------------------|
-| @DesensitizeOperation       | 标记在方法上，只有标记了此注解的返回值才会进行脱敏处理，`removePackClass`属性指定要剥离的外层类，可以指定多个剥离的外层类，只有最内层的类才会进行脱敏处理； |
-| @DesensitizeModel           | 标记在实体类上，只有标记了此注解的实体类才会进行脱敏处理                                                         |
-| @DesensitizeProperty        | 标记在实体类字符串、Map 属性字段，标记了次注解的字段会按照指定类型进行脱敏；                                             |
-| @DesensitizeNullProperty    | 标记在实体类引用数据类型上                                                                        |
-| @DesensitizeMapProperty     | 标记在实体类Map数据类型上，按照指定的 key 字段及类型进行脱敏。                                                  |
-| @DesensitizeComplexProperty | 标记在实体类属性字段上，需两个字段配合使用                                                                |
-
-##### 四、应用场景
-
-- 方法上标记了@DesensitizeOperation注解的返回值对象会根据其它注解的标注情况进行脱敏处理；
-- 除@DesensitizeOperation注解外，其它注解标注在入参、返回值实体类对象上日志系统会对这些进行脱敏处理，不会影响到具体的返回对象和入参对象；
-
-##### 五、案例如下：
-
-- 实体类Company
+# Usage
+## Define Entity Annotations
 
 ```java
+import com.ajaxjs.security.desensitize.DesensitizeType;
+import com.ajaxjs.security.desensitize.annotation.DesensitizeModel;
+import com.ajaxjs.security.desensitize.annotation.DesensitizeProperty;
+import lombok.Data;
 
+@Data
 @DesensitizeModel
-public class Company {
-    private String companyName;
-    @DesensitizeProperty(value = DesensitizeType.ADDRESS)
-    private String address;
-    @DesensitizeProperty(value = DesensitizeType.PHONE)
+public class User {
+    private String name;
+
+    @DesensitizeProperty(DesensitizeType.PHONE)
     private String phone;
-    @DesensitizeProperty(value = DesensitizeType.EMAIL)
-    private String email;
-    /**
-     * {@link DesensitizeProperty}注解和{@link DesensitizeMapProperty} 注解都可以对Map集合中value为String的值进行脱敏处理；
-     * {@link DesensitizeMapProperty}注解优先级高于{@link DesensitizeProperty}注解
-     */
-    @DesensitizeProperty
-    @DesensitizeMapProperty(keys = {"password", "username"}, types = {DesensitizeType.DEFAULT, DesensitizeType.USERNAME})
-    private Map<String, Object> dataMap = new HashMap<>();
-    @DesensitizeProperty
-    private List<String> list;
-    @DesensitizeProperty
-    private String[] arrays;
-    /**
-     * 将任何引用类型字段设置为null,且优先级最高
-     */
-    @DesensitizeNullProperty
-    private Double testNull;
-    /**
-     * 复杂字段脱敏处理，根据传入的字段key值判断对应字段value是否进行脱敏处理
-     */
-    @DesensitizeComplexProperty(keys = {"email", "phone"}, value = "fieldValue", types = {DesensitizeType.EMAIL, DesensitizeType.PHONE})
-    private String fieldKey;
-    private String fieldValue;
+
+    private int age;
 }
 ```
 
-- 返回值是实体类，会对实体类进行脱敏处理
+In the example above:
+- `@DesensitizeModel` indicates that the POJO should be desensitized.
+- `@DesensitizeProperty(DesensitizeType.PHONE)` specifies the field to be desensitized and its type (e.g., "phone"). Other types can be found in the `DesensitizeType` enum:
 
 ```java
-    @DesensitizeOperation
-@GetMapping("api/desensitize/getCompany")
-public Company getCompany(){
-        Company company=new Company();
-        company.setCompanyName("魔方科技");
-        company.setAddress("古北市南京路1688号50号楼106");
-        company.setPhone("18888888888");
-        company.setEmail("18888888888@qq.com");
-        company.getDataMap().put("password","123456");
-        company.getDataMap().put("username","兰兰");
-        company.setTestNull(100D);
-        company.setFieldKey("email");
-        company.setFieldValue("188888888888@qq.com");
-        company.setList(List.of("123","456","789"));
-        company.setArrays(new String[]{"123","456","789"});
-        return company;
-        }
+/**
+ * Desensitization Types
+ */
+public enum DesensitizeType {
+    DEFAULT(v -> DataMask.PLACE_HOLDER),
+    // Phone number
+    PHONE(DataMask::maskPhoneNumber),
+    // Bank card number
+    BANK_CARD(DataMask::maskBankCard),
+    // ID card number
+    ID_CARD(DataMask::maskIdCard),
+    // Name
+    USERNAME(DataMask::maskChineseName),
+    // Email
+    EMAIL(DataMask::maskEmail),
+    // Address
+    ADDRESS(v -> DataMask.maskAddress(v, 0));
+
+    public final Function<String, String> handler;
+
+    DesensitizeType(Function<String, String> handler) {
+        this.handler = handler;
+    }
+}
 ```
 
-- 返回字符串，不支持
+Manual desensitization can be performed using: `DeSensitize.acquire(body);`.
+
+## Define Controller Annotations
+Use `@Desensitize` to annotate controller methods.
 
 ```java
-    @DesensitizeOperation
-@GetMapping("api/desensitize/getCompanyStr")
-public String getCompanyStr(){
-        return"xxx";
-        }
+@GetMapping("/user_desensitize")
+@Desensitize
+public User UserDesensitize() {
+    User user = new User();
+    user.setAge(1);
+    user.setName("tom");
+    user.setPhone("13711118120");
+
+    return user;
+}
 ```
 
-- 返回值是List集合对象，会对内层实体类脱敏处理
+The way to integrate the data desensitization component is somewhat special — it's not done through conventional extension points. Essentially, all we need to do is return an entity result, so we can simply modify (i.e., desensitize) the data at the point of final entity output.
+
+In this approach, each system may have a different location where uniform response objects are handled. In the current example, responses are unified using `ResponseBodyAdvice`, and only a single line of logic needs to be added for desensitization.
+
+As for this kind of centralized response handling — most Spring applications already have something like it. If your project doesn't, you’ll need to consider alternative approaches accordingly.
 
 ```java
-    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping("api/desensitize/getCompanyList")
-public ResponseEntity<List<Company>>getCompanyList(){
-        Company company=new Company();
-        company.setCompanyName("魔方科技");
-        company.setAddress("古北市南京路1688号50号楼106");
-        company.setPhone("18888888888");
-        company.setEmail("18888888888@qq.com");
-        company.getDataMap().put("password","123456");
-        company.getDataMap().put("username","兰兰");
-        company.setTestNull(100D);
-        company.setFieldKey("email");
-        company.setFieldValue("188888888888@qq.com");
-        company.setList(List.of("123","456","789"));
-        company.setArrays(new String[]{"123","456","789"});
-        return ResponseEntity.ok(List.of(company));
-        }
+import com.ajaxjs.security.desensitize.DeSensitize;
+import com.ajaxjs.security.desensitize.annotation.Desensitize;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.lang.reflect.Method;
+
+@RestControllerAdvice
+@Component
+public class GlobalResponseResult implements ResponseBodyAdvice<Object> {
+    @Override
+    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+        return true;
+    }
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        Method method = returnType.getMethod();
+        assert method != null;
+
+        if (method.isAnnotationPresent(Desensitize.class)) // Check if desensitization is required
+            body = DeSensitize.acquire(body);
+
+        ResponseResultWrapper responseResult = new ResponseResultWrapper();
+        responseResult.setStatus(1);
+        responseResult.setData(body);
+
+        return responseResult;
+    }
+}
 ```
 
-- 返回List字符串，不支持
-
-```java
-    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping("api/desensitize/getCompanyListStr")
-public ResponseEntity<List<String>>getCompanyListStr(){
-        return ResponseEntity.ok(List.of("古北市南京路1688号50号楼106"));
-        }
+Example response:
+```json
+{
+    "status": 1,
+    "errorCode": null,
+    "message": "Operation successful",
+    "data": {
+        "phone": "137*****8120",
+        "name": "tom",
+        "age": 1
+    }
+}
 ```
 
-- 返回值是Map集合，会对内层实体类脱敏处理
-
-```java
-    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping("api/desensitize/getCompanyMap")
-public ResponseEntity<Map<String, Company>>getCompanyMap(){
-        Company company=new Company();
-        company.setCompanyName("魔方科技");
-        company.setAddress("古北市南京路1688号50号楼106");
-        company.setPhone("18888888888");
-        company.setEmail("18888888888@qq.com");
-        company.getDataMap().put("password","123456");
-        company.getDataMap().put("username","兰兰");
-        company.setTestNull(100D);
-        company.setFieldKey("email");
-        company.setFieldValue("188888888888@qq.com");
-        company.setList(List.of("123","456","789"));
-        company.setArrays(new String[]{"123","456","789"});
-        return ResponseEntity.ok(Map.of("test",company));
-        }
-```
-
-- 返回Map字符串集合，不支持
-
-```java
-    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping("api/desensitize/getCompanyMapStr")
-public ResponseEntity<Map<String, String>>getCompanyMapStr(){
-        return ResponseEntity.ok(Map.of("test","魔方科技"));
-        }
-```
-
-- 返回值是数组类型集合，会对内层实体类进行脱敏处理
-
-```java
-    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping("api/desensitize/getCompanyArray")
-public ResponseEntity<Company[]>getCompanyArray(){
-        Company company=new Company();
-        company.setCompanyName("魔方科技");
-        company.setAddress("古北市南京路1688号50号楼106");
-        company.setPhone("18888888888");
-        company.setEmail("18888888888@qq.com");
-        company.getDataMap().put("password","123456");
-        company.getDataMap().put("username","兰兰");
-        company.setTestNull(100D);
-        company.setFieldKey("email");
-        company.setFieldValue("188888888888@qq.com");
-        company.setList(List.of("123","456","789"));
-        company.setArrays(new String[]{"123","456","789"});
-        return ResponseEntity.ok(new Company[]{company});
-        }
-```
-
-- 返回字符串数组
-
-```java
-@DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping("api/desensitize/getCompanyArrayStr")
-public ResponseEntity<String[]>getCompanyArrayStr(){
-        return ResponseEntity.ok(new String[]{"魔方科技"});
-        }
-```
-
-- 返回值带有外层包装，指定剥离外层的实体类，会对内层类进行脱敏处理
-
-```java
-@DesensitizeOperation(removePackClass = {BaseResponse.class, ResponseEntity.class, ResponseEntity.class})
-@GetMapping("api/desensitize/getCompanyPack")
-public BaseResponse<ResponseEntity<ResponseEntity<Company>>>getCompanyPack(){
-        Company company=new Company();
-        company.setCompanyName("魔方科技");
-        company.setAddress("古北市南京路1688号50号楼106");
-        company.setPhone("18888888888");
-        company.setEmail("18888888888@qq.com");
-        company.getDataMap().put("password","123456");
-        company.getDataMap().put("username","兰兰");
-        BaseResponse<ResponseEntity<ResponseEntity<Company>>>baseResponse=new BaseResponse<>();
-        baseResponse.setData(ResponseEntity.ok(ResponseEntity.ok(company)));
-        company.setTestNull(100D);
-        company.setFieldKey("phone");
-        company.setFieldValue("188888888888");
-        company.setList(List.of("123","456","789"));
-        company.setArrays(new String[]{"123","456","789"});
-        return baseResponse;
-        }
-```
-
+# Class Descriptions
+- **DeSensitizeUtils**: This class performs desensitization directly on the original entity object, modifying its fields.
+- **SensitizeUtils**: This class creates a new object instance (or collection) and applies desensitization rules to the new object, leaving the original object unchanged. The returned object has the same structure but with values desensitized.

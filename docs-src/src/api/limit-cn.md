@@ -10,6 +10,4 @@ layout: layouts/docs-cn.njk
 
 # 限额限次
 
-## 参考
-
-- [rate-limit 渐进式限流工具](https://github.com/houbb/rate-limit)
+TODO

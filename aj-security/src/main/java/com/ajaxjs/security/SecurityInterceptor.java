@@ -12,6 +12,8 @@ import com.ajaxjs.security.limit.LimitAccess;
 import com.ajaxjs.security.limit.LimitAccessVerify;
 import com.ajaxjs.security.nonrepeatsubmit.NonRepeatSubmit;
 import com.ajaxjs.security.nonrepeatsubmit.NonRepeatSubmitMgr;
+import com.ajaxjs.security.paramssign.ParamsSignAction;
+import com.ajaxjs.security.paramssign.ParamsSignCheck;
 import com.ajaxjs.security.referer.HttpReferer;
 import com.ajaxjs.security.referer.HttpRefererCheck;
 import com.ajaxjs.security.timesignature.TimeSignature;
@@ -66,6 +68,9 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
 
         if (!handler(HttpDigestAuth.class, request, handlerMethod, method, HttpDigestAuthCheck.class))
             return false;
+
+//        if (!handler(ParamsSignAction.class, request, handlerMethod, method, ParamsSignCheck.class))
+//            return false;
 
         return true;
     }

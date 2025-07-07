@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * The sign of the request parameters check
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParamsSignCheck {
 }

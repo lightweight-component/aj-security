@@ -76,17 +76,19 @@ public class EncryptedBodyConverter<T extends IResponseResult> extends MappingJa
      */
     @Override
     public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-        Class<?> clz = (Class<?>) type;
+        if (type instanceof Class<?>) {
+            Class<?> clz = (Class<?>) type;
 
-        if (isEnabled && clz.getAnnotation(EncryptedData.class) != null) {
-            ObjectMapper objectMapper = getObjectMapper();
-            DecodeDTO decodeDTO = objectMapper.readValue(inputMessage.getBody(), DecodeDTO.class);
-            String encryptBody = decodeDTO.getData();
+            if (isEnabled && clz.getAnnotation(EncryptedData.class) != null) {
+                ObjectMapper objectMapper = getObjectMapper();
+                DecodeDTO decodeDTO = objectMapper.readValue(inputMessage.getBody(), DecodeDTO.class);
+                String encryptBody = decodeDTO.getData();
 
-            String decodeJson = decrypt(encryptBody, privateKey);
-            System.out.println(decodeJson);
+                String decodeJson = decrypt(encryptBody, privateKey);
+                System.out.println(decodeJson);
 
-            return objectMapper.readValue(decodeJson, clz);
+                return objectMapper.readValue(decodeJson, clz);
+            }
         }
 
         return super.read(type, contextClass, inputMessage);

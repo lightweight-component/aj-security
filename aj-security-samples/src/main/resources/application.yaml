@@ -38,4 +38,4 @@ security:
     enabled: true
   ParamsSign:
     enabled: true
-    secretKey: der3@x7Az42
+    secret: der3@x7Az42

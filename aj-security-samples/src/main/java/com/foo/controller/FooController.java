@@ -8,8 +8,6 @@ import com.ajaxjs.security.timesignature.TimeSignatureVerify;
 import com.foo.model.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/foo")
 public interface FooController {
@@ -33,8 +31,8 @@ public interface FooController {
     User UserDesensitize();
 
     @PostMapping("/ParamsSignCheck")
-    @ParamsSignCheck
-    int ParamsSignCheck(@RequestBody Map<String, Object> params);
+//    int ParamsSignCheck( @ParamsSignCheck @RequestBody Map<String, Object> params);
+    int ParamsSignCheck(@ParamsSignCheck User user);
 
     @GetMapping("/encrypted_body")
     User getUser();

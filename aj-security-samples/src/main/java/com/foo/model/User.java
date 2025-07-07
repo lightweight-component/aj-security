@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @DesensitizeModel
-@EncryptedData
+//@EncryptedData
 public class User {
     private String name;
 

@@ -6,6 +6,7 @@ import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.RandomTools;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -20,6 +21,7 @@ import java.util.function.Predicate;
 @Data
 @Slf4j
 public class ParamsSign {
+    @Value("${security.ParamsSign.secret}")
     String secretKey;
 
     String nonce;
@@ -33,6 +35,7 @@ public class ParamsSign {
      */
     Predicate<String> containsUsedNonce;
 
+    @Value("${security.ParamsSign.expire: 600}")
     long expireSeconds = 60 * 10;
 
     public static final String SIGN_PARAMS = "sign";

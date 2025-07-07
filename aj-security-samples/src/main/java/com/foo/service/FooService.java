@@ -1,5 +1,6 @@
 package com.foo.service;
 
+import com.ajaxjs.security.paramssign.ParamsSignCheck;
 import com.foo.controller.FooController;
 import com.foo.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +42,9 @@ public class FooService implements FooController {
     }
 
     @Override
-    public int ParamsSignCheck(Map<String, Object> params) {
-        System.out.println(params);
+//    public int ParamsSignCheck(@ParamsSignCheck Map<String, Object> params) {
+    public int ParamsSignCheck(@ParamsSignCheck User user) {
+        System.out.println(user);
         return 8;
     }
 

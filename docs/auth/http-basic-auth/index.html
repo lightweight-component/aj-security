@@ -52,6 +52,9 @@
                     <li>
                         <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
+         <li>
+                       <a href="/http/paramssign">Parameter Signature</a>
+                    </li>
                     <li>
                         <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
@@ -86,13 +89,16 @@
                 </ul>
                 <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
-                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
+                    <li><a href="/misc/desensitize">Field Desensitization</a></li>
+                    <li><a href="/misc/encryption-api">API Encryption</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>HTTP Basic Authentication (Basic Auth)</h1>
-<p><strong>HTTP Basic Authentication (Basic Auth)</strong> is the simplest HTTP authentication method. The client performs identity verification by including the username and password (Base64 encoded) in the HTTP request header. It is commonly used in test environments, internal systems, or simple interface protection (it is recommended to use HTTPS in production environments, otherwise the password can be easily stolen).</p>
+<p><strong>HTTP Basic Authentication (Basic Auth)</strong> is the simplest HTTP authentication method. The client performs identity
+verification by including the username and password (Base64 encoded) in the HTTP request header. It is commonly used in
+test environments, internal systems, or simple interface protection (it is recommended to use HTTPS in production
+environments, otherwise the password can be easily stolen).</p>
 <h2>Basic Principle</h2>
 <ol>
 <li>The client encodes <code>username:password</code> using Base64.</li>

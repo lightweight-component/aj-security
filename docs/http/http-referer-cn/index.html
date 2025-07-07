@@ -52,6 +52,9 @@
                     <li>
                        <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
                     </li>
+                     <li>
+                       <a href="/http/paramssign-cn">请求参数防篡改</a>
+                    </li>
                     <li>
                        <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
                     </li>
@@ -87,12 +90,13 @@
                 <h3>其他实用功能</h3>
                 <ul>
                     <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
-                    <li><a href="/misc/api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/encryption-api-cn">API 接口加解密</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>HTTP Referer 校验</h1>
-<p>HTTP Referer 校验（也称为“Referer 检查”）是一种常见的 Web 安全措施，其原理是：后端服务器在接收请求时检查请求头中的 Referer 字段，判断请求来源是否为信任的域名或页面。</p>
+<p>HTTP Referer 校验（也称为“Referer 检查”）是一种常见的 Web 安全措施，其原理是：后端服务器在接收请求时检查请求头中的 Referer
+字段，判断请求来源是否为信任的域名或页面。</p>
 <h2>基本原理</h2>
 <ol>
 <li>客户端（浏览器）在发起 HTTP 请求时，会在请求头里带上<code>Referer</code>，指明请求的来源页面地址。</li>

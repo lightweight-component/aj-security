@@ -194,14 +194,14 @@ public class DataMask {
     }
 
     public static String repeat(String str, int count) {
-        if (str == null || count <= 0) 
+        if (str == null || count <= 0)
             return "";
-        
+
         StringBuilder builder = new StringBuilder(str.length() * count);
 
-        for (int i = 0; i < count; i++) 
+        for (int i = 0; i < count; i++)
             builder.append(str);
-        
+
         return builder.toString();
     }
 

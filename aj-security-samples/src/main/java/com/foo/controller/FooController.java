@@ -5,8 +5,9 @@ import com.ajaxjs.security.iplist.IpListCheck;
 import com.ajaxjs.security.paramssign.ParamsSignCheck;
 import com.ajaxjs.security.referer.HttpRefererCheck;
 import com.ajaxjs.security.timesignature.TimeSignatureVerify;
-import org.springframework.web.bind.annotation.*;
 import com.foo.model.User;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 @RestController

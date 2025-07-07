@@ -1,8 +1,6 @@
 package com.ajaxjs.security.paramssign;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,8 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Simply check the HTTP Referer
@@ -35,7 +31,6 @@ public class ParamsSignAction extends InterceptorAction<ParamsSignCheck> {
             throw new UnsupportedOperationException("Please add the filter to support ContentCaching");
 
         ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) req;
-
 
 
         try {

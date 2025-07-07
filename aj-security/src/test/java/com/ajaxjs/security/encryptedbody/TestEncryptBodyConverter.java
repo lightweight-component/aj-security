@@ -13,6 +13,7 @@ public class TestEncryptBodyConverter {
         String text = EncryptedBodyConverter.encrypt("{\"name\":\"Jack\"}", publicKey);
         System.out.println(text);
     }
+
     @Test
     void testDecrypt() {
         String text = EncryptedBodyConverter.decrypt(encryptedText, privateKey);

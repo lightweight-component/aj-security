@@ -28,6 +28,7 @@ public class AutoConfiguration implements WebMvcConfigurer {
         registrationBean.setFilter(new CachingRequestBodyFilter());
         registrationBean.setOrder(1); // 数字越小越靠前，尽早执行
         registrationBean.addUrlPatterns("/*"); // 作用于所有路径
+
         return registrationBean;
     }
 }

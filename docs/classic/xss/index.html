@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ MCP SDK/API 接口数据加密</title>
-        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. 对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。"/>
-        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, api"/>
+        <title>AJ MCP SDK/Prevent XSS Cross-Site Scripting Attacks</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. Prevent XSS Cross-Site Scripting Attacks"/>
+        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, XSS"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -52,6 +52,9 @@
                     <li>
                         <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
+         <li>
+                       <a href="/http/paramssign">Parameter Signature</a>
+                    </li>
                     <li>
                         <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
@@ -86,29 +89,46 @@
                 </ul>
                 <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
-                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
+                    <li><a href="/misc/desensitize">Field Desensitization</a></li>
+                    <li><a href="/misc/encryption-api">API Encryption</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>API 接口数据加密</h1>
-<p>对 HTTP API 接口中的入参、出参进行数据加密、解密，其目的是保护敏感数据、防篡改、防抓包。</p>
-<p>示例（Java AES 加密）:</p>
-<pre><code class="language-java">// 加密
-String json = &quot;{\&quot;username\&quot;:\&quot;test\&quot;, \&quot;password\&quot;:\&quot;123456\&quot;}&quot;;
-String key = &quot;xxxxxx&quot;; // 16/24/32位
-String encrypted = AESUtil.encrypt(json, key);
-// 传 encrypted 给后端
-
-// 解密
-String decrypted = AESUtil.decrypt(encrypted, key);
-// 得到原始json
-</code></pre>
-<p>传输格式举例</p>
-<pre><code class="language-json">{
-&quot;data&quot;: &quot;8kfj2j38fjsl2j3dfk...&quot;  // 加密后的密文
+                <h1>General Web Validation</h1>
+<p>General web validation primarily addresses the prevention of attacks such as XSS, CSRF, and CRLF. Unlike other
+components within this framework that rely on Spring Interceptors, the validation mechanism here is implemented using
+traditional Servlet filters.</p>
+<pre><code class="language-java">@Override
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        if (isEnabled) {
+            SecurityRequest securityRequest = new SecurityRequest((HttpServletRequest) request);
+            SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
+            securityResponse.isCRLFCheck = isCRLFCheck;
+            securityResponse.isCookiesSizeCheck = isCookiesSizeCheck;
+            securityResponse.maxCookieSize = maxCookieSize;
+    
+            securityRequest.isXssCheck = securityResponse.isXssCheck = isXssCheck;
+    
+            chain.doFilter(securityRequest, securityResponse);// Continue processing the request
+        } 
+        else
+            chain.doFilter(request, response);
 }
-```java</code></pre>
+</code></pre>
+<p>By overriding the Servlet's method in this way, even if the Java system is attacked or compromised, the filter can still
+effectively prevent XSS attacks.</p>
+<h1>Prevent XSS Cross-Site Scripting Attacks</h1>
+<p>XSS (Cross-Site Scripting) is a type of attack where malicious code (usually JavaScript) is injected into a web
+application. Attackers exploit XSS vulnerabilities to steal user data, hijack sessions, or manipulate browser behavior.</p>
+<p>The key to preventing XSS attacks is to strictly validate and escape user inputs, ensuring that any dynamic content is
+not interpreted as executable code before being output to a page.</p>
+<h2>Configuration</h2>
+<p>First, ensure the filter is enabled by setting <code>enabled: true</code>, then activate <code>xssCheck</code> to enable detection.</p>
+<pre><code class="language-yaml">security:
+    web: # General attack prevention
+        enabled: true
+        xssCheck: true # Prevent XSS Cross-Site Scripting Attacks
+</code></pre>
 
             </article>
         </div>

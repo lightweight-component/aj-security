@@ -9,9 +9,11 @@ layout: layouts/docs-cn.njk
 ---
 
 # API 接口加密/解密
+
 为了安全性需要对接口的数据进行加密处理，不能明文暴露数据。为此应该对接口进行加密/解密处理，对于接口的行为，分别有：
 
-- 入参，对传过来的加密参数解密。接口处理客户端提交的参数时候，这里统一约定对 HTTP Raw Body 提交的数据（已加密的密文），转换为 JSON 处理，这是最常见的提交方式。其他 QueryString、标准 Form、HTTP Header 的入参则不支持。
+- 入参，对传过来的加密参数解密。接口处理客户端提交的参数时候，这里统一约定对 HTTP Raw Body 提交的数据（已加密的密文），转换为
+  JSON 处理，这是最常见的提交方式。其他 QueryString、标准 Form、HTTP Header 的入参则不支持。
 - 出参，对返回值进行加密。接口统一返回加密后的 JSON 结果。
 
 有人把加密结果原文输出，如下图所示：
@@ -32,9 +34,11 @@ layout: layouts/docs-cn.njk
 
 ## 加密算法
 
-加密算法需要调用方（如浏览器）与 API 接口协商好。一般采用 RSA 加密算法。虽然 RSA 没 AES 速度高，但胜在是非对称加密，AES 这种对称加密机制在这场合就不适用了（因为浏览器是不能放置任何密钥的，——除非放置非对称的公钥）。
+加密算法需要调用方（如浏览器）与 API 接口协商好。一般采用 RSA 加密算法。虽然 RSA 没 AES 速度高，但胜在是非对称加密，AES
+这种对称加密机制在这场合就不适用了（因为浏览器是不能放置任何密钥的，——除非放置非对称的公钥）。
 
-当然，如果你设计的 API 接口给其他第三方调用而不是浏览器，可以保证密钥安全的话，那么使用 AES 也可以，包括其他摘要算法同理亦可，大家商定好算法（md5/sha1/sha256……）和盐值（Slat）即可。
+当然，如果你设计的 API 接口给其他第三方调用而不是浏览器，可以保证密钥安全的话，那么使用 AES
+也可以，包括其他摘要算法同理亦可，大家商定好算法（md5/sha1/sha256……）和盐值（Slat）即可。
 
 该组件当前仅支持 RSA（1024bit key）。下面更多的算法在路上。
 
@@ -44,9 +48,10 @@ layout: layouts/docs-cn.njk
 
 # 使用方式
 
-
 ## 初始化
+
 在 YAML 配置中加入：
+
 ```yaml
 api:
   EncryptedBody:
@@ -54,7 +59,9 @@ api:
     publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCmkKluNutOWGmAK2U……
     privateKey: MIICdgIBADANBgkqhkiG9w0BAQ……
 ```
+
 主要是 RSA 的公钥/私钥。然后在 Spring 配置类`WebMvcConfigurer`中加入：
+
 ```java
 @Value("${api.EncryptedBody.publicKey}")
 private String apiPublicKey;
@@ -73,10 +80,13 @@ public void configureMessageConverters(List<HttpMessageConverter<?>> converters)
     converters.add(0, converter);
 }
 ```
+
 ## 配置要加密的数据
+
 使用方式很简单，其实就是添加一个 Java 注解`@EncryptedData`到你的 Java Bean 上即可。
 
-不过我们还是按照正儿八经的循序渐进的方式去看看。首先是解密请求的数据，我们观察这个 Spring MVC 接口声明，与一般的 JSON 提交数据方式无异，添加了注解`@RequestBody`，其他无须修改：
+不过我们还是按照正儿八经的循序渐进的方式去看看。首先是解密请求的数据，我们观察这个 Spring MVC 接口声明，与一般的 JSON
+提交数据方式无异，添加了注解`@RequestBody`，其他无须修改：
 
 ```java
 @PostMapping("/submit")
@@ -112,6 +122,7 @@ public class DecodeDTO {
     private String data;
 }
 ```
+
 当然你可以修改这个 DTO 为你符合的结构。一般情况下提交的样子就是像:
 
 ```json
@@ -145,6 +156,7 @@ public User User() {
 我们同样需要加一个注解`@EncryptedData`即可对其加密。当前版本中暂不支持字段级别的加密，只支持整个对象加密。
 
 返回结果如下：
+
 ```json
 {
     "status": 1,
@@ -155,7 +167,9 @@ public User User() {
 ```
 
 ## 添加依赖
-哦~对了，别忘了添加依赖，——没单独搞 jar 包，直接 copy 代码吧~才三个类：[源码](https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/api/encryptedbody)。
+
+哦~对了，别忘了添加依赖，——没单独搞 jar 包，直接 copy 代码吧~
+才三个类：[源码](https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/api/encryptedbody)。
 
 其中`ResponseResultWrapper`就是统一返回结果的类，你可以改为你项目的，——其他的没啥依赖了，——还有就是 RSA 依赖我的工具包：
 
@@ -166,9 +180,11 @@ public User User() {
     <version>1.1.8</version>
 </dependency>
 ```
+
 很小巧的，才60kb 的 jar 包——请放心食用~
 
 # 实现方式
+
 这里说说实现原理，以及一些 API 设计风格的思考。
 
 我们这种的用法，相当于接收了 A 对象（加密的，`DecodeDTO`），转换为 B 对象（解密的，供控制器使用）。最简单的方式就是这样的：
@@ -180,10 +196,16 @@ boolean jsonSubmit(@RequestBody DecodeDTO dto) {
 }
 ```
 
-但是这种方法，方法数量一多则遍地`DecodeDTO`，API 文档也没法写了（破坏了代码清晰度，不能反映原来代码的意图）。为此我们应该尽量采用“非入侵”的方法，所谓非入侵，就是不修改原有的代码，只做额外的“装饰”。这种手段有很多，典型如 AOP，其他同类的开源库 [rsa-encrypt-body-spring-boot](https://github.com/ishuibo/rsa-encrypt-body-spring-boot)、[encrypt-body-spring-boot-starter](https://github.com/Licoy/encrypt-body-spring-boot-starter) 也是不约而同地使用 AOP。
+但是这种方法，方法数量一多则遍地`DecodeDTO`，API
+文档也没法写了（破坏了代码清晰度，不能反映原来代码的意图）。为此我们应该尽量采用“非入侵”的方法，所谓非入侵，就是不修改原有的代码，只做额外的“装饰”。这种手段有很多，典型如
+AOP，其他同类的开源库 [rsa-encrypt-body-spring-boot](https://github.com/ishuibo/rsa-encrypt-body-spring-boot)、[encrypt-body-spring-boot-starter](https://github.com/Licoy/encrypt-body-spring-boot-starter)
+也是不约而同地使用 AOP。
 
-然而笔者个人来说不太喜欢 AOP，可能也是不够熟悉吧——反正能不用则不用。如果不用 AOP 那应该如何做呢？笔者思考了几种方式例如 Filter、拦截器等，但最终把这个问题定位于 JSON 序列化/反序列化层面上，在执行这一步骤之前就可以做加密/解密操作了。开始以为可以修改 Jackson 全局序列化方式，但碍于全局的话感觉不太合理，更合适的是在介乎于 Spring 与 Jackson 结合的地方做修改。于是有了在的`MappingJackson2HttpMessageConverter`基础上扩展的 `EncryptedBodyConverter`，重写了`read`方法，在反序列化之前先做解密操作，`writeInternal`方法亦然。
-
+然而笔者个人来说不太喜欢 AOP，可能也是不够熟悉吧——反正能不用则不用。如果不用 AOP 那应该如何做呢？笔者思考了几种方式例如
+Filter、拦截器等，但最终把这个问题定位于 JSON 序列化/反序列化层面上，在执行这一步骤之前就可以做加密/解密操作了。开始以为可以修改
+Jackson 全局序列化方式，但碍于全局的话感觉不太合理，更合适的是在介乎于 Spring 与 Jackson
+结合的地方做修改。于是有了在的`MappingJackson2HttpMessageConverter`基础上扩展的 `EncryptedBodyConverter`，重写了`read`
+方法，在反序列化之前先做解密操作，`writeInternal`方法亦然。
 
 核心方法就一个类，不足一百行代码：
 
@@ -286,9 +308,9 @@ public class EncryptedBodyConverter extends MappingJackson2HttpMessageConverter 
 ```
 
 TODO
+
 - 增加加密解密算法
 - 增加一个加密选项，说明使用公钥还是私钥。当前是公钥
 - 针对字段单独的解密
-
 
 哈哈 最后发现也有人用`HttpMessageConverter`来做：https://blog.allbs.cn/posts/49043/。

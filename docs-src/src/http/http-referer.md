@@ -7,13 +7,17 @@ tags:
   - Referer
 layout: layouts/docs.njk
 ---
+
 # HTTP Referer Validation
 
-HTTP Referer validation (also known as "Referer Check") is a common web security measure. Its principle is that the backend server checks the Referer field in the request header when receiving a request to determine whether the request source is a trusted domain or page.
+HTTP Referer validation (also known as "Referer Check") is a common web security measure. Its principle is that the
+backend server checks the Referer field in the request header when receiving a request to determine whether the request
+source is a trusted domain or page.
 
 ## Basic Principle
 
-1. When the client (browser) initiates an HTTP request, it includes a `Referer` in the request header, indicating the source page address of the request.
+1. When the client (browser) initiates an HTTP request, it includes a `Referer` in the request header, indicating the
+   source page address of the request.
 2. After the server receives the request, it reads the `Referer` and determines whether it is from a trusted source.
 3. If the `Referer` does not meet the requirements, the request is rejected or an error is returned.
 
@@ -26,12 +30,14 @@ HTTP Referer validation (also known as "Referer Check") is a common web security
 ## Notes
 
 - Not all requests include a Referer (e.g., direct URL input, certain browser privacy modes, HTTPS to HTTP)
-- The Referer can be easily forged and should not be used as the sole security measure; it should only serve as a supplement
+- The Referer can be easily forged and should not be used as the sole security measure; it should only serve as a
+  supplement
 - It is recommended to combine with multiple measures such as CSRF Token and Cookie validation
 
 # Usage
 
 ## yaml Configuration
+
 ```yaml
 security:
   HttpReferer: # Referer Interceptor
@@ -42,8 +48,11 @@ security:
       - https://another-example.com
       - https://my-site.com
 ```
+
 ## Interceptor Validation
+
 Add the `@HttpRefererCheck` annotation to the interface in use:
+
 ```java
 @GetMapping("/HttpRefererCheck")
 @HttpRefererCheck

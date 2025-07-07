@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ MCP SDK/HTTP Referer Validation</title>
-        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. HTTP Referer 校验（也称为“Referer 检查”）是一种常见的 Web 安全措施，其原理是：后端服务器在接收请求时检查请求头中的 Referer 字段，判断请求来源是否为信任的域名或页面。"/>
-        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, Referer"/>
+        <title>AJ MCP SDK/Installation and Configuration</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. Installation and Configuration"/>
+        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, Installation,Configuration"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -94,47 +94,71 @@
                 </ul>
             </menu>
             <article>
-                <h1>HTTP Referer Validation</h1>
-<p>HTTP Referer validation (also known as &quot;Referer Check&quot;) is a common web security measure. Its principle is that the
-backend server checks the Referer field in the request header when receiving a request to determine whether the request
-source is a trusted domain or page.</p>
-<h2>Basic Principle</h2>
-<ol>
-<li>When the client (browser) initiates an HTTP request, it includes a <code>Referer</code> in the request header, indicating the
-source page address of the request.</li>
-<li>After the server receives the request, it reads the <code>Referer</code> and determines whether it is from a trusted source.</li>
-<li>If the <code>Referer</code> does not meet the requirements, the request is rejected or an error is returned.</li>
-</ol>
-<h2>Common Scenarios</h2>
-<ul>
-<li>Source validation for sensitive operations such as form submission and API calls</li>
-<li>Preventing CSRF attacks</li>
-<li>Anti-leeching (e.g., allowing image or video resources to be accessed only from the same domain)</li>
-</ul>
-<h2>Notes</h2>
-<ul>
-<li>Not all requests include a Referer (e.g., direct URL input, certain browser privacy modes, HTTPS to HTTP)</li>
-<li>The Referer can be easily forged and should not be used as the sole security measure; it should only serve as a
-supplement</li>
-<li>It is recommended to combine with multiple measures such as CSRF Token and Cookie validation</li>
-</ul>
-<h1>Usage</h1>
-<h2>yaml Configuration</h2>
-<pre><code class="language-yaml">security:
-  HttpReferer: # Referer Interceptor
+                <h1>Installation</h1>
+<p>This component integrates seamlessly with Spring Boot applications. After adding the dependency, you can use it in your Spring Boot project. Maven coordinates:</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.ajaxjs&lt;/groupId&gt;
+    &lt;artifactId&gt;aj-security&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>It has been tested on Java 8 + SpringBoot 2.7.</p>
+<p>Currently, non-Spring applications are not supported. If you want to use it in a traditional Spring MVC application, you may need to modify related configuration mechanisms accordingly.</p>
+<h2>Demo Application</h2>
+<p>We provide a <a href="https://gitcode.com/lightweight-component/aj-security/tree/main/aj-security-samples">Sample Demo</a> in the source code for installation and configuration reference. It also serves as part of the test cases and includes demonstrations of all security components. Browse the source code in the <code>aj-security-samples</code> directory; this is a standard SpringBoot v2.7 project.<br>
+To start the demo, simply run the <code>main()</code> function of the <code>FooApp</code> class.</p>
+<h1>Configuration</h1>
+<p>Developers mainly interact with AJ Security through configuration files. Add the following content to the Spring configuration YAML file <code>application.yml</code>:</p>
+<pre><code>security:
+  HttpReferer: # Referer interception
     globalCheck: false # Global check
     enabled: true
     allowedReferrers:
       - https://example.com
       - https://another-example.com
       - https://my-site.com
+
+  TimeSignature: # Timestamp control
+    enabled: true
+    secretKey: der3@x7Az#2 # Secret key, required
+
+  IpList: # IP whitelist/blacklist
+    globalCheck: false # Global check
+    enabled: true
+    whiteList:
+      - 192.168.1.1
+      - 192.168.1.2
+
+  HttpBasicAuth: # HTTP Basic Authentication
+    globalCheck: true # Global check
+    enabled: false
+    username: admin
+    password: admin
+
+  HttpDigestAuth: # HTTP Digest Authentication
+    globalCheck: true # Global check
+    enabled: false
+    username: admin
+    password: admin2
+  EncryptedBody:
+    publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCmkKluNutOWGmAK2U80hM9JtzsgLAlgvHqncakqwhruE9TIXUQFDRKsIBQwN+3rLC76kyOl4U+eBefLaGQGJBZVq0qwIHBe4kfH0eJXaHyG/i9H2Iph1cyY6cn6ocPta6ZmSuOIcx4yLlpCgq5eDRigHs0AR418ZTlRItlhrY9+wIDAQAB
+    privateKey: MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKaQqW42605YaYArZTzSEz0m3OyAsCWC8eqdxqSrCGu4T1MhdRAUNEqwgFDA37essLvqTI6XhT54F58toZAYkFlWrSrAgcF7iR8fR4ldofIb+L0fYimHVzJjpyfqhw+1rpmZK44hzHjIuWkKCrl4NGKAezQBHjXxlOVEi2WGtj37AgMBAAECgYBj9sX4o3UtG9qVVXX4votVVBGaztDocmIF0JL7GLqBC6hv19CNydJoUO1xiY+6iCW5YbB4k28gQqrKmXQxKszWFdd1NTHOKS3nti8I2QNc4T9FF34YvYh/WQlRw7dHmYUl/MCm6U6yVE7XK8GoYYOyAyclXuFR+SRw8/gHsoAYoQJBAPQ3L+K47QSujMSzu8ZcdRingN25VS8r790A18WNxtK9l/7b3l8aTUXmeGcjLpQDnx158jQ32fTUki5aa2eGDp0CQQCumkCpTgcvx0Ys66aXKnpaexWGWDK/ui9hY7lRdd2XijK30Uo2TlQ1ujXYjodbJJUAELE3UAC+0yj8W8Edf093AkAzrHWyaGSmZ/SbLlieCTQxqkenIq72kzpmreX6BBy8vKcrowQzZVJSZwi08gnKAdYqG4J3MBYrKstfiXxOZFw1AkA6+3radrRwzHWFWTnWmQ/qHug/kO3b3M6CrMh+nz1zIslNVVMnk0BZQgVMmaFaBbqb4gerssf9rqGK1ogfKdGzAkBQzGcbSAtTlCAMNMnOXphIvFQ/GnxlPwwr23ysyt0k14SOwGNfND4rXM2rTzjz+2yF20tGdGgmXfwnvKOaCc1N
+    enabled: true
+  ParamsSign:
+    enabled: true
+    secretKey: der3@x7Az42
 </code></pre>
-<h2>Interceptor Validation</h2>
-<p>Add the <code>@HttpRefererCheck</code> annotation to the interface in use:</p>
+<p>You can see that there are configuration options for each security component under <code>security</code>.<br>
+Abstractly, there are two common configuration options for each component: <code>enabled</code> and <code>globalCheck</code>.</p>
+<ul>
+<li><code>enabled</code>: Whether to activate this component. If set to <code>false</code>, the component will not run.</li>
+<li><code>globalCheck</code>: Whether to perform a global check. If set to <code>true</code>, all requests will be checked by this component; if <code>false</code>, only requests matching specific URLs will be checked. The matching method is declared via annotations on Spring controllers, for example:</li>
+</ul>
 <pre><code class="language-java">@GetMapping(&quot;/HttpRefererCheck&quot;)
 @HttpRefererCheck
 int HttpRefererCheck();
 </code></pre>
+<p>For detailed configuration of each component, please refer to the respective chapters.</p>
 
             </article>
         </div>

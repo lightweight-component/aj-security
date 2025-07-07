@@ -7,9 +7,11 @@ tags:
   - IP Whitelist/Blacklist
 layout: layouts/docs.njk
 ---
+
 # IP Whitelist/Blacklist
 
-IP whitelist/blacklist validation is a common security measure used to allow or deny specific IP addresses access to interfaces, pages, or services.
+IP whitelist/blacklist validation is a common security measure used to allow or deny specific IP addresses access to
+interfaces, pages, or services.
 
 ## Scenario Description
 
@@ -17,7 +19,9 @@ IP whitelist/blacklist validation is a common security measure used to allow or 
 - Blacklist: IPs on the blacklist are denied access; all others are allowed.
 
 # Usage
+
 ## YAML Configuration
+
 Usually, only one of whitelist or blacklist is set at a time.
 
 ```yaml
@@ -29,8 +33,11 @@ security:
       - 192.168.1.1
       - 192.168.1.2
 ```
+
 ## Interceptor Validation
+
 Add the `@IpListCheck` annotation to the interface in use:
+
 ```java
 @GetMapping("/IpListCheck")
 @IpListCheck
@@ -38,4 +45,5 @@ int IpListCheck();
 ```
 
 # Roadmap
+
 Consider IPv6 and separate configuration for annotations.

@@ -52,6 +52,9 @@
                     <li>
                        <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
                     </li>
+                     <li>
+                       <a href="/http/paramssign-cn">请求参数防篡改</a>
+                    </li>
                     <li>
                        <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
                     </li>
@@ -87,12 +90,13 @@
                 <h3>其他实用功能</h3>
                 <ul>
                     <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
-                    <li><a href="/misc/api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/encryption-api-cn">API 接口加解密</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>HTTP 基本认证（Basic Auth）</h1>
-<p>**HTTP 基本认证（Basic Auth）**是一种最简单的 HTTP 认证方式，客户端通过在 HTTP 请求头中带上用户名和密码（经过 Base64 编码）来进行身份验证。应用场景多见于测试环境、内部系统或简单接口保护（生产环境建议配合 HTTPS，否则密码易被窃取）。</p>
+<p>**HTTP 基本认证（Basic Auth）**是一种最简单的 HTTP 认证方式，客户端通过在 HTTP 请求头中带上用户名和密码（经过 Base64
+编码）来进行身份验证。应用场景多见于测试环境、内部系统或简单接口保护（生产环境建议配合 HTTPS，否则密码易被窃取）。</p>
 <h2>基本原理</h2>
 <ol>
 <li>客户端将 username:password 用 Base64 编码。</li>

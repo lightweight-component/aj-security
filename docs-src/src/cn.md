@@ -10,7 +10,8 @@ layout: layouts/docs-cn.njk
 
 # AJ Security：实用的 Java Web 安全库
 
-基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一的一套调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
+基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一的一套调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于
+Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
 
 本框架的功能有：
 
@@ -36,8 +37,9 @@ layout: layouts/docs-cn.njk
     - 防止 CRLF 攻击
     - Cookie 容量检查
 - HTTP 标准认证
-  - HTTP Basic Auth 认证
-  - HTTP Digest Auth 认证
+    - HTTP Basic Auth 认证
+    - HTTP Digest Auth 认证
+
 </td>
 
 <td>
@@ -59,10 +61,13 @@ layout: layouts/docs-cn.njk
 AJ Security 的代码量不多，而且都是很简单易懂的代码。另外没啥第三方依赖，适合 Java8+。
 
 ## 源代码
+
 本项目采用 Apache License 协议开源。
 
-- GitHub 地址：[https://github.com/lightweight-component/aj-security](https://github.com/lightweight-component/aj-security)
-- GitCode 地址（适合中国用户快速访问）：[https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security)
+- GitHub
+  地址：[https://github.com/lightweight-component/aj-security](https://github.com/lightweight-component/aj-security)
+- GitCode
+  地址（适合中国用户快速访问）：[https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security)
 
 ## 相关链接
 

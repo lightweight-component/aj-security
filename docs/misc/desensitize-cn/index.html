@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Security 框架-MCP Server SDK Resources Development</title>
-        <meta name="description" content="实用的 Java Web 安全库。MCP Server SDK Resources Development"/>
+        <title>AJ Security 框架-实体类字段脱敏</title>
+        <meta name="description" content="实用的 Java Web 安全库。实体类字段脱敏"/>
         <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, desensitize"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
@@ -52,6 +52,9 @@
                     <li>
                        <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
                     </li>
+                     <li>
+                       <a href="/http/paramssign-cn">请求参数防篡改</a>
+                    </li>
                     <li>
                        <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
                     </li>
@@ -87,236 +90,143 @@
                 <h3>其他实用功能</h3>
                 <ul>
                     <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
-                    <li><a href="/misc/api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/encryption-api-cn">API 接口加解密</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>aj-desensitize</h1>
-<p>平时开发的过程中经常会遇到对一些敏感的字段进行脱敏处理，防止信息泄漏，如：邮箱、用户名、密码等；做为一个优秀的程序员我们不应该遇到这种问题时就做特殊处理，重复做相同的工作，所以我们应该写一个基础库SDK，解决重复的问题。</p>
-<p>该组件源码 Fork 自 <a href="https://github.com/mingyang66/spring-parent/tree/master/emily-project/emily-desensitize">https://github.com/mingyang66/spring-parent/tree/master/emily-project/emily-desensitize</a>，感想原作者！</p>
-<h5>脱敏 SDK 组件</h5>
-<h5>三、注解列表</h5>
-<table>
-<thead>
-<tr>
-<th>注解</th>
-<th>作用域</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>@DesensitizeOperation</td>
-<td>标记在方法上，只有标记了此注解的返回值才会进行脱敏处理，<code>removePackClass</code>属性指定要剥离的外层类，可以指定多个剥离的外层类，只有最内层的类才会进行脱敏处理；</td>
-</tr>
-<tr>
-<td>@DesensitizeModel</td>
-<td>标记在实体类上，只有标记了此注解的实体类才会进行脱敏处理</td>
-</tr>
-<tr>
-<td>@DesensitizeProperty</td>
-<td>标记在实体类字符串、Map 属性字段，标记了次注解的字段会按照指定类型进行脱敏；</td>
-</tr>
-<tr>
-<td>@DesensitizeNullProperty</td>
-<td>标记在实体类引用数据类型上</td>
-</tr>
-<tr>
-<td>@DesensitizeMapProperty</td>
-<td>标记在实体类Map数据类型上，按照指定的 key 字段及类型进行脱敏。</td>
-</tr>
-<tr>
-<td>@DesensitizeComplexProperty</td>
-<td>标记在实体类属性字段上，需两个字段配合使用</td>
-</tr>
-</tbody>
-</table>
-<h5>四、应用场景</h5>
-<ul>
-<li>方法上标记了@DesensitizeOperation注解的返回值对象会根据其它注解的标注情况进行脱敏处理；</li>
-<li>除@DesensitizeOperation注解外，其它注解标注在入参、返回值实体类对象上日志系统会对这些进行脱敏处理，不会影响到具体的返回对象和入参对象；</li>
-</ul>
-<h5>五、案例如下：</h5>
-<ul>
-<li>实体类Company</li>
-</ul>
-<pre><code class="language-java">
+                <h1>实体类字段脱敏</h1>
+<p>脱敏就是现实某些敏感的字段完全暴露数据，但又不能完全消去，保留一部分信息即可判断，常见如姓名、手机、邮箱、用户名、密码等字段。</p>
+<p>考虑到穿梭于 Java 的实体要么是 Java Bean 要么就是 Map，针对实体数据处理即可。接着把控好在哪里调用这个脱敏组件，比如 REST
+API 的在返回实体之前处理就好；而 RPC 的又不一样。</p>
+<p>脱敏实现方式也不难，本质上只是一个简单的字符串替换函数即可。但围绕实体字段各种的情况，考虑得就比较多了。</p>
+<h2>源码</h2>
+<p>该组件源码 Fork
+自 <a href="https://github.com/mingyang66/spring-parent/tree/master/emily-project/emily-desensitize">emily-project</a>，感想原作者！</p>
+<h1>使用方式</h1>
+<h2>定义实体注解</h2>
+<pre><code class="language-java">import com.ajaxjs.security.desensitize.DesensitizeType;
+import com.ajaxjs.security.desensitize.annotation.DesensitizeModel;
+import com.ajaxjs.security.desensitize.annotation.DesensitizeProperty;
+import lombok.Data;
+
+@Data
 @DesensitizeModel
-public class Company {
-    private String companyName;
-    @DesensitizeProperty(value = DesensitizeType.ADDRESS)
-    private String address;
-    @DesensitizeProperty(value = DesensitizeType.PHONE)
+public class User {
+    private String name;
+
+    @DesensitizeProperty(DesensitizeType.PHONE)
     private String phone;
-    @DesensitizeProperty(value = DesensitizeType.EMAIL)
-    private String email;
-    /**
-     * {@link DesensitizeProperty}注解和{@link DesensitizeMapProperty} 注解都可以对Map集合中value为String的值进行脱敏处理；
-     * {@link DesensitizeMapProperty}注解优先级高于{@link DesensitizeProperty}注解
-     */
-    @DesensitizeProperty
-    @DesensitizeMapProperty(keys = {&quot;password&quot;, &quot;username&quot;}, types = {DesensitizeType.DEFAULT, DesensitizeType.USERNAME})
-    private Map&lt;String, Object&gt; dataMap = new HashMap&lt;&gt;();
-    @DesensitizeProperty
-    private List&lt;String&gt; list;
-    @DesensitizeProperty
-    private String[] arrays;
-    /**
-     * 将任何引用类型字段设置为null,且优先级最高
-     */
-    @DesensitizeNullProperty
-    private Double testNull;
-    /**
-     * 复杂字段脱敏处理，根据传入的字段key值判断对应字段value是否进行脱敏处理
-     */
-    @DesensitizeComplexProperty(keys = {&quot;email&quot;, &quot;phone&quot;}, value = &quot;fieldValue&quot;, types = {DesensitizeType.EMAIL, DesensitizeType.PHONE})
-    private String fieldKey;
-    private String fieldValue;
+
+    private int age;
 }
 </code></pre>
-<ul>
-<li>返回值是实体类，会对实体类进行脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation
-@GetMapping(&quot;api/desensitize/getCompany&quot;)
-public Company getCompany(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return company;
-        }
-</code></pre>
-<ul>
-<li>返回字符串，不支持</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation
-@GetMapping(&quot;api/desensitize/getCompanyStr&quot;)
-public String getCompanyStr(){
-        return&quot;xxx&quot;;
-        }
-</code></pre>
-<ul>
-<li>返回值是List集合对象，会对内层实体类脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyList&quot;)
-public ResponseEntity&lt;List&lt;Company&gt;&gt;getCompanyList(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return ResponseEntity.ok(List.of(company));
-        }
+<p>上例使用了 <code>@DesensitizeModel</code> 表示该 POJO 要脱敏；<code>@DesensitizeProperty(DesensitizeType.PHONE)</code>
+说明要脱敏的字段，以及是“手机”的类型。其他更多的类型参见枚举：</p>
+<pre><code class="language-java">/**
+ * 脱敏类型
+ */
+public enum DesensitizeType {
+    DEFAULT(v -&gt; DataMask.PLACE_HOLDER),
+    // 手机号
+    PHONE(DataMask::maskPhoneNumber),
+    // 银行卡号
+    BANK_CARD(DataMask::maskBankCard),
+    // 身份证号
+    ID_CARD(DataMask::maskIdCard),
+    // 姓名
+    USERNAME(DataMask::maskChineseName),
+    // email
+    EMAIL(DataMask::maskEmail),
+    //地址
+    ADDRESS(v -&gt; DataMask.maskAddress(v, 0));
+
+    public final Function&lt;String, String&gt; handler;
+
+    DesensitizeType(Function&lt;String, String&gt; handler) {
+        this.handler = handler;
+    }
+}
 
 </code></pre>
-<ul>
-<li>返回List字符串，不支持</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyListStr&quot;)
-public ResponseEntity&lt;List&lt;String&gt;&gt;getCompanyListStr(){
-        return ResponseEntity.ok(List.of(&quot;古北市南京路1688号50号楼106&quot;));
-        }
+<p>手动执行脱敏：<code>DeSensitize.acquire(body);</code>。</p>
+<h2>定义控制器的注解</h2>
+<p>使用<code>@Desensitize</code>定义在控制器方法上。</p>
+<pre><code class="language-java">@GetMapping(&quot;/user_desensitize&quot;)
+@Desensitize
+public User UserDesensitize() {
+    User user = new User();
+    user.setAge(1);
+    user.setName(&quot;tom&quot;);
+    user.setPhone(&quot;13711118120&quot;);
+
+    return user;
+}
 </code></pre>
-<ul>
-<li>返回值是Map集合，会对内层实体类脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyMap&quot;)
-public ResponseEntity&lt;Map&lt;String, Company&gt;&gt;getCompanyMap(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return ResponseEntity.ok(Map.of(&quot;test&quot;,company));
-        }
+<p>加入脱敏组件的方式有点特殊，不是常规那样有特定的扩展加入。其实，我们无非要返回实体结果，那么就在最终输出实体的时候修改（进行脱敏）就好了。这样的话，每个系统配置那个统一返回对象的地方不一样，当前的例子是在<code>ResponseBodyAdvice</code>
+统一返回的，只需要增加一行判断。至于这个统一返回，一般 Spring 程序都有——如果无则考虑其他办法。</p>
+<pre><code class="language-java">import com.ajaxjs.security.desensitize.DeSensitize;
+import com.ajaxjs.security.desensitize.annotation.Desensitize;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import java.lang.reflect.Method;
+
+@RestControllerAdvice
+@Component
+public class GlobalResponseResult implements ResponseBodyAdvice&lt;Object&gt; {
+    @Override
+    public boolean supports(MethodParameter returnType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; converterType) {
+        return true;
+    }
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        Method method = returnType.getMethod();
+        assert method != null;
+
+        if (method.isAnnotationPresent(Desensitize.class)) // 判断要执行脱敏
+            body = DeSensitize.acquire(body);
+
+        ResponseResultWrapper responseResult = new ResponseResultWrapper();
+        responseResult.setStatus(1);
+        responseResult.setData(body);
+
+        return responseResult;
+    }
+}
 </code></pre>
-<ul>
-<li>返回Map字符串集合，不支持</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyMapStr&quot;)
-public ResponseEntity&lt;Map&lt;String, String&gt;&gt;getCompanyMapStr(){
-        return ResponseEntity.ok(Map.of(&quot;test&quot;,&quot;魔方科技&quot;));
-        }
+<p>返回结果如：</p>
+<pre><code class="language-json">{
+    &quot;status&quot;: 1,
+    &quot;errorCode&quot;: null,
+    &quot;message&quot;: &quot;操作成功&quot;,
+    &quot;data&quot;: {
+        &quot;phone&quot;: &quot;137*****8120&quot;,
+        &quot;name&quot;: &quot;tom&quot;,
+        &quot;age&quot;: 1
+    }
+}
 </code></pre>
+<h1>类说明</h1>
 <ul>
-<li>返回值是数组类型集合，会对内层实体类进行脱敏处理</li>
+<li>DeSensitizeUtils：这个类对实体进行脱敏后返回的是原来的实体对象，它直接在原始对象上进行操作，并对其进行修改。</li>
+<li>SensitizeUtils：而这个类则创建了一个新的对象实例（或集合），并在这个新对象上应用脱敏规则。这意味着原对象保持不变，而返回的是一个结构相同但值被脱敏处理过的新对象。</li>
 </ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyArray&quot;)
-public ResponseEntity&lt;Company[]&gt;getCompanyArray(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return ResponseEntity.ok(new Company[]{company});
-        }
-</code></pre>
+<h1>同类开源</h1>
 <ul>
-<li>返回字符串数组</li>
+<li>https://gitee.com/strong_sea/sensitive-plus https://www.cnblogs.com/nuccch/p/18148298
+使用了<code>MappingJackson2HttpMessageConverter</code>这点不错，同时也比较全面，还支持日志脱敏，可是代码组织太分散了</li>
+<li>https://github.com/chenqi92/alltobs-desensitization-all</li>
+<li>https://github.com/mingyang66/spring-parent/tree/master/emily-project/oceansky-desensitize 代码简洁清晰</li>
+<li>https://gitee.com/l0km/beanfilter 大神作品，功能全面，包括 RPC 的</li>
 </ul>
-<pre><code class="language-java">@DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyArrayStr&quot;)
-public ResponseEntity&lt;String[]&gt;getCompanyArrayStr(){
-        return ResponseEntity.ok(new String[]{&quot;魔方科技&quot;});
-        }
-</code></pre>
-<ul>
-<li>返回值带有外层包装，指定剥离外层的实体类，会对内层类进行脱敏处理</li>
-</ul>
-<pre><code class="language-java">@DesensitizeOperation(removePackClass = {BaseResponse.class, ResponseEntity.class, ResponseEntity.class})
-@GetMapping(&quot;api/desensitize/getCompanyPack&quot;)
-public BaseResponse&lt;ResponseEntity&lt;ResponseEntity&lt;Company&gt;&gt;&gt;getCompanyPack(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        BaseResponse&lt;ResponseEntity&lt;ResponseEntity&lt;Company&gt;&gt;&gt;baseResponse=new BaseResponse&lt;&gt;();
-        baseResponse.setData(ResponseEntity.ok(ResponseEntity.ok(company)));
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;phone&quot;);
-        company.setFieldValue(&quot;188888888888&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return baseResponse;
-        }
-</code></pre>
+<p>更复杂的参考这个<a href="https://www.secrss.com/articles/13856">《大数据隐私保护关键技术解析：数据脱敏、匿名化、差分隐私和同态加密》</a>。</p>
 
             </article>
         </div>

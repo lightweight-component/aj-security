@@ -37,7 +37,7 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
     public boolean action(HttpDigestAuthCheck annotation, HttpServletRequest req) {
         String authHeader = req.getHeader(HttpHeaders.AUTHORIZATION);  // 获取 Referer 头
 
-        if (StrUtil.isEmptyText(authHeader) || !authHeader.startsWith("Digest ")){
+        if (StrUtil.isEmptyText(authHeader) || !authHeader.startsWith("Digest ")) {
             sendDigestChallenge();
             return false;
         }

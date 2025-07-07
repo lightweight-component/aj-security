@@ -2,12 +2,7 @@ package com.foo.config;
 
 import com.ajaxjs.security.encryptedbody.EncryptedBodyConverter;
 import com.foo.common.ResponseResultWrapper;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

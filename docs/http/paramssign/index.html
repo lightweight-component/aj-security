@@ -52,6 +52,9 @@
                     <li>
                        <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
                     </li>
+                     <li>
+                       <a href="/http/paramssign-cn">请求参数防篡改</a>
+                    </li>
                     <li>
                        <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
                     </li>
@@ -87,12 +90,13 @@
                 <h3>其他实用功能</h3>
                 <ul>
                     <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
-                    <li><a href="/misc/api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/encryption-api-cn">API 接口加解密</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>参数签名校验</h1>
-<p>参数签名校验（Parameter Signature Verification）用于防止参数被篡改、重放攻击、伪造请求等。其基本原理是：将请求参数与密钥通过特定算法（常见如MD5、SHA256、HMAC等）计算出签名，服务端用同样逻辑验证签名是否一致。</p>
+<p>参数签名校验（Parameter Signature
+Verification）用于防止参数被篡改、重放攻击、伪造请求等。其基本原理是：将请求参数与密钥通过特定算法（常见如MD5、SHA256、HMAC等）计算出签名，服务端用同样逻辑验证签名是否一致。</p>
 <h2>典型流程</h2>
 <h3>前端/客户端</h3>
 <ul>

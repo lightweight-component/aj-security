@@ -1,7 +1,5 @@
 package com.ajaxjs.security.common;
 
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.*;

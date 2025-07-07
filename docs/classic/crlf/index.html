@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ MCP SDK/MCP Server SDK Resources Development</title>
-        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. MCP Server SDK Resources Development"/>
-        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, desensitize"/>
+        <title>AJ MCP SDK/Prevent CRLF Attacks</title>
+        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. Prevent CRLF Attacks/Prevent Cookie Injection Attacks"/>
+        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, Prevent CRLF Attacks,Prevent Cookie Injection Attacks"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -52,6 +52,9 @@
                     <li>
                         <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
+         <li>
+                       <a href="/http/paramssign">Parameter Signature</a>
+                    </li>
                     <li>
                         <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
@@ -86,235 +89,35 @@
                 </ul>
                 <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
-                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
+                    <li><a href="/misc/desensitize">Field Desensitization</a></li>
+                    <li><a href="/misc/encryption-api">API Encryption</a></li>
                 </ul>
             </menu>
             <article>
-                <h1>aj-desensitize</h1>
-<p>平时开发的过程中经常会遇到对一些敏感的字段进行脱敏处理，防止信息泄漏，如：邮箱、用户名、密码等；做为一个优秀的程序员我们不应该遇到这种问题时就做特殊处理，重复做相同的工作，所以我们应该写一个基础库SDK，解决重复的问题。</p>
-<h5>脱敏 SDK 组件</h5>
-<h5>三、注解列表</h5>
-<table>
-<thead>
-<tr>
-<th>注解</th>
-<th>作用域</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>@DesensitizeOperation</td>
-<td>标记在方法上，只有标记了此注解的返回值才会进行脱敏处理，<code>removePackClass</code>属性指定要剥离的外层类，可以指定多个剥离的外层类，只有最内层的类才会进行脱敏处理；</td>
-</tr>
-<tr>
-<td>@DesensitizeModel</td>
-<td>标记在实体类上，只有标记了此注解的实体类才会进行脱敏处理</td>
-</tr>
-<tr>
-<td>@DesensitizeProperty</td>
-<td>标记在实体类字符串、Map 属性字段，标记了次注解的字段会按照指定类型进行脱敏；</td>
-</tr>
-<tr>
-<td>@DesensitizeNullProperty</td>
-<td>标记在实体类引用数据类型上</td>
-</tr>
-<tr>
-<td>@DesensitizeMapProperty</td>
-<td>标记在实体类Map数据类型上，按照指定的 key 字段及类型进行脱敏。</td>
-</tr>
-<tr>
-<td>@DesensitizeComplexProperty</td>
-<td>标记在实体类属性字段上，需两个字段配合使用</td>
-</tr>
-</tbody>
-</table>
-<h5>四、应用场景</h5>
-<ul>
-<li>方法上标记了@DesensitizeOperation注解的返回值对象会根据其它注解的标注情况进行脱敏处理；</li>
-<li>除@DesensitizeOperation注解外，其它注解标注在入参、返回值实体类对象上日志系统会对这些进行脱敏处理，不会影响到具体的返回对象和入参对象；</li>
-</ul>
-<h5>五、案例如下：</h5>
-<ul>
-<li>实体类Company</li>
-</ul>
-<pre><code class="language-java">
-@DesensitizeModel
-public class Company {
-    private String companyName;
-    @DesensitizeProperty(value = DesensitizeType.ADDRESS)
-    private String address;
-    @DesensitizeProperty(value = DesensitizeType.PHONE)
-    private String phone;
-    @DesensitizeProperty(value = DesensitizeType.EMAIL)
-    private String email;
-    /**
-     * {@link DesensitizeProperty}注解和{@link DesensitizeMapProperty} 注解都可以对Map集合中value为String的值进行脱敏处理；
-     * {@link DesensitizeMapProperty}注解优先级高于{@link DesensitizeProperty}注解
-     */
-    @DesensitizeProperty
-    @DesensitizeMapProperty(keys = {&quot;password&quot;, &quot;username&quot;}, types = {DesensitizeType.DEFAULT, DesensitizeType.USERNAME})
-    private Map&lt;String, Object&gt; dataMap = new HashMap&lt;&gt;();
-    @DesensitizeProperty
-    private List&lt;String&gt; list;
-    @DesensitizeProperty
-    private String[] arrays;
-    /**
-     * 将任何引用类型字段设置为null,且优先级最高
-     */
-    @DesensitizeNullProperty
-    private Double testNull;
-    /**
-     * 复杂字段脱敏处理，根据传入的字段key值判断对应字段value是否进行脱敏处理
-     */
-    @DesensitizeComplexProperty(keys = {&quot;email&quot;, &quot;phone&quot;}, value = &quot;fieldValue&quot;, types = {DesensitizeType.EMAIL, DesensitizeType.PHONE})
-    private String fieldKey;
-    private String fieldValue;
-}
+                <h1>Prevent CRLF Attacks</h1>
+<p>CRLF (Carriage Return Line Feed) attacks are a type of vulnerability in web applications that exploit HTTP header
+injection. By inserting special characters <code>(\r\n)</code>, attackers can manipulate HTTP response headers. Attackers use CRLF
+injection to terminate existing HTTP headers and insert new header fields, or even construct new HTTP responses.</p>
+<p>To prevent CRLF attacks, it's essential to strictly validate and filter user inputs, prohibiting <code>\r</code> and <code>\n</code>.</p>
+<h2>Configuration</h2>
+<p>First, ensure the filter is enabled by setting <code>enabled: true</code>, and then enable <code>crlfCheck</code> to activate detection.</p>
+<pre><code class="language-yaml">security:
+    web: # General attack prevention
+        enabled: true
+        crlfCheck: true # Prevent CRLF attacks
 </code></pre>
-<ul>
-<li>返回值是实体类，会对实体类进行脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation
-@GetMapping(&quot;api/desensitize/getCompany&quot;)
-public Company getCompany(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return company;
-        }
-</code></pre>
-<ul>
-<li>返回字符串，不支持</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation
-@GetMapping(&quot;api/desensitize/getCompanyStr&quot;)
-public String getCompanyStr(){
-        return&quot;xxx&quot;;
-        }
-</code></pre>
-<ul>
-<li>返回值是List集合对象，会对内层实体类脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyList&quot;)
-public ResponseEntity&lt;List&lt;Company&gt;&gt;getCompanyList(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return ResponseEntity.ok(List.of(company));
-        }
-
-</code></pre>
-<ul>
-<li>返回List字符串，不支持</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyListStr&quot;)
-public ResponseEntity&lt;List&lt;String&gt;&gt;getCompanyListStr(){
-        return ResponseEntity.ok(List.of(&quot;古北市南京路1688号50号楼106&quot;));
-        }
-</code></pre>
-<ul>
-<li>返回值是Map集合，会对内层实体类脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyMap&quot;)
-public ResponseEntity&lt;Map&lt;String, Company&gt;&gt;getCompanyMap(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return ResponseEntity.ok(Map.of(&quot;test&quot;,company));
-        }
-</code></pre>
-<ul>
-<li>返回Map字符串集合，不支持</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyMapStr&quot;)
-public ResponseEntity&lt;Map&lt;String, String&gt;&gt;getCompanyMapStr(){
-        return ResponseEntity.ok(Map.of(&quot;test&quot;,&quot;魔方科技&quot;));
-        }
-</code></pre>
-<ul>
-<li>返回值是数组类型集合，会对内层实体类进行脱敏处理</li>
-</ul>
-<pre><code class="language-java">    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyArray&quot;)
-public ResponseEntity&lt;Company[]&gt;getCompanyArray(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;email&quot;);
-        company.setFieldValue(&quot;188888888888@qq.com&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return ResponseEntity.ok(new Company[]{company});
-        }
-</code></pre>
-<ul>
-<li>返回字符串数组</li>
-</ul>
-<pre><code class="language-java">@DesensitizeOperation(removePackClass = ResponseEntity.class)
-@GetMapping(&quot;api/desensitize/getCompanyArrayStr&quot;)
-public ResponseEntity&lt;String[]&gt;getCompanyArrayStr(){
-        return ResponseEntity.ok(new String[]{&quot;魔方科技&quot;});
-        }
-</code></pre>
-<ul>
-<li>返回值带有外层包装，指定剥离外层的实体类，会对内层类进行脱敏处理</li>
-</ul>
-<pre><code class="language-java">@DesensitizeOperation(removePackClass = {BaseResponse.class, ResponseEntity.class, ResponseEntity.class})
-@GetMapping(&quot;api/desensitize/getCompanyPack&quot;)
-public BaseResponse&lt;ResponseEntity&lt;ResponseEntity&lt;Company&gt;&gt;&gt;getCompanyPack(){
-        Company company=new Company();
-        company.setCompanyName(&quot;魔方科技&quot;);
-        company.setAddress(&quot;古北市南京路1688号50号楼106&quot;);
-        company.setPhone(&quot;18888888888&quot;);
-        company.setEmail(&quot;18888888888@qq.com&quot;);
-        company.getDataMap().put(&quot;password&quot;,&quot;123456&quot;);
-        company.getDataMap().put(&quot;username&quot;,&quot;兰兰&quot;);
-        BaseResponse&lt;ResponseEntity&lt;ResponseEntity&lt;Company&gt;&gt;&gt;baseResponse=new BaseResponse&lt;&gt;();
-        baseResponse.setData(ResponseEntity.ok(ResponseEntity.ok(company)));
-        company.setTestNull(100D);
-        company.setFieldKey(&quot;phone&quot;);
-        company.setFieldValue(&quot;188888888888&quot;);
-        company.setList(List.of(&quot;123&quot;,&quot;456&quot;,&quot;789&quot;));
-        company.setArrays(new String[]{&quot;123&quot;,&quot;456&quot;,&quot;789&quot;});
-        return baseResponse;
-        }
+<h1>Prevent Cookie Injection Attacks</h1>
+<p>In certain cases, attackers may attempt to inject excessive data into cookies to pollute the application's state or
+cause system anomalies. Checking cookie size can limit the cookie content's capacity and reduce the likelihood of
+attackers injecting large amounts of data.</p>
+<h2>Configuration</h2>
+<p>First, ensure the filter is enabled by setting <code>enabled: true</code>, then enable <code>cookiesSizeCheck</code> to activate detection,
+and finally set <code>maxCookieSize</code> to define the maximum cookie size.</p>
+<pre><code class="language-yaml">security:
+    web: # General attack prevention
+        enabled: true
+        cookiesSizeCheck: true # Prevent Cookie Injection Attacks
+        maxCookieSize: 1 # Maximum size of a single cookie, unit: KB
 </code></pre>
 
             </article>

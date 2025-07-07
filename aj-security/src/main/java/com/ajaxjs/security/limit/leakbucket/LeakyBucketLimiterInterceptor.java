@@ -2,7 +2,6 @@ package com.ajaxjs.security.limit.leakbucket;
 
 
 import com.ajaxjs.security.SecurityInterceptor;
-import com.ajaxjs.security.common.SpringUtils;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import org.springframework.stereotype.Component;

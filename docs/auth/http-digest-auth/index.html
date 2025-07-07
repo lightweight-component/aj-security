@@ -52,6 +52,9 @@
                     <li>
                         <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
+         <li>
+                       <a href="/http/paramssign">Parameter Signature</a>
+                    </li>
                     <li>
                         <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
@@ -86,14 +89,15 @@
                 </ul>
                 <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
-                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
+                    <li><a href="/misc/desensitize">Field Desensitization</a></li>
+                    <li><a href="/misc/encryption-api">API Encryption</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>HTTP Digest Authentication</h1>
 <p>HTTP Digest Auth is similar to Basic Auth, but it does not transmit the plain text password directly.
-Instead, it mixes the password, nonce, request method, etc., to generate a digest (hash) and transmits the hash value. The advantage is that even if eavesdropped, the password cannot be obtained directly, and replay attacks are prevented.</p>
+Instead, it mixes the password, nonce, request method, etc., to generate a digest (hash) and transmits the hash value.
+The advantage is that even if eavesdropped, the password cannot be obtained directly, and replay attacks are prevented.</p>
 <h1>Usage</h1>
 <h2>yaml Configuration</h2>
 <pre><code class="language-yaml">security:

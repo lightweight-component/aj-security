@@ -2,182 +2,187 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
         <url>
-            <loc>https://mcp.ajaxjs.com/api/limit-cn/</loc>
+            <loc>https://security.ajaxjs.com/api/limit-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/api/limit/</loc>
+            <loc>https://security.ajaxjs.com/api/limit/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/auth/http-basic-auth-cn/</loc>
+            <loc>https://security.ajaxjs.com/auth/http-basic-auth-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/auth/http-basic-auth/</loc>
+            <loc>https://security.ajaxjs.com/auth/http-basic-auth/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/auth/http-digest-auth-cn/</loc>
+            <loc>https://security.ajaxjs.com/auth/http-digest-auth-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/auth/http-digest-auth/</loc>
+            <loc>https://security.ajaxjs.com/auth/http-digest-auth/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/captcha/cf-cn/</loc>
+            <loc>https://security.ajaxjs.com/captcha/cf-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/captcha/cf/</loc>
+            <loc>https://security.ajaxjs.com/captcha/cf/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/captcha/google-cn/</loc>
+            <loc>https://security.ajaxjs.com/captcha/google-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/captcha/google/</loc>
+            <loc>https://security.ajaxjs.com/captcha/google/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/captcha/img-captcha-cn/</loc>
+            <loc>https://security.ajaxjs.com/captcha/img-captcha-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/captcha/img-captcha/</loc>
+            <loc>https://security.ajaxjs.com/captcha/img-captcha/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/classic/crlf-cn/</loc>
+            <loc>https://security.ajaxjs.com/classic/crlf-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/classic/crlf/</loc>
+            <loc>https://security.ajaxjs.com/classic/crlf/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/classic/xss-cn/</loc>
+            <loc>https://security.ajaxjs.com/classic/xss-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/classic/xss/</loc>
+            <loc>https://security.ajaxjs.com/classic/xss/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/cn/</loc>
+            <loc>https://security.ajaxjs.com/cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/http-referer-cn/</loc>
+            <loc>https://security.ajaxjs.com/http/http-referer-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/http-referer/</loc>
+            <loc>https://security.ajaxjs.com/http/http-referer/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/ip-list-cn/</loc>
+            <loc>https://security.ajaxjs.com/http/ip-list-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/ip-list/</loc>
+            <loc>https://security.ajaxjs.com/http/ip-list/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/nonrepeatsubmit-cn/</loc>
+            <loc>https://security.ajaxjs.com/http/nonrepeatsubmit-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/nonrepeatsubmit/</loc>
+            <loc>https://security.ajaxjs.com/http/nonrepeatsubmit/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/sign-cn/</loc>
+            <loc>https://security.ajaxjs.com/http/paramssign-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/sign/</loc>
+            <loc>https://security.ajaxjs.com/http/paramssign/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/timestamp-cn/</loc>
+            <loc>https://security.ajaxjs.com/http/timestamp-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/http/timestamp/</loc>
+            <loc>https://security.ajaxjs.com/http/timestamp/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/install-cn/</loc>
+            <loc>https://security.ajaxjs.com/install-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/misc/api-cn/</loc>
+            <loc>https://security.ajaxjs.com/install/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/misc/api/</loc>
+            <loc>https://security.ajaxjs.com/misc/desensitize-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/misc/desensitize-cn/</loc>
+            <loc>https://security.ajaxjs.com/misc/desensitize/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/misc/desensitize/</loc>
+            <loc>https://security.ajaxjs.com/misc/desensitize2/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/misc/desensitize2/</loc>
+            <loc>https://security.ajaxjs.com/misc/encryption-api-cn/</loc>
             <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/asset/style/common.css</loc>
-            <lastmod>2025-06-26T12:33:30.117Z</lastmod>
+            <loc>https://security.ajaxjs.com/misc/encryption-api/</loc>
+            <lastmod>2022-01-05T00:00:00.000Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/asset/style/main.css</loc>
-            <lastmod>2025-06-26T12:33:30.118Z</lastmod>
+            <loc>https://security.ajaxjs.com/asset/style/common.css</loc>
+            <lastmod>2025-06-25T01:24:59.856Z</lastmod>
         </url>
     
         <url>
-            <loc>https://mcp.ajaxjs.com/</loc>
+            <loc>https://security.ajaxjs.com/asset/style/main.css</loc>
+            <lastmod>2025-06-25T01:24:59.857Z</lastmod>
+        </url>
+    
+        <url>
+            <loc>https://security.ajaxjs.com/</loc>
             <lastmod>2025-07-01T00:00:00.000Z</lastmod>
         </url>
     

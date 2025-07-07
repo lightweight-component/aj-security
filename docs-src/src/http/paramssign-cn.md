@@ -10,7 +10,8 @@ layout: layouts/docs-cn.njk
 
 # 参数签名校验
 
-参数签名校验（Parameter Signature Verification）用于防止参数被篡改、重放攻击、伪造请求等。其基本原理是：将请求参数与密钥通过特定算法（常见如MD5、SHA256、HMAC等）计算出签名，服务端用同样逻辑验证签名是否一致。
+参数签名校验（Parameter Signature
+Verification）用于防止参数被篡改、重放攻击、伪造请求等。其基本原理是：将请求参数与密钥通过特定算法（常见如MD5、SHA256、HMAC等）计算出签名，服务端用同样逻辑验证签名是否一致。
 
 ## 典型流程
 

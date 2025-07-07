@@ -86,14 +86,7 @@ public class EncryptedBodyConverter<T extends IResponseResult> extends MappingJa
             String decodeJson = decrypt(encryptBody, privateKey);
             System.out.println(decodeJson);
 
-//            User user = new User();
-//            user.setAge(1);
-//            user.setName("tom");
-//
-//            String json = objectMapper.writeValueAsString(user);
-
-            Object result = objectMapper.readValue(decodeJson, clz);
-            return result;
+            return objectMapper.readValue(decodeJson, clz);
         }
 
         return super.read(type, contextClass, inputMessage);

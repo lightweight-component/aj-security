@@ -10,7 +10,8 @@ layout: layouts/docs-cn.njk
 
 # HTTP 基本认证（Basic Auth）
 
-**HTTP 基本认证（Basic Auth）**是一种最简单的 HTTP 认证方式，客户端通过在 HTTP 请求头中带上用户名和密码（经过 Base64 编码）来进行身份验证。应用场景多见于测试环境、内部系统或简单接口保护（生产环境建议配合 HTTPS，否则密码易被窃取）。
+**HTTP 基本认证（Basic Auth）**是一种最简单的 HTTP 认证方式，客户端通过在 HTTP 请求头中带上用户名和密码（经过 Base64
+编码）来进行身份验证。应用场景多见于测试环境、内部系统或简单接口保护（生产环境建议配合 HTTPS，否则密码易被窃取）。
 
 ## 基本原理
 
@@ -21,6 +22,7 @@ layout: layouts/docs-cn.njk
 # 使用方式
 
 ## yaml 配置
+
 ```yaml
 security:
   HttpDigestAuth: # HTTP Digest 认证
@@ -29,8 +31,11 @@ security:
         username: admin
         password: admin
 ```
+
 ## 拦截校验
+
 在使用的接口上添加`@HttpDigestAuthCheck`注解：
+
 ```java
 @GetMapping("/HttpDigestAuthCheck")
 @HttpDigestAuthCheck

@@ -52,6 +52,9 @@
                     <li>
                         <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
                     </li>
+         <li>
+                       <a href="/http/paramssign">Parameter Signature</a>
+                    </li>
                     <li>
                         <a href="/http/ip-list">IP Whitelist/Blacklist</a>
                     </li>
@@ -86,28 +89,34 @@
                 </ul>
                 <h3>Other Practical Features</h3>
                 <ul>
-                    <li><a href="/misc/desensitize">Entity Field Desensitization</a></li>
-                    <li><a href="/misc/api">API Encryption/Decryption</a></li>
+                    <li><a href="/misc/desensitize">Field Desensitization</a></li>
+                    <li><a href="/misc/encryption-api">API Encryption</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>Preventing Duplicate Submission</h1>
-<p>Preventing duplicate submissions (such as form or API &quot;double submissions&quot; or &quot;refresh duplicates&quot;) is a common requirement in backend development. Common validation and protection solutions are as follows:</p>
+<p>Preventing duplicate submissions (such as form or API &quot;double submissions&quot; or &quot;refresh duplicates&quot;) is a common
+requirement in backend development. Common validation and protection solutions are as follows:</p>
 <h2>Frontend Disable Button (Basic Solution)</h2>
-<p>When submitting a form, the frontend disables the button or displays a loading state to prevent users from clicking multiple times. This can only prevent accidental operations, but cannot prevent malicious or rapid duplicate submissions.</p>
+<p>When submitting a form, the frontend disables the button or displays a loading state to prevent users from clicking
+multiple times. This can only prevent accidental operations, but cannot prevent malicious or rapid duplicate
+submissions.</p>
 <h2>Backend Idempotency Validation</h2>
 <p>Disabling the button on the frontend only prevents accidental actions; backend validation is safer and more reliable.</p>
 <h3>Unique Token Validation</h3>
 <ul>
-<li>When the frontend requests the form page, the backend generates a unique token (such as a UUID) and returns it to the frontend.</li>
+<li>When the frontend requests the form page, the backend generates a unique token (such as a UUID) and returns it to the
+frontend.</li>
 <li>The frontend includes the token when submitting the form.</li>
-<li>The backend checks whether the token has been used; if it has, the submission is rejected, and the token is immediately invalidated.</li>
+<li>The backend checks whether the token has been used; if it has, the submission is rejected, and the token is
+immediately invalidated.</li>
 <li>Tokens can be stored using Redis, a database, etc.</li>
 </ul>
 <h3>Uniqueness Validation Based on Request Content</h3>
 <ul>
 <li>For the same user and same business parameters, submissions are only allowed once within a short period.</li>
-<li>You can use a hash of the request parameters (such as MD5), combined with the user ID, as the Redis key, which can only be used once within a short time.</li>
+<li>You can use a hash of the request parameters (such as MD5), combined with the user ID, as the Redis key, which can
+only be used once within a short time.</li>
 </ul>
 <h2>Reference</h2>
 <ul>

@@ -10,7 +10,8 @@ layout: layouts/docs-cn.njk
 
 # HTTP Referer 校验
 
-HTTP Referer 校验（也称为“Referer 检查”）是一种常见的 Web 安全措施，其原理是：后端服务器在接收请求时检查请求头中的 Referer 字段，判断请求来源是否为信任的域名或页面。
+HTTP Referer 校验（也称为“Referer 检查”）是一种常见的 Web 安全措施，其原理是：后端服务器在接收请求时检查请求头中的 Referer
+字段，判断请求来源是否为信任的域名或页面。
 
 ## 基本原理
 
@@ -33,6 +34,7 @@ HTTP Referer 校验（也称为“Referer 检查”）是一种常见的 Web 安
 # 使用方式
 
 ## yaml 配置
+
 ```yaml
 security:
   HttpReferer: # Referer 拦截
@@ -43,8 +45,11 @@ security:
       - https://another-example.com
       - https://my-site.com
 ```
+
 ## 拦截校验
+
 在使用的接口上添加`@HttpRefererCheck`注解：
+
 ```java
 @GetMapping("/HttpRefererCheck")
 @HttpRefererCheck

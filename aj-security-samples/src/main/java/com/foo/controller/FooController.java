@@ -1,5 +1,6 @@
 package com.foo.controller;
 
+import com.ajaxjs.framework.database.IgnoreDataBaseConnect;
 import com.ajaxjs.security.desensitize.annotation.Desensitize;
 import com.ajaxjs.security.iplist.IpListCheck;
 import com.ajaxjs.security.paramssign.ParamsSignCheck;

@@ -4,6 +4,7 @@ import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.util.CollUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @Component
 @EqualsAndHashCode(callSuper = true)
+@ConditionalOnProperty(name = "security.HttpReferer.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.http-referer")
 public class HttpReferer extends InterceptorAction<HttpRefererCheck> {
     /**

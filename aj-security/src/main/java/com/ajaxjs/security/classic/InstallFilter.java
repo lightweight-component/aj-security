@@ -3,6 +3,7 @@ package com.ajaxjs.security.classic;
 import com.ajaxjs.util.CollUtils;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +21,14 @@ import java.util.regex.Pattern;
  */
 @Component
 @Data
+@ConditionalOnProperty(name = "security.web.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.web")
 public class InstallFilter implements Filter {
-    boolean isEnabled;
+    Boolean isXssCheck;
 
-    boolean isXssCheck;
+    Boolean isCRLFCheck;
 
-    boolean isCRLFCheck;
-
-    boolean isCookiesSizeCheck;
+    Boolean isCookiesSizeCheck;
 
     /**
      * 单个 cookie 最大大小，单位：kb
@@ -42,18 +42,15 @@ public class InstallFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (isEnabled) {
-            SecurityRequest securityRequest = new SecurityRequest((HttpServletRequest) request);
-            SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
-            securityResponse.isCRLFCheck = isCRLFCheck;
-            securityResponse.isCookiesSizeCheck = isCookiesSizeCheck;
-            securityResponse.maxCookieSize = maxCookieSize;
+        SecurityRequest securityRequest = new SecurityRequest((HttpServletRequest) request);
+        SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
+        securityResponse.isCRLFCheck = isCRLFCheck;
+        securityResponse.isCookiesSizeCheck = isCookiesSizeCheck;
+        securityResponse.maxCookieSize = maxCookieSize;
 
-            securityRequest.isXssCheck = securityResponse.isXssCheck = isXssCheck;
+        securityRequest.isXssCheck = securityResponse.isXssCheck = isXssCheck;
 
-            chain.doFilter(securityRequest, securityResponse);// 继续处理请求
-        } else
-            chain.doFilter(request, response);
+        chain.doFilter(securityRequest, securityResponse);// 继续处理请求
     }
 
     @Override

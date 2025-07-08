@@ -80,7 +80,7 @@ security:
 
 可见在`security`中有各个安全组件的配置。抽象来看，主要有个配置是各个组件共用的，分别是`enabled`与`globalCheck`。
 
-- `enabled`是否激活该组件。若为`false`则不运行该组件
+- `enabled`是否激活该组件。若为`false`则不运行该组件。我们约定，只要某组件的`enabled`为`true`，则该组件会运行，否则不运行（而且不创建相关对象，以节省资源）
 - `globalCheck`是否全局检查。若为`true`则所有请求都会检查该组件，若为`false`则只有匹配 URL 的请求才会检查该组件。匹配的方式通过在
   Spring 控制器上的注解声明。例如：
 
@@ -91,3 +91,7 @@ int HttpRefererCheck();
 ```
 
 各个组件的详细配置方式请参考其各个章节。
+
+## 基本原理
+我们提供了近十多种安全组件，几乎都是与 Spring 框架深度绑定，充分利用了 Spring 的可扩展机制与灵活的配置机制。
+多数组件通过`HandlerInterceptor`拦截器实现，其他特殊组件采用`HandlerMethodArgumentResolver`、传统的`Servlet Filter`、`HttpMessageConverter`均有。

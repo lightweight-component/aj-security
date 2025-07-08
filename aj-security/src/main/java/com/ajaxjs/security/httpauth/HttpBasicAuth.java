@@ -6,6 +6,7 @@ import com.ajaxjs.util.Base64Helper;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.io.UncheckedIOException;
 @Data
 @Component
 @EqualsAndHashCode(callSuper = true)
+@ConditionalOnProperty(name = "security.HttpBasicAuth.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.http-basic-auth")
 public class HttpBasicAuth extends InterceptorAction<HttpBasicAuthCheck> {
     String username;

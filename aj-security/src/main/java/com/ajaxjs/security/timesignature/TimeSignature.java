@@ -5,6 +5,7 @@ import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.util.cryptography.AesCrypto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Data
 @Component
 @EqualsAndHashCode(callSuper = true)
+@ConditionalOnProperty(name = "security.TimeSignature.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.time-signature")
 public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
     /**

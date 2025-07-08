@@ -1,5 +1,5 @@
 server:
-  port: 8081 # 配置服务器端口
+  port: 8083 # 配置服务器端口
 
 security:
   HttpReferer: # Referer 拦截
@@ -39,3 +39,8 @@ security:
   ParamsSign:
     enabled: true
     secret: der3@x7Az42
+
+
+# 数据库连接
+db:
+  disableAutoConnect: true # 禁用每个请求都自动连接数据库

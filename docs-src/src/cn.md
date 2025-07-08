@@ -58,7 +58,7 @@ Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
 
 </td></tr></table>
 
-AJ Security 的代码量不多，而且都是很简单易懂的代码。另外没啥第三方依赖，适合 Java8+。
+AJ Security 的代码量不多（JAR 约 100kb 大小），而且都是很简单易懂的代码。另外没啥第三方依赖，适合 Java8+。
 
 ## 源代码
 

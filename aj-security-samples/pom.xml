@@ -11,17 +11,10 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security-samples</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>aj-security</artifactId>
-            <version>1.0</version>
-        </dependency>
-
         <dependency>
             <groupId>com.youkol.support.kaptcha</groupId>
             <artifactId>kaptcha</artifactId>

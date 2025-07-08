@@ -60,7 +60,7 @@ The features of this framework include:
 
 </td></tr></table>
 
-The code of AJ Security is small, straightforward and well commented. There are not much third-party dependencies, just
+The code of AJ Security is small(A JAR of approximately 100 KB), straightforward and well commented. There are not much third-party dependencies, just
 Java 8 requires.
 
 ## Source Code

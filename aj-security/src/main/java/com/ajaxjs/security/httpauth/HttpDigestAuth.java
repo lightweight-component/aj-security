@@ -7,6 +7,7 @@ import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @Data
 @Component
 @EqualsAndHashCode(callSuper = true)
+@ConditionalOnProperty(name = "security.HttpDigestAuth.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.http-digest-auth")
 public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
     String username;

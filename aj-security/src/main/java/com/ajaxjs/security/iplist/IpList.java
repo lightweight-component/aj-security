@@ -5,6 +5,7 @@ import com.ajaxjs.util.CollUtils;
 import com.ajaxjs.util.WebUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @Component
 @EqualsAndHashCode(callSuper = true)
+@ConditionalOnProperty(name = "security.IpList.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.ip-list")
 public class IpList extends InterceptorAction<IpListCheck> {
     /**

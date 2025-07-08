@@ -78,7 +78,7 @@ security:
 You can see that there are configuration options for each security component under `security`.  
 Abstractly, there are two common configuration options for each component: `enabled` and `globalCheck`.
 
-- `enabled`: Whether to activate this component. If set to `false`, the component will not run.
+- `enabled`: Whether to activate this component. If set to `false`, the component will not run. We have agreed that as long as a component's `enabled` property is set to true, the component will be activated; otherwise, it will not run (and related objects will not even be created, in order to save resources).
 - `globalCheck`: Whether to perform a global check. If set to `true`, all requests will be checked by this component; if `false`, only requests matching specific URLs will be checked. The matching method is declared via annotations on Spring controllers, for example:
 
 ```java
@@ -88,3 +88,9 @@ int HttpRefererCheck();
 ```
 
 For detailed configuration of each component, please refer to the respective chapters.
+
+## Basic Detail
+
+We provide more than ten different security components, all of which are deeply integrated with the Spring framework. We make full use of Spring's extensible architecture and flexible configuration mechanisms.
+
+Most components are implemented using `HandlerInterceptor`, while some special components utilize `HandlerMethodArgumentResolver`, traditional Servlet `Filter`, or `HttpMessageConverter`.

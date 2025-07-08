@@ -1,6 +1,6 @@
 package com.foo.common;
 
-import com.ajaxjs.framework.BusinessException;
+import com.ajaxjs.framework.model.BusinessException;
 import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.io.IOException;
  * 统一异常处理
  */
 @Slf4j
-@Component
+//@Component
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
     /**
      * Let other knows there is an exception.

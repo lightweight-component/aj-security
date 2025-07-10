@@ -1,6 +1,8 @@
 package com.foo.controller;
 
-import com.ajaxjs.framework.database.IgnoreDataBaseConnect;
+import com.ajaxjs.security.captcha.cloudflare.CloudflareCheck;
+import com.ajaxjs.security.captcha.google.GoogleCaptcha;
+import com.ajaxjs.security.captcha.google.GoogleCaptchaCheck;
 import com.ajaxjs.security.desensitize.annotation.Desensitize;
 import com.ajaxjs.security.iplist.IpListCheck;
 import com.ajaxjs.security.paramssign.ParamsSignCheck;
@@ -40,4 +42,12 @@ public interface FooController {
 
     @PostMapping("/encrypted_params")
     int encryptedParams(@RequestBody User user);
+
+    @PostMapping("/captcha_cloudflare")
+    @CloudflareCheck
+    boolean cloudflare(@RequestParam("cf-turnstile-response") String token, @ModelAttribute User user);
+
+    @PostMapping("/captcha_google")
+    @GoogleCaptchaCheck
+    boolean google(@RequestParam(GoogleCaptcha.PARAM_NAME) String token, @ModelAttribute User user);
 }

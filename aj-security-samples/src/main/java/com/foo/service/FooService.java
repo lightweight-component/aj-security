@@ -6,8 +6,6 @@ import com.foo.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 @Slf4j
 public class FooService implements FooController {
@@ -62,5 +60,19 @@ public class FooService implements FooController {
     public int encryptedParams(User user) {
         System.out.println(user);
         return 88;
+    }
+
+    @Override
+    public boolean cloudflare(String token, User user) {
+//        boolean success = verifyTurnstileToken(token);
+        System.out.println(user);
+
+        return true;
+    }
+
+    @Override
+    public boolean google(String token, User user) {
+        System.out.println(user);
+        return true;
     }
 }

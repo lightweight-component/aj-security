@@ -39,6 +39,15 @@ security:
   ParamsSign:
     enabled: true
     secret: der3@x7Az42
+  captcha:
+    cloudflare:
+      enabled: true
+      globalCheck: false # 全局检查
+      secretKey: 0x4AAAAAAAA2Np6UhOC54HcLPAZJpXUT9yU
+    google:
+      enabled: true
+      globalCheck: false # 全局检查
+      accessSecret: 6LclfLMZAAAAAD6XcxnUpBL0qHKYWijay7-lGpOf
 
 
 # 数据库连接

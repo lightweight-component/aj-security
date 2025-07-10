@@ -1,5 +1,7 @@
 package com.ajaxjs.security;
 
+import com.ajaxjs.security.captcha.cloudflare.Cloudflare;
+import com.ajaxjs.security.captcha.cloudflare.CloudflareCheck;
 import com.ajaxjs.security.captcha.google.GoogleCaptcha;
 import com.ajaxjs.security.captcha.google.GoogleCaptchaCheck;
 import com.ajaxjs.security.httpauth.HttpBasicAuth;
@@ -56,6 +58,9 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
             return false;
 
         if (!handler(GoogleCaptcha.class, request, handlerMethod, method, GoogleCaptchaCheck.class))
+            return false;
+
+        if (!handler(Cloudflare.class, request, handlerMethod, method, CloudflareCheck.class))
             return false;
 
         if (!handler(LimitAccess.class, request, handlerMethod, method, LimitAccessVerify.class))

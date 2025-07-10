@@ -13,3 +13,6 @@ layout: layouts/docs-cn.njk
 我们封装了 CloudFlare Turnstile Captcha 的封装，方便使用。
 
 TODO
+
+
+如果是标准 Form 表单提交，请不要声明`enctype="application/x-www-form-urlencoded"`，因为这样会导致 CloudFlare Turnstile 反馈`missing-input-response`的错误。

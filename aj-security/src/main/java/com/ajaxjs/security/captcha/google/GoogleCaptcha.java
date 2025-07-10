@@ -4,6 +4,10 @@ import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.util.http_request.Post;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +17,12 @@ import java.util.Map;
  *
  */
 @Data
+@Slf4j
+@Component
 @EqualsAndHashCode(callSuper = true)
+@ConditionalOnProperty(name = "security.captcha.google.enabled", havingValue = "true")
+@ConfigurationProperties(prefix = "security.captcha.google")
 public class GoogleCaptcha extends InterceptorAction<GoogleCaptchaCheck> {
-    private String accessKeyId;
-
     private String accessSecret;
 
     /**
@@ -32,10 +38,11 @@ public class GoogleCaptcha extends InterceptorAction<GoogleCaptchaCheck> {
     @Override
     public boolean action(GoogleCaptchaCheck annotation, HttpServletRequest request) {
         String token = request.getParameter(PARAM_NAME);
+
         if (!StringUtils.hasText(token))
             throw new SecurityException("非法攻击！客户端缺少必要的参数");
 
-        Map<String, Object> map = Post.api(SITE_VERIFY, String.format("secret=%s&response=%s", getAccessSecret(), token.trim()));
+        Map<String, Object> map = Post.api(SITE_VERIFY, String.format("secret=%s&response=%s", accessSecret, token.trim()));
 
         if (map == null)
             throw new IllegalAccessError("谷歌验证码服务失效，请联系技术人员");

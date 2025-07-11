@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ MCP SDK/Google Recaptcha</title>
-        <meta name="description" content="A lightweight Java 8 Model Context Protocol (MCP) SDK. Google Recaptcha"/>
-        <meta name="keywords" content="mcp, mcp sdk, java mcp, mcp client, mcp server, java8 mcp, Google Recaptcha"/>
+        <title>AJ Security/Google Recaptcha</title>
+        <meta name="description" content="A Practical Java Web Security Library. Google Recaptcha"/>
+        <meta name="keywords" content="security, xss, csrf, captcha, Google Recaptcha"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -94,13 +94,119 @@
                 </ul>
             </menu>
             <article>
-                <h1>Google Recaptcha</h1>
-<p>TODO</p>
+                <h1>Google reCAPTCHA</h1>
+<p>We have encapsulated the Google reCAPTCHA verification for easier use. reCAPTCHA v3 is powerful and eliminates user interaction, enabling seamless and invisible verification.</p>
+<h2>Preparation</h2>
+<p>You need a Google account to register at <a href="https://www.google.com/recaptcha/admin">https://www.google.com/recaptcha/admin</a>. We will be using <strong>reCAPTCHA v3</strong>.</p>
+<p><img src="/captcha/413153c9f85df5e54d02b1401f3da4de.png" alt=""></p>
+<p>Fill in your domain name. Tips:</p>
+<ol>
+<li>You can place multiple domains under one site (in reality, even different sites are fine).</li>
+<li>Add <code>localhost</code> to make local development and testing easier.</li>
+</ol>
+<p>Finally, obtain your <strong>site key (appId)</strong> and <strong>secret key</strong>.</p>
+<p><img src="/captcha/1.jpg" alt=""></p>
+<h1>Usage</h1>
+<p>We use a custom implementation.</p>
+<h2>Include the Script</h2>
+<pre><code class="language-html">&lt;!-- Google anti-bot verification --&gt;
+&lt;style&gt;.grecaptcha-badge{display: none;}&lt;/style&gt; 
+&lt;script src=&quot;https://www.recaptcha.net/recaptcha/api.js?render=XXXX&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>The <code>render</code> parameter is your <strong>site key</strong>, not the secret key. The included CSS style hides the Google badge — most users won’t want to see it.</p>
+<p><img src="/captcha/164f43cd827274a704fa4002b62dc529.png" alt=""></p>
+<h2>Frontend</h2>
+<p>Usually, any form that triggers a write operation should include reCAPTCHA validation. We fetch the token before submitting the form and pass it to the backend as a parameter. Below is an example of a standard form submission.</p>
+<pre><code class="language-html">&lt;script src=&quot;https://www.recaptcha.net/recaptcha/api.js?render=6LclfLMZAAAAAKC3YUTP4E3Ylc0PSvfXpneRePAH&quot;&gt;&lt;/script&gt;
+
+&lt;form id=&quot;myForm&quot; action=&quot;http://localhost:8083/foo/captcha_google&quot; method=&quot;POST&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;name&quot; /&gt;
+    &lt;br /&gt;
+    &lt;input type=&quot;text&quot; name=&quot;age&quot; /&gt;
+    &lt;br /&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;grecaptchaToken&quot; id=&quot;recaptchaToken&quot; /&gt;
+    &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;
+    &lt;p id=&quot;status&quot;&gt;&lt;/p&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+    document.getElementById('myForm').addEventListener('submit', function (e) {
+    debugger
+      e.preventDefault(); // Prevent default form submission
+    
+      const form = e.target;
+      const tokenInput = document.getElementById('recaptchaToken');
+    
+      grecaptcha.ready(function () {
+        grecaptcha.execute('6LclfLMZAAAAAKC3YUTP4E3Ylc0PSvfnp8eRePAH', { action: 'submit' }).then(function (token) {
+        debugger
+          tokenInput.value = token; // Set token value in hidden input
+          form.submit(); // Now submit the form
+        });
+      });
+    });
+
+&lt;/script&gt;
+</code></pre>
+<p>Update the <code>site key</code> accordingly.</p>
+<h3>Example Using POST JSON Raw Body</h3>
+<pre><code class="language-javascript">document.getElementById('myForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const status = document.getElementById('status');
+
+  // Execute reCAPTCHA
+  grecaptcha.ready(function () {
+    grecaptcha.execute('6LclfLMZAAAAAKC3YUTP4Ylc0PSvfnpneRePAH', { action: 'submit' }).then(function (token) {
+      // Add token to form data
+      const formData = new FormData(form);
+      formData.append('token', token);
+
+      // Submit form via fetch
+      fetch('/api/submit-form', {
+        method: 'POST',
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response =&gt; response.json()).then(data =&gt; {
+        status.textContent = data.message || 'Success!';
+        status.style.color = 'green';
+        form.reset();
+      }).catch(error =&gt; {
+        status.textContent = 'An error occurred.';
+        status.style.color = 'red';
+        console.error('Error:', error);
+      });
+    });
+  });
+});
+</code></pre>
+<h2>Backend Handling</h2>
+<p>The backend logic involves sending the received [token](file://d:\sp42\code\zhongen-rdd\ui\src\api\user\index.ts#L29-L29) to Google for verification.</p>
+<h3>YAML Configuration</h3>
+<p>Add the following configuration to your <code>application.yml</code> file:</p>
+<pre><code class="language-yaml">security:
+  captcha:
+    google:
+      enabled: true
+      globalCheck: false # Global check
+      accessSecret: 6LclfLMZAAAAAD6XUpBL0qHKYWijay7-lGpOf
+</code></pre>
+<h3>Intercept and Validate</h3>
+<p>Add the <code>@GoogleCaptchaCheck</code> annotation to the relevant interface:</p>
+<pre><code class="language-java">@PostMapping(&quot;/captcha_google&quot;)
+@GoogleCaptchaCheck
+boolean google(@RequestParam(GoogleCaptcha.PARAM_NAME) String token, @ModelAttribute User user);
+</code></pre>
+<p>Once verified successfully, you'll get a result like this:</p>
+<p><img src="/captcha/d20ef7798177009e31b7125122736d5f.png" alt=""></p>
 
             </article>
         </div>
         <footer>
-            AJ MCP SDK, a part of
+            AJ Security, a part of
             <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a>
             open source. Mail:frank@ajaxjs.com, visit
             <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>. <br/> <br/> Copyright © 2025 Frank Cheung. All rights reserved.

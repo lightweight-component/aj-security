@@ -1,5 +1,5 @@
 ---
-title: AJ Security Home
+title: Home
 subTitle: 
 description: AJ Security Introduction
 date: 2025-07-01

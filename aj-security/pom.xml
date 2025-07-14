@@ -11,9 +11,21 @@
     </parent>
 
     <artifactId>aj-security</artifactId>
+    <name>aj-security</name>
     <version>1.0</version>
-    <description>For the Security Issue</description>
+    <description>Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set of filtering/validation mechanisms,
+        forming a unified invocation chain that is flexibly configurable and extensible. </description>
     <packaging>jar</packaging>
+
+    <url>https://aj-security.ajaxjs.com/</url>
+    <scm>
+        <url>https://github.com/lightweight-component/aj-security</url>
+        <connection>scm:git:https://github.com/lightweight-component/aj-security.git</connection>
+    </scm>
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/lightweight-component/aj-security/issues</url>
+    </issueManagement>
 
     <dependencies>
         <dependency>

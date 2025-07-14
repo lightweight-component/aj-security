@@ -21,12 +21,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--        <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-webmvc</artifactId>
-                    <version>5.3.31</version>
-                    <scope>provided</scope>
-                </dependency>-->
 
         <!-- 编译为 jar 包时依赖的 -->
         <dependency>
@@ -37,7 +31,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-util</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.6</version>
         </dependency>
 
         <dependency>

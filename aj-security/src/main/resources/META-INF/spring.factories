@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.ajaxjs.security.common.AutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.ajaxjs.security.common.AutoConfiguration

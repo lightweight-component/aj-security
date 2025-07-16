@@ -1,5 +1,6 @@
 package com.ajaxjs.security.captcha.image;
 
+import com.ajaxjs.security.captcha.image.impl.SimpleCaptchaImage;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;

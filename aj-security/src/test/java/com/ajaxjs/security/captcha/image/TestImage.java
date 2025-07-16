@@ -1,6 +1,7 @@
 package com.ajaxjs.security.captcha.image;
 
 
+import com.ajaxjs.security.captcha.image.impl.SimpleCaptchaImage;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.junit.jupiter.api.Test;

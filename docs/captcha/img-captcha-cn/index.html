@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Security 框架-Image captcha based on kaptcha</title>
-        <meta name="description" content="实用的 Java Web 安全库。Image captcha based on kaptcha"/>
-        <meta name="keywords" content="security, xss, csrf, captcha, captcha"/>
+        <title>AJ Security 框架-图片验证码</title>
+        <meta name="description" content="实用的 Java Web 安全库。图片验证码"/>
+        <meta name="keywords" content="security, xss, csrf, captcha, captcha,图片验证码"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
@@ -94,8 +94,33 @@
                 </ul>
             </menu>
             <article>
-                <h1>Image captcha based on kaptcha</h1>
-<p>TODO</p>
+                <h1>图片验证码</h1>
+<p>图片验证码能够防止机器人注册、灌水等的恶意操作。一般在开放接口进行写入操作的时候需要添加保护的。</p>
+<h1>使用方式</h1>
+<h2>YAML 配置</h2>
+<pre><code class="language-yaml">security:
+  ImageCaptcha: # 图片验证码
+    enabled: true
+    expireSeconds: 60
+</code></pre>
+<h2>添加控制器</h2>
+<p>添加一个接口，返回图片验证码：</p>
+<pre><code class="language-java">@Autowired
+ImageCaptcha imageCaptcha;
+
+@GetMapping(&quot;/captcha&quot;)
+void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
+    imageCaptcha.captchaImage(req, response);
+}
+</code></pre>
+<p>前端请求该接口须携带一个<code>uuid</code>，表明本次生成验证码的唯一标识。建议使用 QueryString 传参的方式，例如<code>/captcha?uuid=xxx</code>。</p>
+<h2>保护接口</h2>
+<p>在需要保护的接口上添加注解<code>@ImageCaptchaCheck</code>。</p>
+<pre><code class="language-java">@PostMapping(&quot;/create_user&quot;)
+@ImageCaptchaCheck
+boolean createUser(@ModelAttribute User user);
+</code></pre>
+<p>基本上这样就可以了，拦截器会自动校验验证码，ok 的话走下去业务逻辑，不 ok 抛出异常拦截。</p>
 
             </article>
         </div>

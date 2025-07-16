@@ -75,4 +75,11 @@ public class FooService implements FooController {
         System.out.println(user);
         return true;
     }
+
+    @Override
+    public boolean createUser(User user) {
+        System.out.println(user);
+
+        return false;
+    }
 }

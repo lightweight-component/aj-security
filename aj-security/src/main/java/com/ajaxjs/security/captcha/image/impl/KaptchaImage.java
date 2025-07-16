@@ -1,5 +1,6 @@
-package com.ajaxjs.security.captcha.image;
+package com.ajaxjs.security.captcha.image.impl;
 
+import com.ajaxjs.security.captcha.image.ICaptchaImageProvider;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 

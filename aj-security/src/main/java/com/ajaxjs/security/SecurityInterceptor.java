@@ -4,6 +4,8 @@ import com.ajaxjs.security.captcha.cloudflare.Cloudflare;
 import com.ajaxjs.security.captcha.cloudflare.CloudflareCheck;
 import com.ajaxjs.security.captcha.google.GoogleCaptcha;
 import com.ajaxjs.security.captcha.google.GoogleCaptchaCheck;
+import com.ajaxjs.security.captcha.image.ImageCaptcha;
+import com.ajaxjs.security.captcha.image.ImageCaptchaCheck;
 import com.ajaxjs.security.httpauth.HttpBasicAuth;
 import com.ajaxjs.security.httpauth.HttpBasicAuthCheck;
 import com.ajaxjs.security.httpauth.HttpDigestAuth;
@@ -58,6 +60,9 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
             return false;
 
         if (!handler(GoogleCaptcha.class, request, handlerMethod, method, GoogleCaptchaCheck.class))
+            return false;
+
+        if (!handler(ImageCaptcha.class, request, handlerMethod, method, ImageCaptchaCheck.class))
             return false;
 
         if (!handler(Cloudflare.class, request, handlerMethod, method, CloudflareCheck.class))
@@ -141,7 +146,6 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         context = applicationContext;
     }
 
-
     /**
      * 获取已注入的对象
      *
@@ -158,8 +162,6 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         try {
             return context.getBean(clz);
         } catch (NoSuchBeanDefinitionException e) {
-            log.warn("No such bean of class {}.", clz);
-
             return null;
         }
     }

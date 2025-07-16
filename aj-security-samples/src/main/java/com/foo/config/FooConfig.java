@@ -1,8 +1,11 @@
 package com.foo.config;
 
+import com.ajaxjs.security.captcha.image.ImageCaptchaConfig;
+import com.ajaxjs.security.captcha.image.impl.SimpleCaptchaImage;
 import com.ajaxjs.security.encryptedbody.EncryptedBodyConverter;
 import com.foo.common.ResponseResultWrapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -50,5 +53,21 @@ public class FooConfig implements WebMvcConfigurer {
         converter.setEnabled(isEnabled);
 
         converters.add(0, converter);
+    }
+
+    static final SimpleCache RAM = new SimpleCache();
+
+    @Bean
+    ImageCaptchaConfig ImageCaptchaConfig() {
+        ImageCaptchaConfig config = new ImageCaptchaConfig();
+        config.setCaptchaImageProvider(new SimpleCaptchaImage());
+        config.setSaveToRam(RAM::add);
+        config.setCaptchaCodeFromRam(key -> {
+            SimpleCache.Item item = RAM.get(key);
+            return item == null ? null : item.getValue();
+        });
+        config.setRemoveByKey(RAM::remove);
+
+        return config;
     }
 }

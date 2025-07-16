@@ -1,4 +1,4 @@
-package com.ajaxjs.security.captcha.image;
+package com.ajaxjs.security.captcha.image.impl;
 
 
 import com.ajaxjs.util.StrUtil;

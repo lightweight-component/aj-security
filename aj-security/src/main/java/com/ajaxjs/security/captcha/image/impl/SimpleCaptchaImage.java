@@ -1,5 +1,6 @@
-package com.ajaxjs.security.captcha.image;
+package com.ajaxjs.security.captcha.image.impl;
 
+import com.ajaxjs.security.captcha.image.ICaptchaImageProvider;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,7 +17,7 @@ public class SimpleCaptchaImage implements ICaptchaImageProvider {
         Graphics g = image.getGraphics(); // 获取图形上下文
         g.setColor(getRandColor(200, 250)); // 设定背景
         g.fillRect(0, 0, width, height);
-        g.setFont(new Font("Times New Roman", Font.PLAIN, 30)); // 设定字体
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // 设定字体
         g.setColor(getRandColor(160, 200));
 
         Random random = new Random();// 随机产生干扰线
@@ -27,9 +28,9 @@ public class SimpleCaptchaImage implements ICaptchaImageProvider {
         }
 
         String[] arr = randomStr.split("");
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110))); // 将认证码显示到图象中
-            g.drawString(arr[i], 13 * i + 6, 16);// 调用函数出来的颜色相同，可能是因为种子太接近，所以只能直接生成
+            g.drawString(arr[i], 13 * i + 6, 22);// 调用函数出来的颜色相同，可能是因为种子太接近，所以只能直接生成
         }
 
         g.dispose();// 图象生效

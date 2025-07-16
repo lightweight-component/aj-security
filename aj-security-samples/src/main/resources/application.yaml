@@ -49,6 +49,9 @@ security:
       globalCheck: false # 全局检查
       accessSecret: 6LclfLMZAAAAAD6XcxnUpBL0qHKYWijay7-lGpOf
 
+  ImageCaptcha: # 图片验证码
+    enabled: true
+    expireSeconds: 60
 
 # 数据库连接
 db:

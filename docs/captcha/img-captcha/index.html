@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Security/Image captcha based on kaptcha</title>
-        <meta name="description" content="A Practical Java Web Security Library. Image captcha based on kaptcha"/>
+        <title>AJ Security/Image captcha</title>
+        <meta name="description" content="A Practical Java Web Security Library. Image captcha"/>
         <meta name="keywords" content="security, xss, csrf, captcha, captcha"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="/asset/style/main.css"/>
@@ -94,8 +94,33 @@
                 </ul>
             </menu>
             <article>
-                <h1>Image captcha based on kaptcha</h1>
-<p>TODO</p>
+                <h1>Image CAPTCHA</h1>
+<p>Image CAPTCHA helps prevent malicious activities such as bot registration and spamming. It is generally recommended to add this protection when performing write operations on public-facing interfaces.</p>
+<h2>Usage</h2>
+<h3>YAML Configuration</h3>
+<pre><code class="language-yaml">security:
+  ImageCaptcha: # Image CAPTCHA
+    enabled: true
+    expireSeconds: 60
+</code></pre>
+<h3>Add a Controller</h3>
+<p>Add an API endpoint that returns the image CAPTCHA:</p>
+<pre><code class="language-java">@Autowired
+ImageCaptcha imageCaptcha;
+
+@GetMapping(&quot;/captcha&quot;)
+void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
+    imageCaptcha.captchaImage(req, response);
+}
+</code></pre>
+<p>The frontend must include a <code>uuid</code> parameter when requesting this endpoint, which serves as the unique identifier for this CAPTCHA generation. It's recommended to pass it via query string, for example: <code>/captcha?uuid=xxx</code>.</p>
+<h3>Protect an API</h3>
+<p>Add the <code>@ImageCaptchaCheck</code> annotation to the API you want to protect:</p>
+<pre><code class="language-java">@PostMapping(&quot;/create_user&quot;)
+@ImageCaptchaCheck
+boolean createUser(@ModelAttribute User user);
+</code></pre>
+<p>That's basically all you need. The interceptor will automatically verify the CAPTCHA. If valid, the request proceeds to the business logic; otherwise, an exception is thrown and intercepted.</p>
 
             </article>
         </div>

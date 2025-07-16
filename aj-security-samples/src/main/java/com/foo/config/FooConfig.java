@@ -55,7 +55,7 @@ public class FooConfig implements WebMvcConfigurer {
         converters.add(0, converter);
     }
 
-    static final SimpleCache RAM = new SimpleCache();
+    static final SimpleCache RAM = new SimpleCache(); // JVM 缓存
 
     @Bean
     ImageCaptchaConfig ImageCaptchaConfig() {

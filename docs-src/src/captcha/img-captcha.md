@@ -24,6 +24,28 @@ security:
     expireSeconds: 60
 ```
 
+## Configuration
+Create a configuration class and add it to the Spring container. The main purpose is to determine which image generator and caching method to use. For simplicity, we use the JVM's built-in `SimpleCache` here.  
+If you want to switch to Redis, you can configure `SaveToRam`, `CaptchaCodeFromRam`, and `RemoveByKey` as shown below.
+
+```java
+static final SimpleCache RAM = new SimpleCache(); // JVM cache
+
+@Bean
+ImageCaptchaConfig ImageCaptchaConfig() {
+    ImageCaptchaConfig config = new ImageCaptchaConfig();
+    config.setCaptchaImageProvider(new SimpleCaptchaImage());
+    config.setSaveToRam(RAM::add);
+    config.setCaptchaCodeFromRam(key -> {
+        SimpleCache.Item item = RAM.get(key);
+        return item == null ? null : item.getValue();
+    });
+    config.setRemoveByKey(RAM::remove);
+
+    return config;
+}
+```
+
 ### Add a Controller
 
 Add an API endpoint that returns the image CAPTCHA:

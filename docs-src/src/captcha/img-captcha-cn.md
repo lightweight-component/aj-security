@@ -23,7 +23,27 @@ security:
     enabled: true
     expireSeconds: 60
 ```
+## 配置
+创建一个配置类，并添加到 Spring 容器中。主要是决定哪种图片生成器以及缓存方式。这里简单起见使用了 JVM 的缓存 SimpleCache。
+如果要改为 Redis 可以参照下面方式来配置`SaveToRam`、`CaptchaCodeFromRam`、`RemoveByKey`。
 
+```java
+static final SimpleCache RAM = new SimpleCache(); // JVM 缓存
+
+@Bean
+ImageCaptchaConfig ImageCaptchaConfig() {
+    ImageCaptchaConfig config = new ImageCaptchaConfig();
+    config.setCaptchaImageProvider(new SimpleCaptchaImage());
+    config.setSaveToRam(RAM::add);
+    config.setCaptchaCodeFromRam(key -> {
+        SimpleCache.Item item = RAM.get(key);
+        return item == null ? null : item.getValue();
+    });
+    config.setRemoveByKey(RAM::remove);
+
+    return config;
+}
+```
 ## 添加控制器
 添加一个接口，返回图片验证码：
 

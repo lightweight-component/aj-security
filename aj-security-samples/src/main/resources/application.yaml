@@ -48,10 +48,13 @@ security:
       enabled: true
       globalCheck: false # 全局检查
       accessSecret: 6LclfLMZAAAAAD6XcxnUpBL0qHKYWijay7-lGpOf
-
   ImageCaptcha: # 图片验证码
     enabled: true
     expireSeconds: 60
+  limit:
+    SimpleLimit:
+      enabled: true
+      maxSemaphore: 1
 
 # 数据库连接
 db:

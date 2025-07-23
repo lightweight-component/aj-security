@@ -8,6 +8,7 @@ import com.ajaxjs.security.captcha.image.ImageCaptcha;
 import com.ajaxjs.security.captcha.image.ImageCaptchaCheck;
 import com.ajaxjs.security.desensitize.annotation.Desensitize;
 import com.ajaxjs.security.iplist.IpListCheck;
+import com.ajaxjs.security.limit.simplelimit.SimpleLimitCheck;
 import com.ajaxjs.security.paramssign.ParamsSignCheck;
 import com.ajaxjs.security.referer.HttpRefererCheck;
 import com.ajaxjs.security.timesignature.TimeSignatureVerify;
@@ -66,4 +67,8 @@ public interface FooController {
     @PostMapping("/create_user")
     @ImageCaptchaCheck
     boolean createUser(@ModelAttribute User user);
+
+    @GetMapping("/simple_limit")
+    @SimpleLimitCheck
+    boolean simpleLimit();
 }

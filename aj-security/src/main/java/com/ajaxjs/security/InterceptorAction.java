@@ -3,7 +3,9 @@ package com.ajaxjs.security;
 import lombok.Data;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
+import java.util.function.BiConsumer;
 
 /**
  * 拦截器动作
@@ -30,4 +32,8 @@ public abstract class InterceptorAction<T extends Annotation> {
      * @return 拦截器是否通过
      */
     abstract public boolean action(T annotation, HttpServletRequest req);
+
+    public BiConsumer<HttpServletRequest, HttpServletResponse> getAfterCompletionAction() {
+        return null;
+    }
 }

@@ -14,6 +14,8 @@ import com.ajaxjs.security.iplist.IpList;
 import com.ajaxjs.security.iplist.IpListCheck;
 import com.ajaxjs.security.limit.LimitAccess;
 import com.ajaxjs.security.limit.LimitAccessVerify;
+import com.ajaxjs.security.limit.simplelimit.SimpleLimit;
+import com.ajaxjs.security.limit.simplelimit.SimpleLimitCheck;
 import com.ajaxjs.security.nonrepeatsubmit.NonRepeatSubmit;
 import com.ajaxjs.security.nonrepeatsubmit.NonRepeatSubmitMgr;
 import com.ajaxjs.security.referer.HttpReferer;
@@ -33,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.function.BiConsumer;
 
 @Slf4j
 public class SecurityInterceptor implements HandlerInterceptor, ApplicationContextAware {
@@ -71,6 +74,9 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         if (!handler(LimitAccess.class, request, handlerMethod, method, LimitAccessVerify.class))
             return false;
 
+        if (!handler(SimpleLimit.class, request, handlerMethod, method, SimpleLimitCheck.class))
+            return false;
+
         if (!handler(HttpBasicAuth.class, request, handlerMethod, method, HttpBasicAuthCheck.class))
             return false;
 
@@ -82,6 +88,11 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
 
         return true;
     }
+
+    final static String AFTER_COMPLETION_ACTION = "afterCompletionAction";
+
+    int count = 0;
+    int count2 = 0;
 
     /**
      * 处理拦截器动作的方法
@@ -103,6 +114,11 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         if (service == null || !service.isEnabled())// 如果服务实例为空，表示对应的业务没有创建，直接放行
             return true;
 
+        // 是否要有 afterCompletion 处理
+        BiConsumer<HttpServletRequest, HttpServletResponse> afterCompletionAction = service.getAfterCompletionAction();
+        if (afterCompletionAction != null) {
+            req.setAttribute(AFTER_COMPLETION_ACTION, afterCompletionAction);
+        }
         Annotation annotation;
 
         if (service.isGlobalCheck()) {// 如果服务配置了全局检查，则不需要查找方法或类注解
@@ -125,7 +141,6 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
             }
         }
 
-
         if (annotation != null) {        // 如果注解存在，执行拦截器动作
             T a = (T) annotation;
             log.info(String.valueOf(a));
@@ -134,6 +149,15 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         }
 
         return true;  // 如果注解不存在，直接放行
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        System.out.println("DO afterCompletion::" + (++count));
+        if (request.getAttribute(AFTER_COMPLETION_ACTION) != null) {
+            System.out.println("DO afterCompletionAction::" + (++count2));
+            ((BiConsumer<HttpServletRequest, HttpServletResponse>) request.getAttribute(AFTER_COMPLETION_ACTION)).accept(request, response);
+        }
     }
 
     /**

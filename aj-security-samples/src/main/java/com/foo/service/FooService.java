@@ -82,4 +82,18 @@ public class FooService implements FooController {
 
         return false;
     }
+
+    @Override
+    public boolean simpleLimit() {
+        System.out.println("SimpleLimit");
+
+        try {
+            // 模拟业务处理，假如需要1s
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            return false;
+        }
+
+        return true;
+    }
 }

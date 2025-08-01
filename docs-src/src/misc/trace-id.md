@@ -106,7 +106,7 @@ With the above log configuration, you can now write a test interface. Accessing 
 
 The logs output the `traceId`. When debugging issues, we can use this `traceId` for trace tracking.
 
-[](/asset/imgs/trace-id-log.jpg)
+![](/asset/imgs/trace-id-log.jpg)
 
 We have now completed a very simple trace tracking function. Next, we need to return the generated `traceId` for each request to the client to assist in troubleshooting.
 
@@ -146,6 +146,6 @@ public class PackResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
 Re-accessing the interface returns the following result:
 
-[](/asset/imgs/trace-id-result.jpg)
+![](/asset/imgs/trace-id-result.jpg)
 
 The returned result includes the `traceId`. If there are issues with the interface or data that need investigation, we can use this `traceId` to check the logs.

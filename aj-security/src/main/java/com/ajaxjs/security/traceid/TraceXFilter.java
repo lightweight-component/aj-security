@@ -1,5 +1,6 @@
 package com.ajaxjs.security.traceid;
 
+import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.StrUtil;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,6 @@ import java.util.UUID;
 @WebFilter("/**")
 @Component
 public class TraceXFilter implements Filter {
-    public final static String TRACE_KEY = "traceId";
-
     private final static String X_TRACE = "x-trace";
 
     @Override
@@ -26,7 +25,7 @@ public class TraceXFilter implements Filter {
         if (!StringUtils.hasLength(traceId))
             traceId = UUID.randomUUID().toString().replace("-", StrUtil.EMPTY_STRING).toUpperCase();
 
-        MDC.put(TRACE_KEY, traceId);
+        MDC.put(BoxLogger.TRACE_KEY, traceId);
 
         chain.doFilter(request, response);
     }

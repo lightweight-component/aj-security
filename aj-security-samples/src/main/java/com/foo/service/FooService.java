@@ -96,4 +96,9 @@ public class FooService implements FooController {
 
         return true;
     }
+
+    @Override
+    public boolean traceId() {
+        return true;
+    }
 }

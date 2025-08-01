@@ -91,6 +91,7 @@
                 <ul>
                     <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
                     <li><a href="/misc/encryption-api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/trace-id-cn">链路跟踪记录</a></li>
                 </ul>
             </menu>
             <article>
@@ -102,7 +103,7 @@ JSON 处理，这是最常见的提交方式。其他 QueryString、标准 Form�
 <li>出参，对返回值进行加密。接口统一返回加密后的 JSON 结果。</li>
 </ul>
 <p>有人把加密结果原文输出，如下图所示：</p>
-<p><img src="/asset/aj-docs/api-encode.png" alt="">
+<p><img src="/asset/imgs/api-encode.png" alt="">
 但笔者觉得那是一种反模式，而保留原有 JSON 结构更好，如下提交的 JSON。</p>
 <pre><code class="language-json">{
     &quot;errCode&quot;: &quot;0&quot;,

@@ -18,7 +18,7 @@ layout: layouts/docs-cn.njk
 
 有人把加密结果原文输出，如下图所示：
 
-![](/asset/aj-docs/api-encode.png)
+![](/asset/imgs/api-encode.png)
 但笔者觉得那是一种反模式，而保留原有 JSON 结构更好，如下提交的 JSON。
 
 ```json

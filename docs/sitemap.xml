@@ -172,6 +172,16 @@
         </url>
     
         <url>
+            <loc>https://security.ajaxjs.com/misc/trace-id-cn/</loc>
+            <lastmod>2022-01-05T00:00:00.000Z</lastmod>
+        </url>
+    
+        <url>
+            <loc>https://security.ajaxjs.com/misc/trace-id/</loc>
+            <lastmod>2022-01-05T00:00:00.000Z</lastmod>
+        </url>
+    
+        <url>
             <loc>https://security.ajaxjs.com/asset/style/common.css</loc>
             <lastmod>2025-06-25T01:24:59.856Z</lastmod>
         </url>

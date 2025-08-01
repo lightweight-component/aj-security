@@ -71,4 +71,9 @@ public interface FooController {
     @GetMapping("/simple_limit")
     @SimpleLimitCheck
     boolean simpleLimit();
+
+    @GetMapping("/trace_id")
+    boolean traceId();
+
+
 }

@@ -1,5 +1,11 @@
 server:
-  port: 8083 # 配置服务器端口
+  port: 8089 # 配置服务器端口
+
+spring:
+  output:
+    ansi:
+      enabled: always
+
 
 security:
   HttpReferer: # Referer 拦截

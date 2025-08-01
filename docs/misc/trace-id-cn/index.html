@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Security 框架-链路跟踪</title>
+        <meta name="description" content="实用的 Java Web 安全库。链路跟踪"/>
+        <meta name="keywords" content="security, xss, csrf, captcha, 链路跟踪"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="/asset/style/main.css"/>
+        <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
+        <script src="/asset/common.js"></script>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?950ba5ba1f1fe4906c3b4cf836080f03";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 首页</a>
+                    | ⚙️ 源码:
+                    <a target="_blank" href="https://github.com/lightweight-component/aj-security">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-security">Gitcode</a>
+                    |
+                    <a href="/">英文版本</a>
+                </div>
+                <h1>AJ Security</h1>
+                <h3>用户手册</h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                <ul>
+                    <li class="selected">
+                        <a href="/cn">首页</a>
+                    </li>
+                    <li>
+                        <a href="/install-cn">安装与配置</a>
+                    </li>
+                </ul>
+                <h3>HTTP Web 安全</h3>
+                <ul>
+                    <li>
+                        <a href="/http/http-referer-cn">HTTP Referer 校验</a>
+                    </li>
+                    <li>
+                       <a href="/http/timestamp-cn">时间戳加密 Token 校验</a>
+                    </li>
+                     <li>
+                       <a href="/http/paramssign-cn">请求参数防篡改</a>
+                    </li>
+                    <li>
+                       <a href="/http/ip-list-cn">IP 白名单/黑名单</a>
+                    </li>
+                     <li>
+                       <a href="/http/nonrepeatsubmit-cn">防止重复提交数据</a>
+                    </li>
+                </ul>
+                <h3>一般性 Web 校验</h3>
+                <ul>
+                      <li>
+                           <a href="/classic/xss-cn">防止 XSS 跨站攻击</a>
+                      </li>
+                      <li>
+                           <a href="/classic/crlf-cn">防止 CRLF 攻击</a>
+                      </li>
+                </ul>
+
+                <h3>验证码 Captcha 机制</h3>
+                <ul>
+                    <li><a href="/captcha/img-captcha-cn">图片验证码</a></li>
+                    <li><a href="/captcha/google-cn">基于 Google 的验证码</a></li>
+                    <li><a href="/captcha/cf-cn">基于 CloudFlare 的验证码</a></li>
+                </ul>
+                <h3>HTTP 标准认证</h3>
+                <ul>
+                    <li><a href="/auth/http-basic-auth-cn">HTTP Basic Auth 认证</a></li>
+                    <li><a href="/auth/http-digest-auth-cn">HTTP Digest Auth 认证</a></li>
+                </ul>
+                <h3>API 接口功能</h3>
+                <ul>
+                    <li><a href="/api/limit-cn">限流限次数</a></li>
+                </ul>
+                <h3>其他实用功能</h3>
+                <ul>
+                    <li><a href="/misc/desensitize-cn">实体字段脱敏</a></li>
+                    <li><a href="/misc/encryption-api-cn">API 接口加解密</a></li>
+                    <li><a href="/misc/trace-id-cn">链路跟踪记录</a></li>
+                </ul>
+            </menu>
+            <article>
+                <h1>链路跟踪</h1>
+<p>SpringBoot 与 SLF4j 的结合可以帮助我们轻松实现链路跟踪功能，从而提高系统的可维护性和可诊断性。
+链路跟踪功能能够跟踪系统中的请求链路，帮助开发人员快速诊断和解决问题。
+在本文中，我们将介绍如何使用 SpringBoot 和 SLF4j 实现链路跟踪功能。</p>
+<p>不谈 Zipkin，SkyWalking 等开源链路跟踪系统，咱们通过自己动手实现一个简单的链路跟踪功能，其实为的就是提高自己。
+因为是通过日志的方式记录链路，完全可以用到自己的系统中。为什么需要链路跟踪功能呢？</p>
+<ol>
+<li>提高系统的可维护性和可诊断性：通过链路跟踪，可以跟踪系统中的请求链路，了解服务之间的交互和延迟，帮助开发人员快速诊断和解决问题。</li>
+<li>优化系统性能：通过链路跟踪，可以分析服务间的依赖关系和性能问题，优化系统的调用链路和资源利用，提高系统的响应速度和吞吐量。</li>
+<li>增强系统的安全性和可靠性：通过链路跟踪，可以监控系统的运行状况和异常情况，及时发现和解决系统中的漏洞和故障，增强系统的安全性和可靠性。</li>
+<li>辅助系统设计和开发：通过链路跟踪，可以辅助系统设计和开发，了解系统的架构和流程，优化系统的设计和实现，提高系统的可扩展性和可维护性。</li>
+</ol>
+<p>为了唯一地标记每个请求，用户将上下文信息放入 MDC (Mapped Diagnostic Context 的缩写)中，MDC 通过<code>ThreadLocal</code>
+来存储数据，所以不用担心安全问题。</p>
+<h2>动手实现</h2>
+<p>自定义过滤器<code>Filter</code>，该 Filter 的作用是用来在请求到来时获取<code>traceId</code>或者生成一个<code>traceId</code>值。</p>
+<pre><code class="language-java">import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
+import org.springframework.util.AlternativeJdkIdGenerator;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+@WebFilter(&quot;/**&quot;)
+@Component
+@Slf4j
+public class TraceXFilter implements Filter {
+    final static String TRACE_KEY = &quot;traceId&quot;;
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        // 通过请求header获取自定义的traceId，没有则系统生成
+        String traceId = req.getHeader(&quot;x-trace&quot;);
+
+        if (!StringUtils.hasLength(traceId))
+            traceId = getUUID();
+
+        // 将当前请求的traceId存入到MDC中
+        MDC.put(TRACE_KEY, traceId);
+
+        log.info(&quot;请求: {}&quot;, req.getServletPath());
+        chain.doFilter(request, response);
+    }
+}
+</code></pre>
+<p>接下来是 logback-spring.xml 日志进行配置。</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration scan=&quot;true&quot;&gt;
+    &lt;contextName&gt;pack-trace&lt;/contextName&gt;
+    &lt;property name=&quot;DEFAULT_PATTERN&quot; value=&quot;%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n&quot;/&gt;
+    &lt;!--注意这里的traceXId就是我们往MDC中存入的key了，通过%X{traceXId}获取唯一标识--&gt;
+    &lt;property name=&quot;TRACEX_PATTERN&quot;
+              value=&quot;%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) [%yellow(%thread)] %logger Line:%-3L traceId:【%red(%X{traceXId})】 - %msg%n&quot;/&gt;
+    &lt;appender name=&quot;CONSOLE&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;${DEFAULT_PATTERN}&lt;/pattern&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    &lt;appender name=&quot;TRACEX&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;${TRACEX_PATTERN}&lt;/pattern&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    &lt;logger name=&quot;com.pack.tracex.test&quot; additivity=&quot;false&quot; level=&quot;INFO&quot;&gt;
+        &lt;appender-ref ref=&quot;TRACEX&quot;&gt;&lt;/appender-ref&gt;
+    &lt;/logger&gt;
+    &lt;springProfile name=&quot;dev&quot;&gt;
+        &lt;root level=&quot;INFO&quot;&gt;
+            &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;
+        &lt;/root&gt;
+    &lt;/springProfile&gt;
+&lt;/configuration&gt;
+</code></pre>
+<p>有了上面的日志配置，接下来就可以随意写个接口进行测试。访问接口，控制台输出</p>
+<pre><code>2023-12-06 15:18:11.685 INFO  [http-nio-8099-exec-2] com.pack.tracex.test.TraceXFilter Line:40  traceId:【137FEC312666479A98A6433BA80DE951】 - 请求: /tracex
+2023-12-06 15:18:11.699 INFO  [http-nio-8099-exec-2] com.pack.tracex.test.TraceController Line:28  traceId:【137FEC312666479A98A6433BA80DE951】 - start uri: /tracex
+2023-12-06 15:18:11.774 DEBUG [http-nio-8099-exec-2] org.hibernate.SQL Line:135 traceId:【137FEC312666479A98A6433BA80DE951】 - select u1_0.id,u1_0.age,u1_0.email,u1_0.id_no,u1_0.name,u1_0.pwd from users u1_0 where u1_0.id_no=?
+2023-12-06 15:18:11.787 INFO  [http-nio-8099-exec-2] com.pack.tracex.test.TraceController Line:31  traceId:【137FEC312666479A98A6433BA80DE951】 - end uri: /tracex
+</code></pre>
+<p>日志中输出了 traceId；当程序出现问题需要调试时，我们就可以根据这个 traceId 进行跟踪调试。</p>
+<p><img src="/asset/imgs/trace-id-log.jpg" alt=""></p>
+<p>到这我们就完成了一个非常简单的链路跟踪功能。接下来我们需要将每一个请求生成的 traceId 返回到客户端，帮助排查问题。</p>
+<p>第二个问题我们可以通过<code>ResponseBodyAdvice</code>对接口数据进行统一的处理，将 traceId 统计的添加到返回的结果中。</p>
+<h2>自定义 ResponseBodyAdvice 统一处理返回值</h2>
+<pre><code class="language-java">
+@RestControllerAdvice
+public class PackResponseBodyAdvice implements ResponseBodyAdvice&lt;Object&gt; {
+    @Resource
+    private ObjectMapper objectMapper;
+
+    @Override
+    public boolean supports(MethodParameter returnType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; converterType) {
+        return !returnType.getParameterType().equals(R.class);
+    }
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+                                  Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; selectedConverterType, ServerHttpRequest request,
+                                  ServerHttpResponse response) {
+        if (body instanceof String) {
+            try {
+                return this.objectMapper.writeValueAsString(R.success(response, MDC.get(TraceX.TRACE_KEY)));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        if (body instanceof ResponseEntity&lt;?&gt; entity) {
+            return R.success(entity.getBody(), MDC.get(TraceX.TRACE_KEY));
+        }
+        return R.success(body, MDC.get(TraceX.TRACE_KEY));
+    }
+
+}
+</code></pre>
+<p>再次访问接口返回如下结果：</p>
+<p><img src="/asset/imgs/trace-id-result.jpg" alt=""></p>
+<p>返回的结果包含了<code>traceId</code>，如果对接口或者数据有问题需要排查，我们就可以拿着这个<code>traceId</code>到日志中进行查看了。</p>
+
+            </article>
+        </div>
+        <footer>
+             AJ Security，开源框架 <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> 的一部分。联系方式：
+             frank@ajaxjs.com，<a href="https://blog.csdn.net/zhangxin09" target="_blank">作者博客</a>
+             <br />
+             <br />
+             Copyright © 2025 Frank Cheung. All rights reserved.
+         </footer>
+    </body>
+</html>

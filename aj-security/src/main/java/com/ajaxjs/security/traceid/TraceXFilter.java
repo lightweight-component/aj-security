@@ -5,13 +5,18 @@ import com.ajaxjs.util.StrUtil;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+/**
+ * Adds TraceId on every single Request, and adds ContentCachingRequestWrapper/ContentCachingResponseWrapper
+ */
 @WebFilter("/**")
 @Component
 public class TraceXFilter implements Filter {
@@ -27,6 +32,20 @@ public class TraceXFilter implements Filter {
 
         MDC.put(BoxLogger.TRACE_KEY, traceId);
 
-        chain.doFilter(request, response);
+        // 包装请求，缓存 body
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
+//        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
+
+        chain.doFilter(wrappedRequest, response);
+    }
+
+    public static String getRequestBody(HttpServletRequest request) {
+        if (request instanceof ContentCachingRequestWrapper) {
+            ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) request;
+
+            return new String(wrapper.getContentAsByteArray(), StandardCharsets.UTF_8);
+        }
+
+        return "";
     }
 }

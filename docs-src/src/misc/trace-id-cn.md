@@ -155,3 +155,7 @@ public class PackResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 ![](/asset/imgs/trace-id-result.jpg)
 
 返回的结果包含了`traceId`，如果对接口或者数据有问题需要排查，我们就可以拿着这个`traceId`到日志中进行查看了。
+
+## 参阅
+
+- [从原理到实践:MDC日志链路追踪指南](https://mp.weixin.qq.com/s/AnqZJ7glK7Lib4qJufyVrA)

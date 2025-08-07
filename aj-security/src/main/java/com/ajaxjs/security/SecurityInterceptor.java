@@ -119,6 +119,7 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         if (afterCompletionAction != null) {
             req.setAttribute(AFTER_COMPLETION_ACTION, afterCompletionAction);
         }
+
         Annotation annotation;
 
         if (service.isGlobalCheck()) {// 如果服务配置了全局检查，则不需要查找方法或类注解
@@ -153,9 +154,9 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        System.out.println("DO afterCompletion::" + (++count));
+//        System.out.println("DO afterCompletion::" + (++count));
         if (request.getAttribute(AFTER_COMPLETION_ACTION) != null) {
-            System.out.println("DO afterCompletionAction::" + (++count2));
+//            System.out.println("DO afterCompletionAction::" + (++count2));
             ((BiConsumer<HttpServletRequest, HttpServletResponse>) request.getAttribute(AFTER_COMPLETION_ACTION)).accept(request, response);
         }
     }

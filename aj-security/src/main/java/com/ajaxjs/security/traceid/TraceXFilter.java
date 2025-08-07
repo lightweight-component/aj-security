@@ -3,9 +3,11 @@ package com.ajaxjs.security.traceid;
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.StrUtil;
 import org.slf4j.MDC;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -19,6 +21,7 @@ import java.util.UUID;
  */
 @WebFilter("/**")
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 1)  // 比最高优先级稍低，避免冲突
 public class TraceXFilter implements Filter {
     private final static String X_TRACE = "x-trace";
 
@@ -33,19 +36,46 @@ public class TraceXFilter implements Filter {
         MDC.put(BoxLogger.TRACE_KEY, traceId);
 
         // 包装请求，缓存 body
-        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
+        // Spring 的无效
+//        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
 //        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
 
-        chain.doFilter(wrappedRequest, response);
+        if ("GET".equals(req.getMethod()))
+            chain.doFilter(req, response); // GET 请求不记录
+        else
+            chain.doFilter(new BufferedRequestWrapper(req), response);
     }
 
     public static String getRequestBody(HttpServletRequest request) {
-        if (request instanceof ContentCachingRequestWrapper) {
-            ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) request;
+        if (request instanceof BufferedRequestWrapper) {
+            BufferedRequestWrapper wrapper = (BufferedRequestWrapper) request;
 
-            return new String(wrapper.getContentAsByteArray(), StandardCharsets.UTF_8);
+            try {
+                return StreamUtils.copyToString(wrapper.getInputStream(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        return "";
+        return StrUtil.EMPTY_STRING;
     }
+
+//    public static String getRequestBody(HttpServletRequest request) {
+//        if (request instanceof ContentCachingRequestWrapper) {
+//            ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) request;
+//            byte[] contentAsByteArray = wrapper.getContentAsByteArray();
+//
+//            if (contentAsByteArray.length == 0) {
+//                try {
+//                    return StreamUtils.copyToString(wrapper.getInputStream(), StandardCharsets.UTF_8);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//
+//            return new String(contentAsByteArray, StandardCharsets.UTF_8);
+//        }
+//
+//        return "";
+//    }
 }

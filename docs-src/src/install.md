@@ -17,7 +17,7 @@ This component integrates seamlessly with Spring Boot applications. After adding
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 

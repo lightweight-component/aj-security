@@ -68,8 +68,7 @@ Java 8 requires.
 Under Apache License v3.0.
 
 - Github: [https://github.com/lightweight-component/aj-security](https://github.com/lightweight-component/aj-security)
--
-Gitcode: [https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security),
+- Gitcode: [https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security),
 for Chinese users faster access.
 
 ## Links

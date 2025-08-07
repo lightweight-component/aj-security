@@ -7,6 +7,7 @@
         <meta name="description" content="A Practical Java Web Security Library. Trace Tracking"/>
         <meta name="keywords" content="security, xss, csrf, captcha, Trace Tracking"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+         <link rel="stylesheet" href="https://framework.ajaxjs.com/static/font/font.css" />
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
         <script src="/asset/common.js"></script>
@@ -178,7 +179,7 @@ public class TraceXFilter implements Filter {
 2023-12-06 15:18:11.787 INFO  [http-nio-8099-exec-2] com.pack.tracex.test.TraceController Line:31  traceId:【137FEC312666479A98A6433BA80DE951】 - end uri: /tracex
 </code></pre>
 <p>The logs output the <code>traceId</code>. When debugging issues, we can use this <code>traceId</code> for trace tracking.</p>
-<p><a href="/asset/imgs/trace-id-log.jpg"></a></p>
+<p><img src="/asset/imgs/trace-id-log.jpg" alt=""></p>
 <p>We have now completed a very simple trace tracking function. Next, we need to return the generated <code>traceId</code> for each request to the client to assist in troubleshooting.</p>
 <p>We can use <code>ResponseBodyAdvice</code> to uniformly handle interface data, adding the <code>traceId</code> to the returned results.</p>
 <h2>Custom ResponseBodyAdvice for Unified Return Value Handling</h2>
@@ -211,7 +212,7 @@ public class PackResponseBodyAdvice implements ResponseBodyAdvice&lt;Object&gt; 
 }
 </code></pre>
 <p>Re-accessing the interface returns the following result:</p>
-<p><a href="/asset/imgs/trace-id-result.jpg"></a></p>
+<p><img src="/asset/imgs/trace-id-result.jpg" alt=""></p>
 <p>The returned result includes the <code>traceId</code>. If there are issues with the interface or data that need investigation, we can use this <code>traceId</code> to check the logs.</p>
 
             </article>

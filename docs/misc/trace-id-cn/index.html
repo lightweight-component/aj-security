@@ -7,6 +7,7 @@
         <meta name="description" content="实用的 Java Web 安全库。链路跟踪"/>
         <meta name="keywords" content="security, xss, csrf, captcha, 链路跟踪"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="https://framework.ajaxjs.com/static/font/font.css" />
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
         <script src="/asset/common.js"></script>
@@ -219,6 +220,10 @@ public class PackResponseBodyAdvice implements ResponseBodyAdvice&lt;Object&gt; 
 <p>再次访问接口返回如下结果：</p>
 <p><img src="/asset/imgs/trace-id-result.jpg" alt=""></p>
 <p>返回的结果包含了<code>traceId</code>，如果对接口或者数据有问题需要排查，我们就可以拿着这个<code>traceId</code>到日志中进行查看了。</p>
+<h2>参阅</h2>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/AnqZJ7glK7Lib4qJufyVrA">从原理到实践:MDC日志链路追踪指南</a></li>
+</ul>
 
             </article>
         </div>

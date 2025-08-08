@@ -2,6 +2,7 @@ package com.ajaxjs.security.traceid;
 
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.http_request.model.HttpConstants;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -39,11 +40,10 @@ public class TraceXFilter implements Filter {
         // Spring 的无效
 //        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
 //        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
-
-        if ("GET".equals(req.getMethod()))
-            chain.doFilter(req, response); // GET 请求不记录
-        else
+        if (!HttpConstants.GET.equals(req.getMethod()) && StrUtil.hasText(request.getContentType()) && request.getContentType().contains(HttpConstants.CONTENT_TYPE_JSON))
             chain.doFilter(new BufferedRequestWrapper(req), response);
+        else
+            chain.doFilter(req, response); // GET 请求不记录
     }
 
     public static String getRequestBody(HttpServletRequest request) {

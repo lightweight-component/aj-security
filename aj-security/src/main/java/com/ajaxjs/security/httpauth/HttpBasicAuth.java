@@ -1,7 +1,7 @@
 package com.ajaxjs.security.httpauth;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.security.common.SpringUtils;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.Base64Helper;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
@@ -60,7 +60,7 @@ public class HttpBasicAuth extends InterceptorAction<HttpBasicAuthCheck> {
     }
 
     private static void responseLogin() {
-        HttpServletResponse response = SpringUtils.getResponse();
+        HttpServletResponse response = DiContextUtil.getResponse();
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
         response.setHeader("WWW-Authenticate", "Basic realm=\"User Login\"");
 

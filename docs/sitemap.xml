@@ -187,18 +187,13 @@
         </url>
     
         <url>
-            <loc>https://security.ajaxjs.com/asset/style/common.css</loc>
-            <lastmod>2025-07-12T13:43:47.998Z</lastmod>
-        </url>
-    
-        <url>
-            <loc>https://security.ajaxjs.com/asset/style/main.css</loc>
-            <lastmod>2025-07-12T13:43:47.998Z</lastmod>
-        </url>
-    
-        <url>
             <loc>https://security.ajaxjs.com/test/cf/</loc>
-            <lastmod>2025-07-12T13:43:48.011Z</lastmod>
+            <lastmod>2025-07-09T01:45:42.851Z</lastmod>
+        </url>
+    
+        <url>
+            <loc>https://security.ajaxjs.com/asset/main.css</loc>
+            <lastmod>2025-08-08T10:05:24.374Z</lastmod>
         </url>
     
 </urlset>

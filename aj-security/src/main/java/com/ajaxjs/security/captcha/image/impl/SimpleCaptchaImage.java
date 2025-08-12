@@ -28,7 +28,7 @@ public class SimpleCaptchaImage implements ICaptchaImageProvider {
         }
 
         String[] arr = randomStr.split("");
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < randomStr.length(); i++) {
             g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110))); // 将认证码显示到图象中
             g.drawString(arr[i], 13 * i + 6, 22);// 调用函数出来的颜色相同，可能是因为种子太接近，所以只能直接生成
         }

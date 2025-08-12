@@ -2,6 +2,7 @@ package com.ajaxjs.security.limit.leakbucket;
 
 
 import com.ajaxjs.security.SecurityInterceptor;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class LeakyBucketLimiterInterceptor implements HandlerInterceptor {
             // 判断方法是否包含CounterLimit，有这个注解就需要进行限速操作
             if (handlerMethod.hasMethodAnnotation(LeakyBucketLimit.class)) {
                 LeakyBucketLimit annotation = handlerMethod.getMethod().getAnnotation(LeakyBucketLimit.class);
-                LeakyBucket leakyBucket = (LeakyBucket) SecurityInterceptor.getBean(annotation.limitClass());
+                LeakyBucket leakyBucket = (LeakyBucket) DiContextUtil.getBean(annotation.limitClass());
 
                 assert leakyBucket != null;
                 boolean acquire = leakyBucket.acquire();

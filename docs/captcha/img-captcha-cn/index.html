@@ -8,10 +8,18 @@
         <meta name="keywords" content="security, xss, csrf, captcha, captcha,图片验证码"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="https://framework.ajaxjs.com/static/font/font.css" />
-        <link rel="stylesheet" href="/asset/style/main.css"/>
-        <link rel="icon" type="image/png" href="/asset/favicon.ico"/>
-        <script src="/asset/common.js"></script>
+        <link rel="stylesheet" href="/asset/main.css"/>
+        <link rel="icon" type="image/x-icon" href="https://framework.ajaxjs.com/aj-logo/logo.ico"/>
+        <script src="https://framework.ajaxjs.com/static/aj-docs/common.js"></script>
         <script>
+            // 获取用户的默认语言
+            var userLang = navigator.language || navigator.userLanguage;
+
+            // 检查是否为中文环境（包括简体和繁体）
+            if (userLang.startsWith('zh') && location.pathname.indexOf('cn') == -1) {
+                 confirm('欢迎！您可以改为访问中文内容。是否继续？') && location.assign('/cn');  // 如果是中文，则弹出提示
+            }
+
             var _hmt = _hmt || [];
             (function() {
               var hm = document.createElement("script");
@@ -31,7 +39,7 @@
                     |
                     <a href="/">英文版本</a>
                 </div>
-                <h1>AJ Security</h1>
+                <h1><img src="https://framework.ajaxjs.com/aj-logo/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> AJ Security</h1>
                 <h3>用户手册</h3>
             </div>
         </nav>
@@ -104,6 +112,17 @@
   ImageCaptcha: # 图片验证码
     enabled: true
     expireSeconds: 60
+    message:
+      zh_CN:
+        a1: 验证码错误
+        a2: 参数 [%s] 必填
+        a3: 缺少参数 'uuid'
+        a4: 不存在图片验证码或者已经过期，请稍后再试
+      en_US:
+        a1: The captcha code is incorrect.
+        a2: The parameter %s is required.
+        a3: The parameter 'uuid' is required.
+        a4: The captcha code doesn't exist or expired. Please try to generate it again.
 </code></pre>
 <h2>配置</h2>
 <p>创建一个配置类，并添加到 Spring 容器中。主要是决定哪种图片生成器以及缓存方式。这里简单起见使用了 JVM 的缓存 SimpleCache。
@@ -125,7 +144,7 @@ ImageCaptchaConfig ImageCaptchaConfig() {
 }
 </code></pre>
 <h2>添加控制器</h2>
-<p>添加一个接口，返回图片验证码：</p>
+<p>首先我们把验证码图片显示出来，添加一个Spring 接口，返回图片验证码：</p>
 <pre><code class="language-java">@Autowired
 ImageCaptcha imageCaptcha;
 
@@ -135,7 +154,39 @@ void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
 }
 </code></pre>
 <p>前端请求该接口须携带一个<code>uuid</code>，表明本次生成验证码的唯一标识。建议使用 QueryString 传参的方式，例如<code>/captcha?uuid=xxx</code>。</p>
-<h2>保护接口</h2>
+<h3>前端引入验证码</h3>
+<p>下面用原生 JS 写出前端的代码：</p>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; class=&quot;captcha-code&quot; placeholder=&quot;请输入验证码&quot; style=&quot;width:40%&quot; /&gt;
+&lt;img src=&quot;http://localhost:8089/base_api/feedback/captcha&quot; class=&quot;captcha-img&quot; title=&quot;单击刷新&quot;
+    style=&quot;cursor: pointer;vertical-align: middle;&quot; /&gt;
+&lt;script&gt;
+    window.CAPTCHA_UUID; // 提交时需要携带的验证码 UUID，QueryString 形式传参，避免与表单实体耦合
+
+    ; (function () {
+        const imgApi = 'http://localhost:8089/base_api/feedback/captcha';
+        const captchaImg = document.querySelector('.captcha-img');
+
+        function init() {
+            window.CAPTCHA_UUID = getUUID();
+            captchaImg.src = `${imgApi}?uuid=${window.CAPTCHA_UUID}`;
+        }
+
+        init();
+        captchaImg.onclick = init;
+
+        function getUUID() {
+            if (crypto &amp;&amp; crypto.randomUUID)
+                return crypto.randomUUID();
+            else return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = (Math.random() * 16) | 0;
+                const v = c === 'x' ? r : (r &amp; 0x3) | 0x8;
+                return v.toString(16);
+            })
+        }
+    })();
+&lt;/script&gt;
+</code></pre>
+<h3>保护控制器</h3>
 <p>在需要保护的接口上添加注解<code>@ImageCaptchaCheck</code>。</p>
 <pre><code class="language-java">@PostMapping(&quot;/create_user&quot;)
 @ImageCaptchaCheck

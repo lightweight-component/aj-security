@@ -1,7 +1,7 @@
 package com.ajaxjs.security.httpauth;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.security.common.SpringUtils;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.Base64Helper;
 import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
@@ -76,7 +76,7 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
     }
 
     private void sendDigestChallenge() {
-        HttpServletResponse response = SpringUtils.getResponse();
+        HttpServletResponse response = DiContextUtil.getResponse();
         String nonce = Base64Helper.encode().input(UUID.randomUUID().toString()).getString();
         String header = String.format("Digest realm=\"%s\", qop=\"auth\", nonce=\"%s\", opaque=\"%s\"", REALM, nonce, MessageDigestHelper.md5(REALM));
         response.setHeader("WWW-Authenticate", header);

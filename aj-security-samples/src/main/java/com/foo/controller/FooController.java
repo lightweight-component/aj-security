@@ -12,6 +12,7 @@ import com.ajaxjs.security.limit.simplelimit.SimpleLimitCheck;
 import com.ajaxjs.security.paramssign.ParamsSignCheck;
 import com.ajaxjs.security.referer.HttpRefererCheck;
 import com.ajaxjs.security.timesignature.TimeSignatureVerify;
+import com.ajaxjs.spring.DiContextUtil;
 import com.foo.model.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +61,7 @@ public interface FooController {
 
     @GetMapping("/captcha")
     default void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
-        ImageCaptcha imageCaptcha = SecurityInterceptor.getBean(ImageCaptcha.class);
+        ImageCaptcha imageCaptcha = DiContextUtil.getBean(ImageCaptcha.class);
         imageCaptcha.captchaImage(req, response);
     }
 

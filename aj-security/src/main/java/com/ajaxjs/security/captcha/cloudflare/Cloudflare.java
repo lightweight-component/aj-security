@@ -2,6 +2,7 @@ package com.ajaxjs.security.captcha.cloudflare;
 
 import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.security.SecurityInterceptor;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -69,7 +70,7 @@ public class Cloudflare extends InterceptorAction<CloudflareCheck> {
     private static RestTemplate restTemplate;
 
     static synchronized RestTemplate getRestTemplate() {
-        RestTemplate http = SecurityInterceptor.getBean(RestTemplate.class);
+        RestTemplate http = DiContextUtil.getBean(RestTemplate.class);
 
         if (http == null) {
             if (restTemplate == null)

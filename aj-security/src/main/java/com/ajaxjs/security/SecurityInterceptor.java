@@ -22,12 +22,9 @@ import com.ajaxjs.security.referer.HttpReferer;
 import com.ajaxjs.security.referer.HttpRefererCheck;
 import com.ajaxjs.security.timesignature.TimeSignature;
 import com.ajaxjs.security.timesignature.TimeSignatureVerify;
+import com.ajaxjs.spring.DiContextUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -38,7 +35,7 @@ import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 @Slf4j
-public class SecurityInterceptor implements HandlerInterceptor, ApplicationContextAware {
+public class SecurityInterceptor implements HandlerInterceptor {
     @Autowired(required = false)
     NonRepeatSubmitMgr nonRepeatSubmitMgr;
 
@@ -109,7 +106,7 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
     @SuppressWarnings("unchecked")
     private <T extends Annotation> boolean handler(Class<? extends InterceptorAction<T>> serviceClz, HttpServletRequest req,
                                                    HandlerMethod handlerMethod, Method method, Class<T> annotationType) {
-        InterceptorAction<T> service = getBean(serviceClz);// 获取拦截器服务的实例
+        InterceptorAction<T> service = DiContextUtil.getBean(serviceClz);// 获取拦截器服务的实例
 
         if (service == null || !service.isEnabled())// 如果服务实例为空，表示对应的业务没有创建，直接放行
             return true;
@@ -158,36 +155,6 @@ public class SecurityInterceptor implements HandlerInterceptor, ApplicationConte
         if (request.getAttribute(AFTER_COMPLETION_ACTION) != null) {
 //            System.out.println("DO afterCompletionAction::" + (++count2));
             ((BiConsumer<HttpServletRequest, HttpServletResponse>) request.getAttribute(AFTER_COMPLETION_ACTION)).accept(request, response);
-        }
-    }
-
-    /**
-     * Spring 上下文
-     */
-    public static ApplicationContext context;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        context = applicationContext;
-    }
-
-    /**
-     * 获取已注入的对象
-     *
-     * @param <T> 对象类型
-     * @param clz 对象类型引用
-     * @return 组件对象
-     */
-    public static <T> T getBean(Class<T> clz) {
-        if (context == null) {
-            log.warn("Spring Bean 未准备好，不能返回 {} 类", clz);
-            return null;
-        }
-
-        try {
-            return context.getBean(clz);
-        } catch (NoSuchBeanDefinitionException e) {
-            return null;
         }
     }
 }

@@ -42,12 +42,6 @@
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-util</artifactId>
-            <version>1.2.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
             <artifactId>base</artifactId>
             <version>1.0</version>
         </dependency>

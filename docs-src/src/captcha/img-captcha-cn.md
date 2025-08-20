@@ -63,6 +63,7 @@ ImageCaptchaConfig ImageCaptchaConfig() {
 ImageCaptcha imageCaptcha;
 
 @GetMapping("/captcha")
+@IgnoreDataBaseConnect // 不需要连接数据库的注解，视乎你的框架所定
 void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
     imageCaptcha.captchaImage(req, response);
 }
@@ -106,6 +107,8 @@ void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
     })();
 </script>
 ```
+
+我们可以把上述前端逻辑封装一下
 ### 保护控制器
 
 在需要保护的接口上添加注解`@ImageCaptchaCheck`。

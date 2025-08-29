@@ -106,7 +106,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
     @SuppressWarnings("unchecked")
     private <T extends Annotation> boolean handler(Class<? extends InterceptorAction<T>> serviceClz, HttpServletRequest req,
                                                    HandlerMethod handlerMethod, Method method, Class<T> annotationType) {
-        InterceptorAction<T> service = DiContextUtil.getBean(serviceClz);// 获取拦截器服务的实例
+        InterceptorAction<T> service = DiContextUtil.getBeanSlient(serviceClz);// 获取拦截器服务的实例
 
         if (service == null || !service.isEnabled())// 如果服务实例为空，表示对应的业务没有创建，直接放行
             return true;
@@ -152,9 +152,9 @@ public class SecurityInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 //        System.out.println("DO afterCompletion::" + (++count));
-        if (request.getAttribute(AFTER_COMPLETION_ACTION) != null) {
-//            System.out.println("DO afterCompletionAction::" + (++count2));
-            ((BiConsumer<HttpServletRequest, HttpServletResponse>) request.getAttribute(AFTER_COMPLETION_ACTION)).accept(request, response);
-        }
+//        if (request.getAttribute(AFTER_COMPLETION_ACTION) != null) {
+////            System.out.println("DO afterCompletionAction::" + (++count2));
+//            ((BiConsumer<HttpServletRequest, HttpServletResponse>) request.getAttribute(AFTER_COMPLETION_ACTION)).accept(request, response);
+//        }
     }
 }

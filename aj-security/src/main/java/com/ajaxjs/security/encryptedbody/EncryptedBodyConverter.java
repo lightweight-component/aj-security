@@ -2,7 +2,7 @@ package com.ajaxjs.security.encryptedbody;
 
 
 import com.ajaxjs.util.EncodeTools;
-import com.ajaxjs.util.cryptography.RsaCrypto;
+import com.ajaxjs.util.cryptography.rsa.KeyMgr;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -46,7 +46,7 @@ public class EncryptedBodyConverter<T extends IResponseResult> extends MappingJa
     static String decrypt(String encryptBody, String privateKey) {
         byte[] data = EncodeTools.base64Decode(encryptBody);
 
-        return new String(RsaCrypto.decryptByPrivateKey(data, privateKey));
+        return KeyMgr.privateKeyDecryptAsStr(data, privateKey);
     }
 
     /**
@@ -60,8 +60,7 @@ public class EncryptedBodyConverter<T extends IResponseResult> extends MappingJa
      * @return 加密后的 Base64 编码字符串
      */
     static String encrypt(String body, String publicKey) {
-        byte[] encWord = RsaCrypto.encryptByPublicKey(body.getBytes(), publicKey);
-        return EncodeTools.base64EncodeToString(encWord);
+        return KeyMgr.publicKeyEncryptAsBase64Str(body.getBytes(), publicKey);
     }
 
     /**

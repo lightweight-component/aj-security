@@ -1,8 +1,7 @@
 package com.ajaxjs.security.timesignature;
 
-
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.util.cryptography.AesCrypto;
+import com.ajaxjs.util.cryptography.Cryptography;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -44,7 +43,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
         String timestampStr;
 
         try {
-            timestampStr = AesCrypto.getInstance().AES_decode(signature, secretKey);
+            timestampStr = Cryptography.AES_decode(signature, secretKey);
         } catch (Exception e) {
             throw new SecurityException("Invalid signature: " + signature);
         }
@@ -69,7 +68,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
     public String generateSignature(long timestamp) {
         String timestampStr = String.valueOf(timestamp);
 
-        return AesCrypto.getInstance().AES_encode(timestampStr, secretKey);
+        return Cryptography.AES_encode(timestampStr, secretKey);
     }
 
     /**

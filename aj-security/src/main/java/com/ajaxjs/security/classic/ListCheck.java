@@ -1,10 +1,9 @@
 package com.ajaxjs.security.classic;
 
-import com.ajaxjs.util.CollUtils;
+import com.ajaxjs.util.ObjectHelper;
 
 import java.util.List;
 import java.util.regex.Pattern;
-
 
 /**
  * 白名单/黑名单
@@ -56,7 +55,7 @@ public class ListCheck {
      * @return true 表示为包含；false 表示为不包含
      */
     private static boolean isInList(String str, List<String> list) {
-        if (CollUtils.isEmpty(list))
+        if (ObjectHelper.isEmpty(list))
             return false;
 
         for (String pattern : list) {

@@ -1,9 +1,8 @@
 package com.ajaxjs.security.captcha.cloudflare;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.security.SecurityInterceptor;
 import com.ajaxjs.spring.DiContextUtil;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class Cloudflare extends InterceptorAction<CloudflareCheck> {
     public boolean action(CloudflareCheck annotation, HttpServletRequest req) {
         String token = req.getParameter("cf-turnstile-response");
 
-        if (StrUtil.isEmptyText(token))
+        if (ObjectHelper.isEmptyText(token))
             throw new IllegalArgumentException("Missing the parameter of token");
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();

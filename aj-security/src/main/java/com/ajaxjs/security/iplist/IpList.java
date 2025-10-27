@@ -1,7 +1,7 @@
 package com.ajaxjs.security.iplist;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.util.CollUtils;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.WebUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,10 +36,10 @@ public class IpList extends InterceptorAction<IpListCheck> {
     public boolean action(IpListCheck annotation, HttpServletRequest req) {
         String ip = WebUtils.getClientIp(req);
 
-        if (!CollUtils.isEmpty(whiteList) && StringUtils.hasText(ip) && !whiteList.contains(ip))
+        if (!ObjectHelper.isEmpty(whiteList) && StringUtils.hasText(ip) && !whiteList.contains(ip))
             throw new SecurityException("Invalid IP:[" + ip + "] access");
 
-        if (!CollUtils.isEmpty(blackList) && StringUtils.hasText(ip) && !blackList.contains(ip))
+        if (!ObjectHelper.isEmpty(blackList) && StringUtils.hasText(ip) && !blackList.contains(ip))
             throw new SecurityException("Invalid IP:[" + ip + "] access");
 
         return true;

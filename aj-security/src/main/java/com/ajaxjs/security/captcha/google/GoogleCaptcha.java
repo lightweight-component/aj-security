@@ -1,7 +1,7 @@
 package com.ajaxjs.security.captcha.google;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.util.http_request.Post;
+import com.ajaxjs.util.httpremote.Post;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;

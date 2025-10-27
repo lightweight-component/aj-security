@@ -1,6 +1,6 @@
 package com.ajaxjs.security.desensitize;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.ObjectHelper;
 
 import java.util.Arrays;
 
@@ -18,7 +18,7 @@ public class DataMask {
      * @return 脱敏后的姓名
      */
     public static String maskChineseName(String name) {
-        if (StrUtil.isEmptyText(name))
+        if (ObjectHelper.isEmptyText(name))
             return name;
 
         if (name.length() == 1)
@@ -46,7 +46,7 @@ public class DataMask {
      * @return 脱敏后的身份证信息
      */
     public static String maskIdCard(String idCard) {
-        if (StrUtil.isEmptyText(idCard))
+        if (ObjectHelper.isEmptyText(idCard))
             return idCard;
 
         if (idCard.length() == 15)
@@ -69,7 +69,7 @@ public class DataMask {
      * @return 脱敏后的手机号
      */
     public static String maskPhoneNumber(String phone) {
-        if (StrUtil.isEmptyText(phone))
+        if (ObjectHelper.isEmptyText(phone))
             return phone;
 
         if (phone.length() == 11)
@@ -118,7 +118,7 @@ public class DataMask {
      * @return 脱敏后的地址信息
      */
     public static String maskAddress(String address, int len) {
-        if (StrUtil.isEmptyText(address))
+        if (ObjectHelper.isEmptyText(address))
             return address;
 
         if (address.length() < 3)
@@ -150,7 +150,7 @@ public class DataMask {
      * @return 脱敏后的邮箱
      */
     public static String maskEmail(String email) {
-        if (StrUtil.isEmptyText(email))
+        if (ObjectHelper.isEmptyText(email))
             return email;
 
         int index = email.indexOf('@');
@@ -184,7 +184,7 @@ public class DataMask {
      * @return 脱敏后的银行卡号
      */
     public static String maskBankCard(String cardNo) {
-        if (StrUtil.isEmptyText(cardNo))
+        if (ObjectHelper.isEmptyText(cardNo))
             return cardNo;
 
         if (cardNo.length() <= 10)
@@ -211,7 +211,7 @@ public class DataMask {
      * @return 脱敏后的字段值
      */
     public static String doGetProperty(String value, DesensitizeType type) {
-        if (StrUtil.isEmptyText(value))
+        if (ObjectHelper.isEmptyText(value))
             return value;
 
         if (type == null)

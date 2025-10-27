@@ -2,8 +2,8 @@ package com.ajaxjs.security.captcha.image;
 
 import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.spring.Inter18n;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +31,14 @@ public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
     public boolean action(ImageCaptchaCheck annotation, HttpServletRequest req) {
         String uuid = req.getParameter("uuid");
 
-        if (StrUtil.isEmptyText(uuid))
+        if (ObjectHelper.isEmptyText(uuid))
             throw new IllegalArgumentException(
                     i18n.getText(MESSAGE_KEY_PREFIX, "a3", "The parameter 'uuid' is required.")
             );
 
         String captchaCode = req.getParameter(CODE_KEY);
 
-        if (StrUtil.isEmptyText(captchaCode))
+        if (ObjectHelper.isEmptyText(captchaCode))
             throw new IllegalArgumentException(
                     i18n.getText(MESSAGE_KEY_PREFIX, "a2", "The parameter '" + CODE_KEY + "' is required.", CODE_KEY)
             );
@@ -46,7 +46,7 @@ public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
         String key = KEY_PREFIX + uuid;
         String captchaCodeInRam = config.getCaptchaCodeFromRam().apply(key);
 
-        if (StrUtil.isEmptyText(captchaCodeInRam))
+        if (ObjectHelper.isEmptyText(captchaCodeInRam))
             throw new SecurityException(
                     i18n.getText(MESSAGE_KEY_PREFIX, "a4", "The captcha code doesn't exist or expired. Please try to generate it again.")
             );
@@ -84,7 +84,7 @@ public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
 
         String uuid = req.getParameter("uuid");
 
-        if (StrUtil.isEmptyText(uuid) || "undefined".equals(uuid))
+        if (ObjectHelper.isEmptyText(uuid) || "undefined".equals(uuid))
             throw new IllegalArgumentException("The parameter 'uuid' is required.");
 
         String capText = RandomTools.generateRandomString(4);// create the text for the image

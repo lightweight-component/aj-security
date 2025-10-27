@@ -1,7 +1,7 @@
 package com.ajaxjs.security.auditlog;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class AuditOperationLogAction extends InterceptorAction<AuditOperationLog
     public boolean action(AuditOperationLog annotation, HttpServletRequest req) {
         String expression = annotation.expression();
 
-        if (StrUtil.hasText(expression)) {
+        if (ObjectHelper.hasText(expression)) {
             try {
                 EvaluationContext evaluationContext = new StandardEvaluationContext();
 

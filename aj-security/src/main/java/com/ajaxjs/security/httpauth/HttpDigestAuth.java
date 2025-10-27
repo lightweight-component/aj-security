@@ -2,9 +2,9 @@ package com.ajaxjs.security.httpauth;
 
 import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.spring.DiContextUtil;
-import com.ajaxjs.util.Base64Helper;
-import com.ajaxjs.util.MessageDigestHelper;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.Base64Utils;
+import com.ajaxjs.util.HashHelper;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,7 +39,7 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
     public boolean action(HttpDigestAuthCheck annotation, HttpServletRequest req) {
         String authHeader = req.getHeader(HttpHeaders.AUTHORIZATION);  // 获取 Referer 头
 
-        if (StrUtil.isEmptyText(authHeader) || !authHeader.startsWith("Digest ")) {
+        if (ObjectHelper.isEmptyText(authHeader) || !authHeader.startsWith("Digest ")) {
             sendDigestChallenge();
             return false;
         }
@@ -61,11 +61,11 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
         String responseDigest = authParams.get("response");
 
         // HA1 = MD5(username:realm:password)
-        String ha1 = MessageDigestHelper.md5(username + ":" + REALM + ":" + password);
+        String ha1 = HashHelper.md5(username + ":" + REALM + ":" + password);
         // HA2 = MD5(method:uri)
-        String ha2 = MessageDigestHelper.md5(method + ":" + uri);
+        String ha2 = HashHelper.md5(method + ":" + uri);
         // response = MD5(HA1:nonce:nc:cnonce:qop:HA2)
-        String validResponse = MessageDigestHelper.md5(ha1 + ":" + nonce + ":" + nc + ":" + cnonce + ":" + qop + ":" + ha2);
+        String validResponse = HashHelper.md5(ha1 + ":" + nonce + ":" + nc + ":" + cnonce + ":" + qop + ":" + ha2);
 
         if (validResponse.equals(responseDigest))
             return true;
@@ -77,8 +77,8 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
 
     private void sendDigestChallenge() {
         HttpServletResponse response = DiContextUtil.getResponse();
-        String nonce = Base64Helper.encode().input(UUID.randomUUID().toString()).getString();
-        String header = String.format("Digest realm=\"%s\", qop=\"auth\", nonce=\"%s\", opaque=\"%s\"", REALM, nonce, MessageDigestHelper.md5(REALM));
+        String nonce = new Base64Utils(UUID.randomUUID().toString()).encodeAsString();
+        String header = String.format("Digest realm=\"%s\", qop=\"auth\", nonce=\"%s\", opaque=\"%s\"", REALM, nonce, HashHelper.md5(REALM));
         response.setHeader("WWW-Authenticate", header);
         response.setStatus(401);
 

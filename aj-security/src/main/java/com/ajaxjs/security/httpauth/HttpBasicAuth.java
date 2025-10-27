@@ -2,8 +2,8 @@ package com.ajaxjs.security.httpauth;
 
 import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.spring.DiContextUtil;
-import com.ajaxjs.util.Base64Helper;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.Base64Utils;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,18 +31,18 @@ public class HttpBasicAuth extends InterceptorAction<HttpBasicAuthCheck> {
 
     @Override
     public boolean action(HttpBasicAuthCheck annotation, HttpServletRequest req) {
-        if (StrUtil.isEmptyText(username) || StrUtil.isEmptyText(password))
+        if (ObjectHelper.isEmptyText(username) || ObjectHelper.isEmptyText(password))
             throw new UnsupportedOperationException("System not finished setting the password or username.");
 
         String authHeader = req.getHeader(HttpHeaders.AUTHORIZATION);  // 获取 Referer 头
 
-        if (StrUtil.isEmptyText(authHeader) || !authHeader.startsWith("Basic ")) { // 提示用户输入账号密码
+        if (ObjectHelper.isEmptyText(authHeader) || !authHeader.startsWith("Basic ")) { // 提示用户输入账号密码
             responseLogin();
             return false;
         }
 
         String base64Credentials = authHeader.substring("Basic ".length());
-        String credentials = Base64Helper.decode().input(base64Credentials).getString();
+        String credentials = new Base64Utils(base64Credentials).decodeAsString();
         String[] values = credentials.split(":", 2);
         String _username = values[0];
         String _password = values[1];
@@ -56,7 +56,7 @@ public class HttpBasicAuth extends InterceptorAction<HttpBasicAuthCheck> {
     }
 
     public static String create(String username, String password) {
-        return "Basic " + Base64Helper.encode().input(username + ":" + password).getString();
+        return "Basic " + new Base64Utils(username + ":" + password).encodeAsString();
     }
 
     private static void responseLogin() {

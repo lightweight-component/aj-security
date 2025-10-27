@@ -1,7 +1,6 @@
 package com.ajaxjs.security.encryptedbody;
 
-
-import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.Base64Utils;
 import com.ajaxjs.util.cryptography.rsa.KeyMgr;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpInputMessage;
@@ -44,7 +43,7 @@ public class EncryptedBodyConverter<T extends IResponseResult> extends MappingJa
      * @return 解密后的字符串
      */
     static String decrypt(String encryptBody, String privateKey) {
-        byte[] data = EncodeTools.base64Decode(encryptBody);
+        byte[] data = new Base64Utils(encryptBody).decode();
 
         return KeyMgr.privateKeyDecryptAsStr(data, privateKey);
     }

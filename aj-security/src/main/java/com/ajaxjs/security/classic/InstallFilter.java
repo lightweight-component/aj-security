@@ -1,7 +1,6 @@
 package com.ajaxjs.security.classic;
 
-import com.ajaxjs.util.CollUtils;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -69,7 +68,7 @@ public class InstallFilter implements Filter {
      * @return 清理后的字符串。
      */
     private static String clean(String str, Pattern p, Function<Matcher, String> replFn) {
-        if (StrUtil.isEmptyText(str))
+        if (ObjectHelper.isEmptyText(str))
             return str;
 
         Matcher matcher = p.matcher(str);
@@ -143,7 +142,7 @@ public class InstallFilter implements Filter {
      * @return true 表示为包含；false 表示为不包含
      */
     private static boolean isInList(String str, List<String> list) {
-        if (CollUtils.isEmpty(list))
+        if (ObjectHelper.isEmpty(list))
             return false;
 
         for (String pattern : list) {

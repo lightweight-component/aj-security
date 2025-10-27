@@ -1,7 +1,7 @@
 package com.ajaxjs.security.nonrepeatsubmit;
 
-import com.ajaxjs.util.MessageDigestHelper;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.HashHelper;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +32,12 @@ public class NonRepeatSubmitMgr {
     static String extractToken(HttpServletRequest req) {
         String token = req.getHeader(TOKEN_NAME);
 
-        if (StrUtil.hasText(token))
+        if (ObjectHelper.hasText(token))
             return token;
 
         token = req.getParameter(TOKEN_NAME);
 
-        if (StrUtil.hasText(token))
+        if (ObjectHelper.hasText(token))
             return token;
 
         // TODO gets from Cookie
@@ -61,7 +61,7 @@ public class NonRepeatSubmitMgr {
             String uri = request.getRequestURI();
 //            String paramString = Arrays.toString(params);
 
-            String token = MessageDigestHelper.md5(className + methodName + uri);
+            String token = HashHelper.md5(className + methodName + uri);
 
             if (checkTokenIfExists.apply(token))
                 throw new IllegalAccessException("Submit repeated, it's NOT allow!");
@@ -71,7 +71,7 @@ public class NonRepeatSubmitMgr {
         } else if (annotation.type() == NonRepeatSubmit.Type.TOKEN) {
             String token = extractToken(request);
 
-            if (StrUtil.isEmptyText(token))
+            if (ObjectHelper.isEmptyText(token))
                 throw new IllegalArgumentException("The NS_token is empty.");
 
             if (!checkTokenIfExists.apply(token))

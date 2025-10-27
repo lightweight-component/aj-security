@@ -1,7 +1,7 @@
 package com.ajaxjs.security.referer;
 
 import com.ajaxjs.security.InterceptorAction;
-import com.ajaxjs.util.CollUtils;
+import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -30,7 +30,7 @@ public class HttpReferer extends InterceptorAction<HttpRefererCheck> {
 
     @Override
     public boolean action(HttpRefererCheck annotation, HttpServletRequest req) {
-        if (!CollUtils.isEmpty(allowedReferrers)) {
+        if (!ObjectHelper.isEmpty(allowedReferrers)) {
             String referer = req.getHeader(HttpHeaders.REFERER);  // 获取 Referer 头
 
             if ((!StringUtils.hasText(referer) || !allowedReferrers.contains(referer)))

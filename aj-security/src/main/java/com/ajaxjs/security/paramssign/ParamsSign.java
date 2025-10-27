@@ -1,9 +1,9 @@
 package com.ajaxjs.security.paramssign;
 
-import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.RandomTools;
+import com.ajaxjs.util.UrlEncode;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,9 +57,9 @@ public class ParamsSign {
         map.put("timestamp", getTimestamp());
 
         String sortString = sort(paramMap);
-        sortString = EncodeTools.urlEncodeQuery(sortString);
-        String sign = MessageDigestHelper.getHmacSHA1AsBase64(accessSecret, sortString);
-        sign = EncodeTools.urlEncodeQuery(sign);
+        sortString = new UrlEncode(sortString).encodeQuery();
+        String sign = HashHelper.getHmacMD5(sortString, accessSecret).hashAsBase64();
+        sign = new UrlEncode(sign).encodeQuery(); // needs?
 
         paramMap.put(SIGN_PARAMS, sign);
         this.paramMap = paramMap;
@@ -127,7 +127,10 @@ public class ParamsSign {
 
         while (it.hasNext()) {
             String key = it.next();
-            sb.append("&").append(EncodeTools.urlEncodeQuery(key)).append("=").append(EncodeTools.urlEncodeQuery(paras.get(key)));
+            String value = new UrlEncode(paras.get(key)).encodeQuery();
+            key = new UrlEncode(key).encodeQuery();
+
+            sb.append("&").append(key).append("=").append(value);
         }
 
         return sb.substring(1);// 去除第一个多余的&符号

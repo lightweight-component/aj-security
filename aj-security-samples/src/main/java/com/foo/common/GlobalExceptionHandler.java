@@ -1,12 +1,13 @@
 package com.foo.common;
 
-import com.ajaxjs.framework.model.BusinessException;
+import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,6 +41,8 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
         ResponseResultWrapper resultWrapper = new ResponseResultWrapper();
         resultWrapper.setStatus(0);
+
+        JsonParserFactory.getJsonParser()
 
         if (_ex instanceof BusinessException) {
             BusinessException b = (BusinessException) _ex;

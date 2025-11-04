@@ -14,7 +14,8 @@
     <name>aj-security</name>
     <version>1.1</version>
     <description>Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set of filtering/validation mechanisms,
-        forming a unified invocation chain that is flexibly configurable and extensible. </description>
+        forming a unified invocation chain that is flexibly configurable and extensible.
+    </description>
     <packaging>jar</packaging>
 
     <url>https://security.ajaxjs.com/</url>
@@ -29,18 +30,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- 编译为 jar 包时依赖的 -->
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>base</artifactId>
             <version>1.0</version>
@@ -49,8 +38,9 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-net</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
+
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-cryptography</artifactId>
@@ -64,5 +54,16 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 编译为 jar 包时依赖的 -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
     </dependencies>
 </project>

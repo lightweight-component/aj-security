@@ -1,6 +1,5 @@
 package com.ajaxjs.security.desensitize.entity;
 
-
 import java.io.Serializable;
 
 /**

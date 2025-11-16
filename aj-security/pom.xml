@@ -12,7 +12,7 @@
 
     <artifactId>aj-security</artifactId>
     <name>aj-security</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <description>Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set of filtering/validation mechanisms,
         forming a unified invocation chain that is flexibly configurable and extensible.
     </description>
@@ -32,19 +32,19 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>base</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-net</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-cryptography</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <dependency>

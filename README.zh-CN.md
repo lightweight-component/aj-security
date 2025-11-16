@@ -50,7 +50,7 @@ AJ Security 的代码量不多，而且都是很简单易懂的代码。另外�
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
 </dependency>
 ```
 

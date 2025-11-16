@@ -1,15 +1,10 @@
 package com.foo.common;
 
-import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.CommonConstant;
-import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,18 +38,17 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         ResponseResultWrapper resultWrapper = new ResponseResultWrapper();
         resultWrapper.setStatus(0);
 
-        JsonParserFactory.getJsonParser()
-
-        if (_ex instanceof BusinessException) {
-            BusinessException b = (BusinessException) _ex;
-            resultWrapper.setErrorCode(StringUtils.hasText(b.getErrCode()) ? b.getErrCode() : "500");
-            resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        }
-//        else if (_ex instanceof ICustomException) {
-//            int errCode = ((ICustomException) _ex).getErrCode();
-//            resultWrapper.setErrorCode(String.valueOf(errCode));
-//            resp.setStatus(errCode);
-        } else if (_ex instanceof IllegalArgumentException) {// 客户端请求参数错误
+//        if (_ex instanceof BusinessException) {
+//            BusinessException b = (BusinessException) _ex;
+//            resultWrapper.setErrorCode(StringUtils.hasText(b.getErrCode()) ? b.getErrCode() : "500");
+//            resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+////        }
+////        else if (_ex instanceof ICustomException) {
+////            int errCode = ((ICustomException) _ex).getErrCode();
+////            resultWrapper.setErrorCode(String.valueOf(errCode));
+////            resp.setStatus(errCode);
+//        } else
+        if (_ex instanceof IllegalArgumentException) {// 客户端请求参数错误
             resultWrapper.setErrorCode("400");
             resp.setStatus(HttpStatus.BAD_REQUEST.value());
         } else if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException) {// 设置状态码

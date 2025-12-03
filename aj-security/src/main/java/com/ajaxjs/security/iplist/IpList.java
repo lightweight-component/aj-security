@@ -68,7 +68,7 @@ public class IpList extends InterceptorAction<IpListCheck> {
             ipAddresses = request.getHeader("HTTP_CLIENT_IP"); // HTTP_CLIENT_IP：有些代理服务器
 
         // 有些网络通过多层代理，那么获取到的ip就会有多个，一般都是通过逗号（,）分割开来，并且第一个ip为客户端的真实IP
-        if (ObjectHelper.isEmptyText(ipAddresses))
+        if (ObjectHelper.hasText(ipAddresses))
             ipAddress = ipAddresses.split(",")[0];
 
         if (ObjectHelper.isEmptyText(ipAddresses) || UNKNOWN.equalsIgnoreCase(ipAddresses))

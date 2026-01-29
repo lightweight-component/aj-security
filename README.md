@@ -51,7 +51,7 @@ Runs on Java 8+. Maven:
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
 </dependency>
 ```
 

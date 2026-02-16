@@ -61,7 +61,7 @@ public interface FooController {
 
     @GetMapping("/captcha")
     default void showCaptcha(HttpServletRequest req, HttpServletResponse response) {
-        ImageCaptcha imageCaptcha = DiContextUtil.getBean(ImageCaptcha.class);
+        ImageCaptcha imageCaptcha = DiContextUtil.getBeanNonNull(ImageCaptcha.class);
         imageCaptcha.captchaImage(req, response);
     }
 

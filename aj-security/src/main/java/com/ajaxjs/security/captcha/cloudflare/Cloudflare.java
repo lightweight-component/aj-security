@@ -74,6 +74,7 @@ public class Cloudflare extends InterceptorAction<CloudflareCheck> {
         if (http == null) {
             if (restTemplate == null)
                 restTemplate = new RestTemplate();
+
             http = restTemplate;
         }
 
